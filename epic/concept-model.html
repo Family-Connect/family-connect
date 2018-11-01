@@ -11,28 +11,25 @@
 			<h1>Conceptual Model</h1>
 			<h2>Entities & Attributes</h2>
 			<br>
-			<h3>USER</h3>
+			<h3>COMMENTS</h3>
 			<ul>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
+				<li>commentId(primary key)</li>
+				<li>commentEventId(foreign key)</li>
+				<li>commentTaskId(foreign key)</li>
+				<li>commentUserId(foreign key)</li>
+				<li>commentDate</li>
+				<li>commentContent</li>
 			</ul>
 		</div>
 		<div>
 			<h3>EVENT</h3>
 			<ul>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
+				<li>eventId(primary key)</li>
+				<li>eventFamilyId(foreign key)</li>
+				<li>eventUserId(fireign key)</li>
+				<li>eventDateTime</li>
+				<li>eventName</li>
+				<li>eventContent</li>
 			</ul>
 		</div>
 		<div>
