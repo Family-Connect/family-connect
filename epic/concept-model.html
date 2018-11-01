@@ -6,20 +6,21 @@
 		<title>Conceptual Model for Family Connect</title>
 	</head>
 
-		<body>
+	<body>
 		<div>
 			<h1>Conceptual Model</h1>
 			<h2>Entities & Attributes</h2>
-			<br>
-			<h3>COMMENTS</h3>
+		</div>
+
+		<div>
+			<h3>FAMILY</h3>
 			<ul>
-				<li>commentId(primary key)</li>
-				<li>commentEventId(foreign key)</li>
-				<li>commentTaskId(foreign key)</li>
-				<li>commentUserId(foreign key)</li>
-				<li>commentDate</li>
-				<li>commentContent</li>
+				<li>familyId (primary key)</li>
+				<li>familyName</li>
 			</ul>
+		</div>
+
+		<div>
 			<h3>USER</h3>
 			<ul>
 				<li>userId (primary key)</li>
@@ -35,6 +36,7 @@
 				<li>userUserName</li>
 			</ul>
 		</div>
+
 		<div>
 			<h3>EVENT</h3>
 			<ul>
@@ -46,13 +48,7 @@
 				<li>eventContent</li>
 			</ul>
 		</div>
-		<div>
-			<h3>FAMILY</h3>
-			<ul>
-				<li>familyId (primary key)</li>
-				<li>familyName</li>
-			</ul>
-		</div>
+
 		<div>
 			<h3>TASK</h3>
 			<ul>
@@ -65,8 +61,19 @@
 			</ul>
 		</div>
 
+		<div>
+			<h3>COMMENTS</h3>
+			<ul>
+				<li>commentId(primary key)</li>
+				<li>commentEventId(foreign key)</li>
+				<li>commentTaskId(foreign key)</li>
+				<li>commentUserId(foreign key)</li>
+				<li>commentDate</li>
+				<li>commentContent</li>
+			</ul>
+		</div>
 
-		</body>
+	</body>
 
 </html>
 
