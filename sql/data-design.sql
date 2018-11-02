@@ -1,6 +1,20 @@
 ALTER DATABASE foo CHARACTER SET uft8 COLLATE utf8_unicode_ci;
 
+DROP TABLE IF EXISTS family;
 DROP TABLE IF EXISTS user;
+
+-- create family table
+
+CREATE TABLE family (
+	-- primary key
+	familyId BINARY(16) NOT NULL,
+	-- attributes
+	familyName VARCHAR(64) NOT NULL,
+	-- prevent duplicate data
+	UNIQUE(familyName),
+	-- primary key
+	PRIMARY KEY(familyId)
+);
 
 CREATE TABLE user (
 	userId BINARY(16) NOT NULL,
