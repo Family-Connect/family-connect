@@ -81,8 +81,8 @@ CREATE TABLE task(
 
 CREATE TABLE comments (
 	commentId BINARY (16) NOT NULL,
-	commentEventId BINARY (16) NOT NULL,
-	commentTaskId BINARY (16) NOT NULL,
+	commentEventId BINARY (16) NULLABLE,
+	commentTaskId BINARY (16) NULLABLE,
 	commentUserId BINARY (16) NOT NULL,
 	commentDate DATETIME (6) NOT NULL,
 	commentContent VARCHAR (855) NOT NULL,
