@@ -23,12 +23,18 @@ CREATE TABLE user (
 	userAvatar VARCHAR (128) NOT NULL,
 	userDisplayName VARCHAR (128) NOT NULL,
 	userEmail VARCHAR (128) NOT NULL,
-	userHash CHAR (96) NOT NULL,
+	userHash CHAR (97) NOT NULL,
 	userPhoneNumber CHAR (7) NOT NULL,
 	userPrivilege VARCHAR (250) NOT NULL,
 	userTimeZone CHAR (4) NOT NULL,
-	userName VARCHAR (96) NOT NULL
-)
+	userName VARCHAR (96) NOT NULL,
+
+	INDEX(userFamilyId),
+
+	FOREIGN KEY(userFamilyId) REFERENCES family(familyId),
+
+	PRIMARY KEY(userId)
+);
 
 CREATE TABLE comments (
 	commentId BINARY (16) NOT NULL,
