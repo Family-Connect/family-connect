@@ -22,14 +22,14 @@ CREATE TABLE family (
 CREATE TABLE user (
 	userId BINARY(16) NOT NULL,
 	userFamilyId BINARY(16) NOT NULL,
-	userActivationToken VARCHAR (128) NULL,
-	userAvatar VARCHAR (128) NULL,
+	userActivationToken VARCHAR (128),
+	userAvatar VARCHAR (128),
 	userDisplayName VARCHAR (128) NOT NULL,
 	userEmail VARCHAR (128) NOT NULL,
 	userHash CHAR (97) NOT NULL,
-	userPhoneNumber CHAR (10) NULL,
+	userPhoneNumber VARCHAR (10),
 	userPrivilege VARCHAR (250) NOT NULL,
-	userTimeZone CHAR (4) NOT NULL,
+	userTimeZone VARCHAR (4) NOT NULL,
 	userName VARCHAR (96) NOT NULL,
 
 	UNIQUE(userDisplayName),
@@ -46,7 +46,7 @@ CREATE TABLE event(
 	eventId BINARY(16) NOT NULL,
 	eventFamilyId BINARY(16) NOT NULL,
 	eventUserId BINARY(16) NOT NULL,
-	eventContent VARCHAR(255) NULL,
+	eventContent VARCHAR(255),
 	eventStartDate DATETIME(6) NOT NULL,
 	eventEndDate DATETIME(6),
 	eventName CHAR(30) NOT NULL,
@@ -63,14 +63,14 @@ CREATE TABLE event(
 
 CREATE TABLE task(
 	taskId BINARY(16) NOT NULL,
-	taskEventId BINARY(16) NULL,
-	taskUserId BINARY(16) NULL,
+	taskEventId BINARY(16),
+	taskUserId BINARY(16),
 	taskDueDate DATETIME(6) NOT NULL,
-	taskDescription CHAR(35) NOT NULL,
-	taskName CHAR(30),
+	taskDescription VARCHAR(35),
+	taskName VARCHAR(30) NOT NULL,
 
-	INDEX(taskEventId)
-	INDEX(taskUserId)
+	INDEX(taskEventId),
+	INDEX(taskUserId),
 
 	FOREIGN KEY(taskEventId) REFERENCES event(eventId),
 
@@ -81,11 +81,11 @@ CREATE TABLE task(
 
 CREATE TABLE comments (
 	commentId BINARY (16) NOT NULL,
-	commentEventId BINARY (16) NULLABLE,
-	commentTaskId BINARY (16) NULLABLE,
+	commentEventId BINARY (16),
+	commentTaskId BINARY (16),
 	commentUserId BINARY (16) NOT NULL,
 	commentDate DATETIME (6) NOT NULL,
-	commentContent VARCHAR (855) NOT NULL,
+	commentContent VARCHAR (855),
 
 	PRIMARY KEY(commentId),
 
