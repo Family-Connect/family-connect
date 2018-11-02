@@ -36,5 +36,5 @@ CREATE TABLE comments (
 	commenttaskId BINARY (16) NOT NULL,
 	commentUserId BINARY (16) NOT NULL,
 	commentDate,
-	commentContent VARCHAR ()
+	commentContent VARCHAR (855)
 )
