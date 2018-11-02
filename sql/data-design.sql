@@ -29,6 +29,9 @@ CREATE TABLE user (
 	userTimeZone CHAR (4) NOT NULL,
 	userName VARCHAR (96) NOT NULL,
 
+	UNIQUE(userDisplayName),
+	UNIQUE(userEmail),
+
 	INDEX(userFamilyId),
 
 	FOREIGN KEY(userFamilyId) REFERENCES family(familyId),
