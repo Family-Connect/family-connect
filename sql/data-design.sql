@@ -28,4 +28,10 @@ CREATE TABLE user (
 	userPrivilege VARCHAR (250) NOT NULL,
 	userTimeZone CHAR (4) NOT NULL,
 	userName VARCHAR (96) NOT NULL
-)
+
+	INDEX(userFamilyId),
+
+	FOREIGN KEY(userFamilyId) REFERENCES family(familyId),
+
+	PRIMARY KEY(userId)
+);
