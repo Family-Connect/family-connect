@@ -44,15 +44,19 @@ CREATE TABLE comments (
 	commentEventId BINARY (16) NOT NULL,
 	commentTaskId BINARY (16) NOT NULL,
 	commentUserId BINARY (16) NOT NULL,
-	commentDate, DATETIME (6)
+	commentDate DATETIME (6) NOT NULL,
 	commentContent VARCHAR (855) NOT NULL,
+
+	UNIQUE(commentId),
 
 	PRIMARY KEY(commentId),
 
 	index(commentEventId),
 	FOREIGN KEY(commentEventId) REFERENCES event(eventId),
+
 	index(commentTaskId),
 	FOREIGN KEY(commentTaskId) REFERENCES task(taskId),
+
 	index(commentUserId),
 	FOREIGN KEY(commentUserId) REFERENCES comment(commentId),
 );
