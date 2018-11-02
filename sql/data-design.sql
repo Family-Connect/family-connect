@@ -22,12 +22,12 @@ CREATE TABLE family (
 CREATE TABLE user (
 	userId BINARY(16) NOT NULL,
 	userFamilyId BINARY(16) NOT NULL,
-	userActivationToken VARCHAR (128) NOT NULL,
-	userAvatar VARCHAR (128) NOT NULL,
+	userActivationToken VARCHAR (128) NULL,
+	userAvatar VARCHAR (128) NULL,
 	userDisplayName VARCHAR (128) NOT NULL,
 	userEmail VARCHAR (128) NOT NULL,
 	userHash CHAR (97) NOT NULL,
-	userPhoneNumber CHAR (7) NOT NULL,
+	userPhoneNumber CHAR (10) NULL,
 	userPrivilege VARCHAR (250) NOT NULL,
 	userTimeZone CHAR (4) NOT NULL,
 	userName VARCHAR (96) NOT NULL,
@@ -63,8 +63,8 @@ CREATE TABLE event(
 
 CREATE TABLE task(
 	taskId BINARY(16) NOT NULL,
-	taskEventId BINARY(16) NOT NULL,
-	taskUserId BINARY(16) NOT NULL,
+	taskEventId BINARY(16) NULL,
+	taskUserId BINARY(16) NULL,
 	taskDueDate DATETIME(6) NOT NULL,
 	taskDescription CHAR(35) NOT NULL,
 	taskName CHAR(30),
