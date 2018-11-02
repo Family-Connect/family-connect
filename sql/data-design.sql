@@ -87,8 +87,6 @@ CREATE TABLE comments (
 	commentDate DATETIME (6) NOT NULL,
 	commentContent VARCHAR (855) NOT NULL,
 
-	UNIQUE(commentId),
-
 	PRIMARY KEY(commentId),
 
 	index(commentEventId),
