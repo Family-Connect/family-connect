@@ -28,10 +28,13 @@ CREATE TABLE user (
 	userPrivilege VARCHAR (250) NOT NULL,
 	userTimeZone CHAR (4) NOT NULL,
 	userName VARCHAR (96) NOT NULL
+)
 
-	INDEX(userFamilyId),
-
-	FOREIGN KEY(userFamilyId) REFERENCES family(familyId),
-
-	PRIMARY KEY(userId)
-);
+CREATE TABLE comments (
+	commentId BINARY (16) NOT NULL,
+	commentEventId BINARY (16) NOT NULL,
+	commenttaskId BINARY (16) NOT NULL,
+	commentUserId BINARY (16) NOT NULL,
+	commentDate,
+	commentContent VARCHAR ()
+)
