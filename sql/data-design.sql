@@ -1,7 +1,7 @@
 ALTER DATABASE foo CHARACTER SET uft8 COLLATE utf8_unicode_ci;
 
 DROP TABLE IF EXISTS family;
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS task;
 DROP TABLE IF EXISTS comments;
@@ -43,34 +43,40 @@ CREATE TABLE user (
 );
 
 CREATE TABLE event(
-eventId BINARY(16) NOT NULL,
-eventFamilyId BINARY(16) NOT NULL,
-eventUserId BINARY(16) NOT NULL,
-eventContent VARCHAR(255) NULL,
-eventStartDate DATETIME(6) NOT NULL,
-eventEndDate DATETIME(6),
-eventName CHAR(30) NOT NULL,
+	eventId BINARY(16) NOT NULL,
+	eventFamilyId BINARY(16) NOT NULL,
+	eventUserId BINARY(16) NOT NULL,
+	eventContent VARCHAR(255) NULL,
+	eventStartDate DATETIME(6) NOT NULL,
+	eventEndDate DATETIME(6),
+	eventName CHAR(30) NOT NULL,
 
-INDEX(eventFamilyId),
-INDEX(eventUserId),
-FOREIGN KEY(eventFamilyId) REFERENCES family(familyId),
-FOREIGN KEY(eventUserId) REFERENCES user(userId),
-PRIMARY KEY(eventId)
+	INDEX(eventFamilyId),
+	INDEX(eventUserId),
+
+	FOREIGN KEY(eventFamilyId) REFERENCES family(familyId),
+
+	FOREIGN KEY(eventUserId) REFERENCES user(userId),
+
+	PRIMARY KEY(eventId)
 );
 
 CREATE TABLE task(
-taskId BINARY(16) NOT NULL,
-taskEventId BINARY(16) NOT NULL,
-taskUserId BINARY(16) NOT NULL,
-taskDueDate DATETIME(6) NOT NULL,
-taskDescription CHAR(35) NOT NULL,
-taskName CHAR(30),
+	taskId BINARY(16) NOT NULL,
+	taskEventId BINARY(16) NOT NULL,
+	taskUserId BINARY(16) NOT NULL,
+	taskDueDate DATETIME(6) NOT NULL,
+	taskDescription CHAR(35) NOT NULL,
+	taskName CHAR(30),
 
-INDEX(taskEventId)
-INDEX(taskUserId)
-FOREIGN KEY(taskEventId) REFERENCES event(eventId),
-FOREIGN KEY(taskUserId) REFERENCES user(userId),
-PRIMARY KEY(taskId)
+	INDEX(taskEventId)
+	INDEX(taskUserId)
+
+	FOREIGN KEY(taskEventId) REFERENCES event(eventId),
+
+	FOREIGN KEY(taskUserId) REFERENCES user(userId),
+
+	PRIMARY KEY(taskId)
 );
 
 CREATE TABLE comments (
