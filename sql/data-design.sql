@@ -39,8 +39,17 @@ CREATE TABLE user (
 CREATE TABLE comments (
 	commentId BINARY (16) NOT NULL,
 	commentEventId BINARY (16) NOT NULL,
-	commenttaskId BINARY (16) NOT NULL,
+	commentTaskId BINARY (16) NOT NULL,
 	commentUserId BINARY (16) NOT NULL,
-	commentDate,
-	commentContent VARCHAR (855)
-)
+	commentDate, DATETIME (6)
+	commentContent VARCHAR (855) NOT NULL,
+
+	PRIMARY KEY(commentId),
+
+	index(commentEventId),
+	FOREIGN KEY(commentEventId) REFERENCES event(eventId),
+	index(commentTaskId),
+	FOREIGN KEY(commentTaskId) REFERENCES task(taskId),
+	index(commentUserId),
+	FOREIGN KEY(commentUserId) REFERENCES comment(commentId),
+);
