@@ -22,14 +22,14 @@ CREATE TABLE family (
 CREATE TABLE user (
 	userId BINARY(16) NOT NULL,
 	userFamilyId BINARY(16) NOT NULL,
-	userActivationToken VARCHAR (128),
-	userAvatar VARCHAR (128),
-	userDisplayName VARCHAR (128) NOT NULL,
-	userEmail VARCHAR (128) NOT NULL,
-	userHash CHAR (97) NOT NULL,
-	userPhoneNumber VARCHAR (10),
-	userPrivilege VARCHAR (250) NOT NULL,
-	userName VARCHAR (96) NOT NULL,
+	userActivationToken CHAR(32) NOT NULL,
+	userAvatar VARCHAR(128) NOT NULL,
+	userDisplayName VARCHAR(128) NOT NULL,
+	userEmail VARCHAR(128) NOT NULL,
+	userHash CHAR(97) NOT NULL,
+	userPhoneNumber VARCHAR(10) NOT NULL,
+	userPrivilege VARCHAR(250) NOT NULL,
+	userName VARCHAR(96) NOT NULL,
 
 	UNIQUE(userDisplayName),
 	UNIQUE(userEmail),
@@ -45,9 +45,9 @@ CREATE TABLE event(
 	eventId BINARY(16) NOT NULL,
 	eventFamilyId BINARY(16) NOT NULL,
 	eventUserId BINARY(16) NOT NULL,
-	eventContent VARCHAR(255),
+	eventContent VARCHAR(255) NOT NULL,
 	eventStartDate DATETIME(6) NOT NULL,
-	eventEndDate DATETIME(6),
+	eventEndDate DATETIME(6) NOT NULL,
 	eventName CHAR(30) NOT NULL,
 
 	INDEX(eventFamilyId),
@@ -65,7 +65,7 @@ CREATE TABLE task(
 	taskEventId BINARY(16),
 	taskUserId BINARY(16),
 	taskDueDate DATETIME(6) NOT NULL,
-	taskDescription VARCHAR(35),
+	taskDescription VARCHAR(512),
 	taskName VARCHAR(30) NOT NULL,
 
 	INDEX(taskEventId),
@@ -78,13 +78,13 @@ CREATE TABLE task(
 	PRIMARY KEY(taskId)
 );
 
-CREATE TABLE comments (
-	commentId BINARY (16) NOT NULL,
-	commentEventId BINARY (16),
-	commentTaskId BINARY (16),
-	commentUserId BINARY (16) NOT NULL,
-	commentDate DATETIME (6) NOT NULL,
-	commentContent VARCHAR (855),
+CREATE TABLE comment (
+	commentId BINARY(16) NOT NULL,
+	commentEventId BINARY(16) NOT NULL,
+	commentTaskId BINARY(16),
+	commentUserId BINARY(16) NOT NULL,
+	commentDate DATETIME(6) NOT NULL,
+	commentContent VARCHAR(855),
 
 	PRIMARY KEY(commentId),
 
