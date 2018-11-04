@@ -1,4 +1,4 @@
-ALTER DATABASE foo CHARACTER SET uft8 COLLATE utf8_unicode_ci;
+ALTER DATABASE family_connect_table_CHANGE_ME CHARACTER SET uft8 COLLATE utf8_unicode_ci;
 
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS task;
@@ -29,7 +29,7 @@ CREATE TABLE user (
 	userHash CHAR(97) NOT NULL,
 	userPhoneNumber VARCHAR(10) NOT NULL,
 	userPrivilege VARCHAR(250) NOT NULL,
-	userName VARCHAR(96) NOT NULL,
+	userUserName VARCHAR(96) NOT NULL,
 
 	UNIQUE(userDisplayName),
 	UNIQUE(userEmail),
@@ -46,9 +46,9 @@ CREATE TABLE event(
 	eventFamilyId BINARY(16) NOT NULL,
 	eventUserId BINARY(16) NOT NULL,
 	eventContent VARCHAR(255) NOT NULL,
-	eventStartDate DATETIME(6) NOT NULL,
 	eventEndDate DATETIME(6) NOT NULL,
 	eventName CHAR(30) NOT NULL,
+	eventStartDate DATETIME(6) NOT NULL,
 
 	INDEX(eventFamilyId),
 	INDEX(eventUserId),
@@ -64,8 +64,8 @@ CREATE TABLE task(
 	taskId BINARY(16) NOT NULL,
 	taskEventId BINARY(16),
 	taskUserId BINARY(16),
-	taskDueDate DATETIME(6) NOT NULL,
 	taskDescription VARCHAR(512),
+	taskDueDate DATETIME(6) NOT NULL,
 	taskName VARCHAR(30) NOT NULL,
 
 	INDEX(taskEventId),
@@ -83,18 +83,18 @@ CREATE TABLE comment (
 	commentEventId BINARY(16) NOT NULL,
 	commentTaskId BINARY(16),
 	commentUserId BINARY(16) NOT NULL,
-	commentDate DATETIME(6) NOT NULL,
 	commentContent VARCHAR(855),
+	commentDate DATETIME(6) NOT NULL,
 
-	PRIMARY KEY(commentId),
+	INDEX(commentEventId),
+	INDEX(commentTaskId),
+	INDEX(commentUserId),
 
-	index(commentEventId),
 	FOREIGN KEY(commentEventId) REFERENCES event(eventId),
 
-	index(commentTaskId),
 	FOREIGN KEY(commentTaskId) REFERENCES task(taskId),
 
-	index(commentUserId),
-	FOREIGN KEY(commentUserId) REFERENCES comment(commentId),
-);
+	FOREIGN KEY(commentUserId) REFERENCES user(userId),
 
+	PRIMARY KEY(commentId)
+	);
