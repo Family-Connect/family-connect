@@ -1,10 +1,11 @@
 ALTER DATABASE family_connect_table_CHANGE_ME CHARACTER SET uft8 COLLATE utf8_unicode_ci;
 
-DROP TABLE IF EXISTS comments;
-DROP TABLE IF EXISTS task;
-DROP TABLE IF EXISTS event;
-DROP TABLE IF EXISTS `user`;
+-- drop tables if they already exist
 DROP TABLE IF EXISTS family;
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS event;
+DROP TABLE IF EXISTS task;
+DROP TABLE IF EXISTS comments;
 
 -- create family table
 
@@ -19,7 +20,7 @@ CREATE TABLE family (
 	PRIMARY KEY(familyId)
 );
 
-CREATE TABLE user (
+CREATE TABLE `user` (
 	userId BINARY(16) NOT NULL,
 	userFamilyId BINARY(16) NOT NULL,
 	userActivationToken CHAR(32) NOT NULL,
@@ -28,13 +29,13 @@ CREATE TABLE user (
 	userEmail VARCHAR(128) NOT NULL,
 	userHash CHAR(97) NOT NULL,
 	userPhoneNumber VARCHAR(10) NOT NULL,
-	userPrivilege VARCHAR(250) NOT NULL,
-	userUserName VARCHAR(96) NOT NULL,
+	userPrivilege VARCHAR(250) NOT NULL
 
 	UNIQUE(userDisplayName),
 	UNIQUE(userEmail),
 
 	INDEX(userFamilyId),
+	INDEX(userEmail),
 
 	FOREIGN KEY(userFamilyId) REFERENCES family(familyId),
 
@@ -54,7 +55,6 @@ CREATE TABLE event(
 	INDEX(eventUserId),
 
 	FOREIGN KEY(eventFamilyId) REFERENCES family(familyId),
-
 	FOREIGN KEY(eventUserId) REFERENCES user(userId),
 
 	PRIMARY KEY(eventId)
@@ -91,9 +91,7 @@ CREATE TABLE comment (
 	INDEX(commentUserId),
 
 	FOREIGN KEY(commentEventId) REFERENCES event(eventId),
-
 	FOREIGN KEY(commentTaskId) REFERENCES task(taskId),
-
 	FOREIGN KEY(commentUserId) REFERENCES user(userId),
 
 	PRIMARY KEY(commentId)
