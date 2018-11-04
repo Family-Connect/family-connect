@@ -1,10 +1,10 @@
 ALTER DATABASE foo CHARACTER SET uft8 COLLATE utf8_unicode_ci;
 
-DROP TABLE IF EXISTS family;
-DROP TABLE IF EXISTS `user`;
-DROP TABLE IF EXISTS event;
-DROP TABLE IF EXISTS task;
 DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS task;
+DROP TABLE IF EXISTS event;
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS family;
 
 -- create family table
 
@@ -29,7 +29,6 @@ CREATE TABLE user (
 	userHash CHAR (97) NOT NULL,
 	userPhoneNumber VARCHAR (10),
 	userPrivilege VARCHAR (250) NOT NULL,
-	userTimeZone VARCHAR (4) NOT NULL,
 	userName VARCHAR (96) NOT NULL,
 
 	UNIQUE(userDisplayName),
