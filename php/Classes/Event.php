@@ -360,39 +360,41 @@ eventEndDate = :eventEndDate, eventName = :eventName, eventStartDate = :eventSta
 		}
 
 		// create query template
-		$query = "SELECT articleId, articleBirdId, articleContent, articleBirdImage FROM article WHERE articleId = :articleId";
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM 
+event WHERE eventId = :eventId";
 		$statement = $pdo->prepare($query);
 
-		// bind the article id to the place holder in the template
-		$parameters = ["articleId" => $articleId->getBytes()];
+		// bind the event id to the place holder in the template
+		$parameters = ["eventId" => $eventId->getBytes()];
 		$statement->execute($parameters);
 
 		// grab the article from mySQL
 		try {
-			$article = null;
+			$event = null;
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$article = new Article($row["articleId"], $row["articleBirdId"], $row["articleContent"], $row["articleBirdImage"]);
+				$event = new Event($row["eventId"], $row["eventFamilyId"], $row["eventUserId"], $row["eventContent"],
+					$row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($article);
+		return($event);
 	}
 
 	/**
-	 * gets all Articles
+	 * gets all Event
 	 *
 	 * @param \PDO $pdo PDO connection object
-	 * @return \SplFixedArray SplFixedArray of Articles found or null if not found
+	 * @return \SplFixedArray SplFixedArray of Events found or null if not found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	public static function getAllArticles(\PDO $pdo) : \SPLFixedArray {
+	public static function getAllEvents(\PDO $pdo) : \SPLFixedArray {
 		// create query template
-		$query = "SELECT articleId, articleBirdId, articleContent, articleBirdImage FROM article";
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM event";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
