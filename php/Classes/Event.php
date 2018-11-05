@@ -398,20 +398,21 @@ event WHERE eventId = :eventId";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
-		// build an array of articles
-		$articles = new \SplFixedArray($statement->rowCount());
+		// build an array of events
+		$events = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$article = new Article($row["articleId"], $row["articleBirdId"], $row["articleContent"], $row["articleBirdImage"]);
-				$articles[$articles->key()] = $article;
-				$articles->next();
+				$event = new Event($row["eventId"], $row["eventFamilyId"], $row["eventUserId"], $row["eventContent"],
+					$row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
+				$events[$events->key()] = $event;
+				$events->next();
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return ($articles);
+		return ($events);
 	}
 
 	/**
@@ -422,8 +423,8 @@ event WHERE eventId = :eventId";
 	public function jsonSerialize() : array {
 		$fields = get_object_vars($this);
 
-		$fields["articleId"] = $this->articleId->toString();
-		$fields["articleBirdId"] = $this->articleBirdId->toString();
+		$fields["eventId"] = $this->eventId->toString();
+		$fields["eventFamilyId"] = $this->eventFamilyId->toString();
 
 		return($fields);
 	}
