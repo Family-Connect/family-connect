@@ -1,6 +1,6 @@
 <?php
 
-namespace agarcia\family-connect ;
+namespace agarcia707\family-connect;
 
 require_once("autoload.php");
 require_once(dirname(__DIR__,2)."/vendor/autoload.php");
@@ -49,13 +49,30 @@ class User {
 	 */
 	private $userHash;
 	/**
-	 * Phone number user uses as information
+	 * Phone number used as user information
 	 * @var string $userPhoneNumber
 	 */
 	private $userPhoneNumber;
 	/**
 	 * Privilege allows user to do administrative tasks
-	 @var string $userPrivilege
+	 @var int $userPrivilege
 	 */
 	private $userPrivilege;
 }
+/**
+ * constructor for this User
+ *
+ * @param string|Uuid $newUserId id of this User or null if a new User
+ * @param string|Uuid $newUserFamilyId id of the Family the User belongs to
+ * @param string $ewUserActivationToken string containing characters that verifies account
+ * @param string $newUserAvatar string containing characters for user representation
+ * @param string $newUserDisplayName string containing characters to identify user
+ * @param string $newUserEmail string containing characters to allow log in
+ * @param string $newUserHash string containing characters to look up information in database
+ * @param string $newUserPhoneNumber string containing characters to use as user information
+ * @param int $newUserPrivilege
+ * @throws \InvalidArgumentException if data types are not valid
+ * @throws \RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+ * @throws \TypeError if data types violate type hints
+ * @throws \Exception if some other exception occurs
+ */
