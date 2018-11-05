@@ -113,5 +113,23 @@ public function setCommentId($newCommentId) ; void {
 	$this->commentId = $newCommentId;
 }
 
+/**
+ * accessor method for comment event id
+ *
+ * @return Uuid values of comment event id
+ **/
+public function get CommentEventId() : Uuid{
+	return($this->commentEventId);
+}
+
+/**
+ * mutator method for comment event id
+ *
+ * @param | Uuid $newCommentEventId new value of comment event id
+ * @throws \RangeException if $newCommentEventId is not positive
+ * @throws \ TypeError if $newCommentEventId is not an integer
+ **/
+
+}
 
 
