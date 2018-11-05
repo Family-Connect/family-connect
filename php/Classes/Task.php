@@ -81,6 +81,29 @@ class Task {
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 	}
-
+	/**
+	 * accessor method for taskId
+	 *
+	 * @return Uuid value of taskId
+	 */
+	public function getTaskId() : Uuid {
+		return ($this->taskId);
+	}
+	/**
+	 * mutator method for taskId
+	 *
+	 *@param Uuid|string $newTaskId new value of task id
+	 *@throws \RangeException if $newTaskId is not positive
+	 *@throws \TypeError if $newTaskId is not Uuid or string
+	 */
+	public function setTaskId($newTaskId) : void {
+		try {
+			$uuid = self::validateUuid($newTaskId);
+		} catch(\RangeException | \InvalidArgumentException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		$this->taskId = $newTaskId;
+	}
 
 }
