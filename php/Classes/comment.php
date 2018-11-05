@@ -18,3 +18,21 @@ use Ramsey\Uuid\Uuid;
  * @author Feliz Munoz <fmunoz11@cnm.edu>
  * @version 3.0.0
  */
+
+class Comment {
+	use ValidateUuid;
+	/**
+	 * id for comment; this is the primary key
+	 * @varUuid $commentId
+	 **/
+	private $commentId;
+	/**
+	 * id of the event that the comment belongs to
+	 * @varUuid $commentEventId
+	 **/
+	private $commentEventId;
+	/**
+	 * id of the task that the comment belongs to
+	 * @varUuid $commentTaskId
+	 */
+}
