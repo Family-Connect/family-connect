@@ -12,9 +12,6 @@ use Ramsey\Uuid\Uuid;
  * @author Sharon Romero <sromero130@cnm.edu>
  * @version 1.0.0
  **/
-
-
-
 class Event {
 use ValidateUuid;
 /**id for the Event, this is the primary key.
@@ -28,7 +25,7 @@ private $eventId;
 private $eventFamilyId;
 /**
 * id of the event that the user creates; this is a foreign key.
-* @var string $eventUserId;
+* @var $eventUserId;
 **/
 private $eventUserId;
 /**
@@ -52,4 +49,21 @@ private $eventName;
 	**/
 private $eventStartDate;
 
+
+
+public function __construct($newEventId, $newEventFamilyId, $newEventUserId, string $newEventContent, $newEventEndDate,
+									 $newEventName,$newEventStartDate) {
+	try {
+		$this->setEventId($newEventId);
+		$this->setEventFamilyId($newEventFamilyId);
+		$this->setEventUserId($newEventUserId);
+		$this->setEventContent($newEventContent);
+		$this->setEventEndDate($newEventEndDate);
+		$this->setEventName($newEventName);
+		$this->setEventStartDate($newEventStartDate);
+	} //determine what exception was thrown
+	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		$exceptionType = get_class($exception);
+		throw(new $exceptionType($exception->getMessage(), 0, $exception));
+	}
 }
