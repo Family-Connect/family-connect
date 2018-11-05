@@ -75,9 +75,43 @@ class Comment {
 			$this->setCommentUserId($newCommentUserId);
 			$this->setCommentContent($newCommentContent);
 			$this->setCommentDate($newCommentDate);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		}
+		catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
-	}	}
+	}
+
+/**
+ * accessor method for comment id
+ *
+ * @return Uuid value of comment id
+ */
+public funtion getCommentId () : Uuid {
+	return ($this->commentId);
+
+	//this outside of class
+	//$comment-getCommentId();
+}
+
+/**
+ * mutator method for comment id
+ *
+ * @param Uuid|string $newCommentId new value of comment id
+ * @throws \RangeException if #newCommentId is not positive
+ * @throws \TypeError if $newCommentId is not a uuid or string
+ **/
+public function setCommentId($newCommentId) ; void {
+	try {
+		$newCommentId = self ::ValidateUuid($newCommentId);
+	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		$exceptionType = get_class($exception);
+		throw(new $expectionType($exception->getMessage(), 0, $expection));
+	}
+
+	//convert and store the comment id
+	$this->commentId = $newCommentId;
+}
+
+
 
