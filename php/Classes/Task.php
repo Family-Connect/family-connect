@@ -251,4 +251,55 @@ class Task {
 		// store new task name
 		$this->taskName = $newTaskName;
 	}
+
+	/**
+	 * insert this task into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors happen
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 */
+	public function insert(\PDO $pdo) : void {
+		// create template for query
+		$query "INSERT INTO task(taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName) VALUES (:taskId, :taskEventId, :taskUserId, :taskDescription, :taskDueDate, :taskName)";
+		$statement = $pdo->prepare($query);
+
+		// wire variables up to their template place holders
+		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $this->taskDueDate, "taskName" => $this->taskName];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * deletes this task from mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a connection object
+	 */
+	public function delete(\PDO $pdo) : void {
+		// create template for query
+		$query = "DELETE FROM task WHERE taskId = :taskId";
+		$statement = $pdo->prepare($query);
+
+		// wire up variable to template placeholder
+		$parameters = ["taskId" => $this->taskId->getBytes()];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * updates this task in mySQL
+	 *
+	 * @param \PDO $pdo connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a connection object
+	 */
+	public function update(\PDO $pdo) : void {
+		// create template for query
+		$query = "UPDATE task SET taskId = :taskId, taskEventId = :taskEventId, taskUserId = :taskUserId, taskDescription = :taskDescription, taskDueDate = :taskDueDate, taskName = :taskName";
+		$statement = $pdo->prepare($query);
+
+		// wire up variables to place holders in query
+		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $this->taskDueDate, "taskName" => $this->taskName];
+		$statement->execute($parameters);
+	}
 }
