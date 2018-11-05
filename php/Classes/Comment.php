@@ -50,4 +50,20 @@ class Comment {
 	 * actual time that the comment was posted
 	 * @varDatetime $commentDate
 	 **/
-}
+	private $commentDate;
+
+/**
+ * constructor for Comment
+ *
+ * @param string|Uuid $newCommentId id of the comment or null if new Comment
+ * @param string|Uuid $newCommentEventId of the event that the comment is associated with
+ * @param string|Uuid $newCommentTaskId of the task that the comment is assiciated with
+ * @param string|Uuid $newCommentUserId of the user that the comment s associated with
+ * @param string $newCommentContent string containing actual comment content posted
+ * @param string $newCommentDate string with actual date and time when comment is posted
+ * @throws \InvalidArgumentException if data types are not valid
+ * @throws \RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+ * @throws \TypeError if data types violate type hints
+ * @throws \Exception if some other exception occurs
+ * @Documentation https://php.net/manual/en/language.oop5.decon.php
+ */
