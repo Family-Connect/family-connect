@@ -299,7 +299,7 @@ class Event {
 	public function insert(\PDO $pdo): void {
 
 		$query = "INSERT INTO event(eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate) VALUES
-(:eventId, :eventFamilyId, :eventUserId, :eventContent, :eventEndDate, :eventName, :eventStartDate)";
+					(:eventId, :eventFamilyId, :eventUserId, :eventContent, :eventEndDate, :eventName, :eventStartDate)";
 
 		$statement = $pdo->prepare($query);
 
@@ -317,10 +317,10 @@ class Event {
 
 		// create query template
 		$query = "UPDATE event SET eventFamilyId = :eventFamilyId:, eventUserId = :eventUserId, eventContent = :eventContent, 
-eventEndDate = :eventEndDate, eventName = :eventName, eventStartDate = :eventStartDate WHERE eventId = :eventId";
+					eventEndDate = :eventEndDate, eventName = :eventName, eventStartDate = :eventStartDate WHERE eventId = :eventId";
 		$statement = $pdo->prepare($query);
 
-		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" => $this->eventUserId, "eventContent" => $this->eventContent, "eventEndDate" => $this->eventEndDate, "eventName" => $this->eventName, "eventStartDate"=> $this->eventStartDate];
+		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" 		=> 	$this->eventUserId, "eventContent" => $this->eventContent, "eventEndDate" => $this->eventEndDate, "eventName" => 		$this->eventName, "eventStartDate"=> $this->eventStartDate];
 		$statement->execute($parameters);
 	}
 
@@ -343,14 +343,14 @@ eventEndDate = :eventEndDate, eventName = :eventName, eventStartDate = :eventSta
 	}
 
 	/**
-	 * gets the event by eventId
-	 *
-	 * @param \PDO $pdo PDO connection object
-	 * @param Uuid|string $eventId event id to search for
-	 * @return event|null event found or null if not found
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when a variable is not the correct data type
-	 **/
+	* gets the event by eventId
+	*
+	* @param \PDO $pdo PDO connection object
+	* @param Uuid|string $eventId event id to search for
+	* @return event|null event found or null if not found
+	* @throws \PDOException when mySQL related errors occur
+	* @throws \TypeError when a variable is not the correct data type
+	**/
 	public static function getEventByEventId(\PDO $pdo, $eventId) : ?Event {
 		// sanitize the eventId before searching
 		try {
@@ -361,7 +361,7 @@ eventEndDate = :eventEndDate, eventName = :eventName, eventStartDate = :eventSta
 
 		// create query template
 		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM 
-event WHERE eventId = :eventId";
+					event WHERE eventId = :eventId";
 		$statement = $pdo->prepare($query);
 
 		// bind the event id to the place holder in the template
@@ -385,13 +385,13 @@ event WHERE eventId = :eventId";
 	}
 
 	/**
-	 * gets all Event
-	 *
-	 * @param \PDO $pdo PDO connection object
-	 * @return \SplFixedArray SplFixedArray of Events found or null if not found
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when variables are not the correct data type
-	 **/
+	* gets all Event
+	*
+	* @param \PDO $pdo PDO connection object
+	* @return \SplFixedArray SplFixedArray of Events found or null if not found
+	* @throws \PDOException when mySQL related errors occur
+	* @throws \TypeError when variables are not the correct data type
+	**/
 	public static function getAllEvents(\PDO $pdo) : \SPLFixedArray {
 		// create query template
 		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM event";
@@ -416,10 +416,10 @@ event WHERE eventId = :eventId";
 	}
 
 	/**
-	 * formats the state variables for JSON serialization
-	 *
-	 * @return array resulting state variables to serialize
-	 **/
+	* formats the state variables for JSON serialization
+	*
+	* @return array resulting state variables to serialize
+	**/
 	public function jsonSerialize() : array {
 		$fields = get_object_vars($this);
 
@@ -429,5 +429,3 @@ event WHERE eventId = :eventId";
 		return($fields);
 	}
 }
-}
-
