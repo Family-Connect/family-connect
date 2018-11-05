@@ -28,7 +28,7 @@ CREATE TABLE `user` (
 	userDisplayName VARCHAR(128) NOT NULL,
 	userEmail VARCHAR(128) NOT NULL,
 	userHash CHAR(97) NOT NULL,
-	userPhoneNumber VARCHAR(10) NOT NULL,
+	userPhoneNumber VARCHAR(32) NOT NULL,
 	userPrivilege TINYINT NOT NULL,
 
 	UNIQUE(userDisplayName),
