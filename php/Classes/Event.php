@@ -180,15 +180,15 @@ class Event {
 		$newEventContent = trim($newEventContent);
 		$newEventContent = filter_var($newEventContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newEventContent) === true) {
-			throw(new \InvalidArgumentException("article content is empty or insecure"));
+			throw(new \InvalidArgumentException("event content is empty or insecure"));
 		}
 
-		//verify the article content will fit in the database
+		//verify the event content will fit in the database
 		if(strlen($newEventContent) >= 255) {
-			throw(new \RangeException("article content too large"));
+			throw(new \RangeException("event content too large"));
 		}
 
-		// store the article content
+		// store the event content
 		$this->eventContent = $newEventContent;
 	}
 
@@ -224,5 +224,40 @@ class Event {
 		$this->eventEndDate = $newEventEndDate;
 	}
 
+	/**
+	 * accessor method for event name
+	 *
+	 * @return string value of event name
+	 **/
+	public function getEventName(): string {
+		return ($this->EventName);
+	}
+	/**
+	 * mutator method for event name
+	 *
+	 * @param string $newEventName new value of event name
+	 * @throws \InvalidArgumentException if $newEventName is not a string or insecure
+	 * @throws \RangeException if $newEventName is > 30 characters
+	 * @throws \TypeError if $newEventName is not a string
+	 **/
+	public function setEventName(string $newEventName): void {
+		//verify the event name is secure
+		$newEventName = trim($newEventName);
+		$newEventName = filter_var($newEventName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newEventName) === true) {
+			throw(new \InvalidArgumentException("event name is empty or insecure"));
+		}
 
-}
+		//verify the event name will fit in the database
+		if(strlen($newEventName) >= 30) {
+			throw(new \RangeException("event name too large"));
+		}
+
+		// store the event name
+		$this->eventName = $newEventName;
+	}
+
+
+
+
+	}
