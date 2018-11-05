@@ -1,6 +1,6 @@
 <?php
 
-namespace agarcia707\family-connect;
+namespace agarcia707\FamilyConnect;
 
 require_once("autoload.php");
 require_once(dirname(__DIR__,2)."/vendor/autoload.php");
@@ -58,7 +58,7 @@ class User {
 	 @var int $userPrivilege
 	 */
 	private $userPrivilege;
-}
+
 /**
  * constructor for this User
  *
@@ -99,7 +99,7 @@ class User {
  *
  * @return Uuid value of user id
  */
-public function getUserId() : Uuid {
+	public function getUserId() : Uuid {
 	return($this->UserId);
 }
 
@@ -110,7 +110,7 @@ public function getUserId() : Uuid {
  * @throws \RangeException if $newUserId is not positive
  * @throws \TypeError if $newUserId is not a uuid or string
  **/
-public function setUserId( $newUserId) : void {
+	public function setUserId( $newUserId) : void {
 	try {
 		$uuid = self::validateUuid($newUserId);
 	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -127,7 +127,7 @@ public function setUserId( $newUserId) : void {
  *
  * @return Uuid value of user family id
  **/
-public function getUserFamilyId() : Uuid{
+	public function getUserFamilyId() : Uuid{
 	return($this->userFamilyId);
 }
 
@@ -138,7 +138,7 @@ public function getUserFamilyId() : Uuid{
  * @throws \RangeException if $newUserFamilyId is not positive
  * @throws \TypeError if $newUserFamilyId is not an integer
  **/
-public function setUserFamilyId( $newUserFamilyId) : void {
+	public function setUserFamilyId( $newUserFamilyId) : void {
 	try {
 		$uuid = self::validateUuid($newUserFamilyId);
 	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -158,11 +158,11 @@ public function setUserFamilyId( $newUserFamilyId) : void {
  * @throws \RangeException if $newUserActivationToken is > 32 characters
  * @throws \TypeError if $newUserActivationToken is not a string
  **/
-public function setUserActivationToken(string $newUserActivationToken) : void {
+	public function setUserActivationToken(string $newUserActivationToken) : void {
 	$newUserActivationToken = trim($newUserActivationToken);
 	$newUserActivationToken = filter_var($newUserActivationToken, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	if(empty($newUserActivationToken) === true) {
-		throw(new \InvalidArgumentException("tweet content is empty or insecure"));
+		throw(new \InvalidArgumentException("user activation token is empty or insecure"));
 	}
 
 	if(strlen($newUserActivationToken) >= 32) {
@@ -180,17 +180,107 @@ public function setUserActivationToken(string $newUserActivationToken) : void {
  * @throws \RangeException if $newUserAvatar is > 128 characters
  * @throws \TypeError if $newUserAvatar is not a string
  **/
-public function setUserAvatar(string $newUserAvatar) : void {
+	public function setUserAvatar(string $newUserAvatar) : void {
 	$newUserAvatar = trim($newUserAvatar);
 	$newUserAvatar = filter_var($newUserAvatar, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	if(empty($newUserAvatar) === true) {
-		throw(new \InvalidArgumentException("tweet content is empty or insecure"));
+		throw(new \InvalidArgumentException("user avatar is empty or insecure"));
 	}
 
-	if(strlen($newUserAvatar) >= 128) {
-		throw(new \RangeException("user activation token too large"));
+	if(strlen($newUserAvatar) > 128) {
+		throw(new \RangeException("user avatar too large"));
 	}
 
 	$this->userAvatar = $newUserAvatar;
 }
 
+/**
+ * mutator method for user avatar
+ *
+ * @param string $newUserDisplayName new value of user display name
+ * @throws \InvalidArgumentException if $newUserDisplayName is not a string or insecure
+ * @throws \RangeException if $newUserDisplayName is > 128 characters
+ * @throws \TypeError if $newUserDisplayName is not a string
+ **/
+	public function setUserDisplayName(string $newUserDisplayName) : void {
+	$newUserDisplayName = trim($newUserDisplayName);
+	$newUserDisplayName = filter_var($newUserDisplayName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($newUserDisplayName) === true) {
+		throw(new \InvalidArgumentException("user display name empty or insecure"));
+	}
+
+	if(strlen($newUserDisplayName) > 128) {
+		throw(new \RangeException("user display name too large"));
+	}
+
+	$this->userDisplayName = $newUserDisplayName;
+}
+
+/**
+ * mutator method for user email
+ *
+ * @param string $newUserEmail new value of user avatar
+ * @throws \InvalidArgumentException if $newUserEmail is not a string or insecure
+ * @throws \RangeException if $newUserEmail is > 128 characters
+ * @throws \TypeError if $newUserEmail is not a string
+ **/
+	public function setUserEmail(string $newUserEmail) : void {
+	$newUserEmail = trim($newUserEmail);
+	$newUserEmail = filter_var($newUserEmail, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($newUserEmail) === true) {
+		throw(new \InvalidArgumentException("user email is empty or insecure"));
+	}
+
+	if(strlen($newUserEmail) > 128) {
+		throw(new \RangeException("user email too large"));
+	}
+
+	$this->userEmail = $newUserEmail;
+}
+
+/**
+ * mutator method for user hash
+ *
+ * @param string $newUserHash new value of user hash
+ * @throws \InvalidArgumentException if $newUserHash is not a string or insecure
+ * @throws \RangeException if $newUserHash >= 97 characters
+ * @throws \TypeError if $newUserAvatar is not a string
+ **/
+	public function setUserHash(string $newUserHash) : void {
+	$newUserHash = trim($newUserHash);
+	$newUserHash = filter_var($newUserHash, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($newUserHash) === true) {
+		throw(new \InvalidArgumentException("user hash is empty or insecure"));
+	}
+
+	if(strlen($newUserHash) >= 97) {
+		throw(new \RangeException("user hash too large"));
+	}
+
+	$this->userHash = $newUserHash;
+	}
+
+	/**
+	 * mutator method for user phone number
+	 *
+	 * @param string $newUserPhoneNumber new value of user phone number
+	 * @throws \InvalidArgumentException if $newPhoneNumber is not a string or insecure
+	 * @throws \RangeException if $newUserPhoneNumber is > 32 characters
+	 * @throws \TypeError if $newUserPhoneNumber is not a string
+	 **/
+	public function setUserPhoneNumber(string $newUserPhoneNumber) : void {
+		$newUserPhoneNumber = trim($newUserPhoneNumber);
+		$newUserPhoneNumber = filter_var($newUserPhoneNumber, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newUserPhoneNumber) === true) {
+			throw(new \InvalidArgumentException("user phone number is empty or insecure"));
+		}
+
+		if(strlen($newUserPhoneNumber) > 32) {
+			throw(new \RangeException("user phone number too large"));
+		}
+
+		$this->userPhoneNumber = $newUserPhoneNumber;
+	}
+
+
+}
