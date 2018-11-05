@@ -241,4 +241,16 @@ class Family {
 		return($family);
 	}
 
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 */
+	public function jsonSerialize() : array {
+		$fields = get_object_vars($this);
+
+		$fields["familyId"] = $this->familyId->toString();
+		return($fields);
+	}
+
 }
