@@ -121,3 +121,54 @@ public function setUserId( $newUserId) : void {
 	// convert and store the user id
 	$this->userId = $uuid;
 }
+
+/**
+ * accessor method for user family id
+ *
+ * @return Uuid value of user family id
+ **/
+public function getUserFamilyId() : Uuid{
+	return($this->userFamilyId);
+}
+
+/**
+ * mutator method for user family id
+ *
+ * @param string | Uuid $newUserFamilyId new value of user family id
+ * @throws \RangeException if $newUserFamilyId is not positive
+ * @throws \TypeError if $newUserFamilyId is not an integer
+ **/
+public function setUserFamilyId( $newUserFamilyId) : void {
+	try {
+		$uuid = self::validateUuid($newUserFamilyId);
+	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		$exceptionType = get_class($exception);
+		throw(new $exceptionType($exception->getMessage(), 0, $exception));
+	}
+
+	// convert and store the profile id
+	$this->userFamilyId = $uuid;
+}
+
+/**
+ * mutator method for user activation token
+ *
+ * @param string $newUserActivationToken new value of user activation token
+ * @throws \InvalidArgumentException if $newUserActivationToken is not a string or insecure
+ * @throws \RangeException if $newTweetContent is > 32 characters
+ * @throws \TypeError if $newUserActivationToken is not a string
+ **/
+public function setUserActivationToken(string $newUserActivationToken) : void {
+	$newUserActivationToken = trim($newUserActivationToken);
+	$newUserActivationToken = filter_var($newUserActivationToken, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($newUserActivationToken) === true) {
+		throw(new \InvalidArgumentException("tweet content is empty or insecure"));
+	}
+
+	if(strlen($newTweetContent) >= 32) {
+		throw(new \RangeException("user activation token too large"));
+	}
+
+	$this->userActivationToken = $newUserActivationToken;
+}
+
