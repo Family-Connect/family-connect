@@ -157,4 +157,35 @@ class Task {
 		$this->taskUserId = $newTaskUserId;
 	}
 
+
+	/**
+	 * accessor method for task description
+	 *
+	 * @return string value of task description
+	 */
+	public function getTaskDescription() : ?string {
+		return ($this->taskDescription);
+	}
+	/**
+	 * mutator method for task description
+	 *
+	 * @param string $newTaskDescription value of new task description
+	 * @throws \InvalidArgumentException if task description is not a string or if it's insecure
+	 * @throws \RangeException if length of task description is greater than 512 characters
+	 * @throws \TypeError if family name is not a string
+	 */
+	public function setTaskDescription(string $newTaskDescription) : void {
+		$newTaskDescription = trim($newTaskDescription);
+		$newTaskDescription = filter_var($newTaskDescription, FILTER_SANITIZE_STRING);
+		// verify that the new task description is a string
+		if($newTaskDescription === false) {
+			throw(new \InvalidArgumentException("new task description is not a string or is insecure"));
+		}
+		// verify that the new task description is not too long
+		if(strlen($newFamilyName) > 512) {
+			throw(new \RangeException("new task description is too long"));
+		}
+		// store new task description
+		$this->taskDescription = $newTaskDescription;
+	}
 }
