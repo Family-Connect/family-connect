@@ -81,6 +81,7 @@ class Task {
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 	}
+
 	/**
 	 * accessor method for taskId
 	 *
@@ -104,6 +105,56 @@ class Task {
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 		$this->taskId = $newTaskId;
+	}
+
+	/**
+	 * accessor method for taskEventId
+	 *
+	 * @return Uuid value of taskEventId
+	 */
+	public function getTaskEventId() : Uuid {
+		return ($this->taskEventId);
+	}
+	/**
+	 * mutator method for taskEventId
+	 *
+	 *@param Uuid|string $newTaskEventId new value of task event id
+	 *@throws \RangeException if $newTaskEventId is not positive
+	 *@throws \TypeError if $newTaskEventId is not Uuid or string
+	 */
+	public function setTaskEventId($newTaskEventId) : void {
+		try {
+			$uuid = self::validateUuid($newTaskEventId);
+		} catch(\RangeException | \InvalidArgumentException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		$this->taskEventId = $newTaskEventId;
+	}
+
+	/**
+	 * accessor method for taskUserId
+	 *
+	 * @return Uuid value of taskUserId
+	 */
+	public function getTaskUserId() : Uuid {
+		return ($this->taskUserId);
+	}
+	/**
+	 * mutator method for taskUserId
+	 *
+	 *@param Uuid|string $newTaskUserId new value of task user id
+	 *@throws \RangeException if $newTaskUserId is not positive
+	 *@throws \TypeError if $newTaskUserId is not Uuid or string
+	 */
+	public function setTaskUserId($newTaskUserId) : void {
+		try {
+			$uuid = self::validateUuid($newTaskUserId);
+		} catch(\RangeException | \InvalidArgumentException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		$this->taskUserId = $newTaskUserId;
 	}
 
 }
