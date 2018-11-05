@@ -22,4 +22,34 @@ use Ramsey\Uuid\Uuid;
 class Task {
 	use ValidateDate;
 	use ValidateUuid;
+	/**
+	 * id for this task, this is the primary key
+	 * @var Uuid $taskId
+	 */
+	private $taskId;
+	/**
+	 * id for this event associated with this task (if applicable), this is a foreign key
+	 * @var Uuid $taskEventId
+	 */
+	private $taskEventId;
+	/**
+	 * id for the user associated with this task (if applicable), this is a foreign key
+	 * @var Uuid $taskUserId
+	 */
+	private $taskUserId;
+	/**
+	 * string content describing task
+	 * @var string $taskDescription
+	 */
+	private $taskDescription;
+	/**
+	 * date and time before which the task must be completed, in a PHP DateTime object
+	 * @var \DateTime $taskDueDate
+	 */
+	private $taskDueDate;
+	/**
+	 * string value holding name of this task
+	 * @var string $taskName
+	 */
+	private $taskName;
 }
