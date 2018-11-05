@@ -48,8 +48,16 @@ class Event {
 	 * @var $eventStartDate
 	 **/
 	private $eventStartDate;
-
-
+	/**
+	 * constructor for event class
+	 * @param uuid $newEventId id of this event or null if new event
+	 * @param uuid $newEventFamilyId id of the family channel the event is tied to
+	 * @param uuid $newEventUserId id of the user who created the event
+	 * @param string $newEventContent string containing the content of the event
+	 * @param string $newEventEndDate string containing the end date of the event
+	 * @param string $newEventName string containing the name of the event
+	 * @param string $newEventStartDate string containing the start date of the event
+	 **/
 	public function __construct($newEventId, $newEventFamilyId, $newEventUserId, string $newEventContent, $newEventEndDate,
 										 $newEventName, $newEventStartDate) {
 		try {
@@ -79,12 +87,12 @@ class Event {
 		//$event->get event id();
 	}
 
-/**
-* mutator method for event id
-* @param uuid $newEventId new value of event id
-* @throws \RangeException if $newEventId is not positive
-* @throws \TypeError if $newEventId is not a uuid
-**/
+	/**
+	* mutator method for event id
+	* @param uuid $newEventId new value of event id
+	* @throws \RangeException if $newEventId is not positive
+	* @throws \TypeError if $newEventId is not a uuid
+	**/
 	public function setEventId($newEventId): void {
 		try {
 			$uuid = self::validateUuid($newEventId);
@@ -106,7 +114,6 @@ class Event {
 
 /**
  * mutator method for event family id
- *
  * @param string | Uuid $newEventFamilyId new value of event family id
  * @throws \RangeException if $newEventFamilyId is not positive
  * @throws \TypeError if $newEventFamilyId is not an integer
@@ -123,6 +130,36 @@ class Event {
 		// convert and store the event family id
 		$this->eventFamilyId = $uuid;
 	}
+
+	/**
+	 * accessor method for event user id
+	 *
+	 * @return uuid value for event user id
+	 **/
+	public function getEventUserId(): uuid {
+		return ($this->eventUserId);
+	}
+
+	/**
+	 * mutator method for event user id
+	 * @param string | Uuid $newEventUserId new value of event user id
+	 * @throws \RangeException if $newEventUserId is not positive
+	 * @throws \TypeError if $newEventUserId is not an integer
+	 **/
+
+	public function setEventUserId($newEventUserId): void {
+		try {
+			$uuid = self::validateUuid($newEventUserId);
+		} catch
+		(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		// convert and store the event user id
+		$this->eventUserId = $uuid;
+	}
+
+
 
 
 }
