@@ -129,7 +129,44 @@ public function get CommentEventId() : Uuid{
  * @throws \RangeException if $newCommentEventId is not positive
  * @throws \ TypeError if $newCommentEventId is not an integer
  **/
-
+public function setCommentEventId( $newCommentEventId) : void {
+	try {
+		$uuid = self::validateUuid($newCommentEventId);
+	}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError) {
+		throw(new $exceptionType($exception->getMessage(), 0, $exception));
+	}
+	//convert and store the comment event id
+	$this->commentEventId = $uuid;
 }
+
+/**
+ * accessor method for comment task id
+ *
+ * @return Uuid value of comment task id
+ **/
+public function getCommentTaskId() : Uuid{
+	return($this->commentTaskId);
+}
+
+/**
+ * mutator method for comment task id
+ *
+ * @param | Uuid $newCommentTaskId new value of comment task id
+ * @throws \RangeException if $newCommentTaskId is not positive
+ * @throws \TypeError if $newCommentTaskId is not an integer
+ */
+public function setCommentTaskId( $newCommentTaskId) : void {
+	try {
+		$uuid = self::validateUuid($newCommentTaskId);
+	} catch(\InvalidArgumentException | \RangeException | \Exception |\TypeError $exception) {
+		$exceptionType = get_class($exception);
+		throw(new $exceptionType($exception->getMessage(), 0, $exception));
+	}
+	//convert and store the comment task id
+	$this->commentTaskId = $uuid;
+}
+
+
+
 
 
