@@ -80,4 +80,36 @@ class Family {
 		// store the new family id
 		$this->familyId = $uuid;
 	}
+
+	/**
+	 * accessor method for family name
+	 *
+	 * @return string value of family name
+	 */
+	public function getFamilyName() : ?string {
+		return ($this->familyName);
+	}
+	/**
+	 * mutator method for family name
+	 *
+	 * @param string $newFamilyName value of new family name
+	 * @throws \InvalidArgumentException if family name is not a string or if it's insecure
+	 * @throws \RangeException if length of family name is greater than 64 characters
+	 * @throws \TypeError if family name is not a string
+	 */
+	public function setFamilyName(string $newFamilyName) : void {
+		$newFamilyName = trim($newFamilyName);
+		$newFamilyName = filter_var($newFamilyName, FILTER_SANITIZE_STRING);
+		// verify that the new family name is a string
+		if($newFamilyName === false) {
+			throw(new \InvalidArgumentException("new family name is not a string or is insecure"));
+		}
+		// verify that the new family name is not too long
+		if(strlen($newFamilyName) > 64) {
+			throw(new \RangeException("new family name is too long"));
+		}
+		// store new family name
+		$this->familyName = $newFamilyName;
+	}
+
 }
