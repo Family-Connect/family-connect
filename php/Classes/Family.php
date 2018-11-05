@@ -41,4 +41,17 @@ class Family {
 	 * @throws \Exception for any other mysqli_sql_exception
 	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
 	 */
+	public function __construct($newFamilyId, $newFamilyName) {
+		try {
+			$this->setFamilyId($newFamilyId);
+			$this->setFamilyName($newFamilyName);
+		}
+		// determine if/what exceptions were thrown
+		catch(\InvalidArgumentException | \RangeException | \TypeError | \Exception $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+	}
+
+
 }
