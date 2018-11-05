@@ -198,7 +198,33 @@ public function setCommentUserId( $newCommentUserId) : void {
  *
  * @return string value of comment content
  **/
+public function getCommentContent() : string {
+	return($this->commentContent);
+}
 
+/**
+ * mutator method for comment content
+ *
+ * @param string $newCommentContent new value of comment content
+ * @throws \InvalidArgumentException if $newCommentContent is not a string or insecure
+ * @throws \RangeException if $newComentContent is >855 characters
+ * @throws \TypeError if $newcommentContent is not a string
+ **/
+public function setCommentContent(string $newCommentContent) : void {
+	// verify the comment content is secure
+	$newCommentContent = trim($newCommentContent);
+	$newCommentContent = filter_var($newCommentContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($newCommentContent) === true) {
+		throw(new \InvalidArgumentException("comment content is empty or insecure"));
+	}
+	//verify the comment content will fit in the database
+	if(strlen($newCommentContent) >=855) {
+		throw(new \RangeException("comment content too large"));
+	}
+
+	//store the comment content
+	$this->commentContent = $newCommentContent;
+}
 
 
 
