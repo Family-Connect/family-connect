@@ -6,6 +6,7 @@
  * Time: 10:47 AM
  */
 
+namespace FamConn\FamilyConnect;
 require_once("autoload.php");
 require_once(dirname(path:__Dir__, levels: 2) . "/vendor/autoload.php");
 use Ramsey\Uuid\Uuid;
@@ -86,8 +87,8 @@ class Comment {
  *
  * @return Uuid value of comment id
  */
-public funtion getCommentId () : Uuid {
-	return ($this->commentId);
+public function getCommentId() : Uuid {
+ return ($this->commentId);
 
 	//this outside of class
 	//$comment-getCommentId();
@@ -100,12 +101,12 @@ public funtion getCommentId () : Uuid {
  * @throws \RangeException if #newCommentId is not positive
  * @throws \TypeError if $newCommentId is not a uuid or string
  **/
-public function setCommentId($newCommentId) ; void {
+public function setCommentId( $newCommentId) : void {
 	try {
 		$newCommentId = self ::ValidateUuid($newCommentId);
 	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 		$exceptionType = get_class($exception);
-		throw(new $expectionType($exception->getMessage(), 0, $expection));
+		throw(new $exceptionType($exception->getMessage(), 0, $exception));
 	}
 
 	// convert and store the comment id
@@ -117,7 +118,7 @@ public function setCommentId($newCommentId) ; void {
  *
  * @return Uuid values of comment event id
  **/
-public function get CommentEventId() : Uuid{
+public function getCommentEventId() : Uuid{
 	return($this->commentEventId);
 }
 
@@ -131,7 +132,7 @@ public function get CommentEventId() : Uuid{
 public function setCommentEventId( $newCommentEventId) : void {
 	try {
 		$uuid = self::validateUuid($newCommentEventId);
-	}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError) {
+	}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 		throw(new $exceptionType($exception->getMessage(), 0, $exception));
 	}
 	// convert and store the comment event id
@@ -247,13 +248,14 @@ public function setCommentDate($newCommentDate = null) : void {
 		return;
 	}
 
-	try{
-		$newCommentDate = self::validateDateTime($newCommentDate);
+	try {
+		$newCommentDate = self::validateDate($newCommentDate);
 	} catch(\InvalidArgumentException | \RangeException $exception) {
 		$exceptionType = get_class($exception);
 		throw(new $exceptionType($exception->getMessage(), 0, $exception));
 	}
 	$this->commentDate = $newCommentDate;
+	}
 }
 
 
