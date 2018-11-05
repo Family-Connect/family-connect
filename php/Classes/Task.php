@@ -52,4 +52,35 @@ class Task {
 	 * @var string $taskName
 	 */
 	private $taskName;
+
+	/**
+	 * constructor for this task
+	 *
+	 * @param string|Uuid $newTaskId if this comment is null or a new comment
+	 * @param string|Uuid $newTaskEventId if this comment is null or a new comment
+	 * @param string|Uuid $newTaskUserId if this comment is null or a new comment
+	 * @param string $newTaskDescription for content of task description
+	 * @param \DateTime $newTaskDueDate for datetime task is due
+	 * @param string $newTaskName for name of task
+	 * @throws \InvalidArgumentException if data types aren't valid
+	 * @throws \RangeException if data values are incorrect lengths
+	 * @throws \TypeError if data values are wrong type
+	 * @throws \Exception for any others
+	 */
+	public function __construct($newTaskId, $newTaskEventId, $newTaskUserId, $newTaskDescription, $newTaskDueDate, $newTaskName) {
+		try {
+			$this->setTaskId($newTaskId);
+			$this->setTaskEventId($newTaskEventId);
+			$this->setTaskUserId($newTaskUserId);
+			$this->setTaskDescription($newTaskDescription);
+			$this->setTaskDueDate($newTaskDueDate);
+			$this->setTaskName($newTaskName);
+		}
+		catch(\InvalidArgumentException | \RangeException | \TypeError | \Exception $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+	}
+
+
 }
