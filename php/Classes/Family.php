@@ -163,4 +163,43 @@ class Family {
 		$statement->execute($parameters);
 	}
 
+	/**
+	 * get family by family id
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param Uuid|string $familyId family id used in query
+	 * @return Family|null - family if there's a result, null if there isn't
+	 * @throws \PDOException when mySQL errors occur
+	 * @throws \TypeError when the variables are not the correct data type
+	 */
+	public static function getFamilyByFamilyId(\PDO $pdo, $familyId) : ?Family {
+		// sanitize string / Uuid
+		try {
+			$familyId = self::validateUuid($familyId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create template for new query
+		$query = "SELECT familyId, familyName FROM family WHERE familyId = :familyId";
+		$statement = $pdo->prepare($query);
+
+		// wire up variable (familyId) to query
+		$parameters = ["familyId" => $familyId->getBytes()];
+		$statement->execute($parameters);
+
+		// grab family from mySQL
+		try {
+			$family = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$family = new Family($row["familyId"], $row["familyName"]);
+			}
+		} catch(\Exception $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($family);
+	}
+
 }
