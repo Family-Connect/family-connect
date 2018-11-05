@@ -220,4 +220,35 @@ class Task {
 		}
 		$this->taskDueDate = $newTaskDueDate;
 	}
+
+	/**
+	 * accessor method for task name
+	 *
+	 * @return string value of task name
+	 */
+	public function getTaskName() : ?string {
+		return ($this->taskName);
+	}
+	/**
+	 * mutator method for task name
+	 *
+	 * @param string $newTaskName value of new task name
+	 * @throws \InvalidArgumentException if task name is not a string or if it's insecure
+	 * @throws \RangeException if length of task name is greater than 30 characters
+	 * @throws \TypeError if task name is not a string
+	 */
+	public function setTaskName(string $newTaskName) : void {
+		$newTaskName = trim($newTaskName);
+		$newTaskName = filter_var($newTaskName, FILTER_SANITIZE_STRING);
+		// verify that the new task name is a string
+		if($newTaskName === false) {
+			throw(new \InvalidArgumentException("new task name is not a string or is insecure"));
+		}
+		// verify that the new task name is not too long
+		if(strlen($newTaskName) > 30) {
+			throw(new \RangeException("new task name is too long"));
+		}
+		// store new task name
+		$this->taskName = $newTaskName;
+	}
 }
