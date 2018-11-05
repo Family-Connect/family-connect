@@ -188,4 +188,36 @@ class Task {
 		// store new task description
 		$this->taskDescription = $newTaskDescription;
 	}
+
+	/**
+	 * accessor method for task due date
+	 *
+	 * @return \DateTime value of task due date
+	 */
+	public function getTaskDueDate(): \DateTime {
+		return($this->taskDueDate);
+	}
+
+	/**
+	 * mutator method for task due date
+	 *
+	 * @param \DateTime|string|null $newTaskDueDate task due date as a DateTime object or string (or null to load current time)
+	 * @throws \InvalidArgumentException if $newTaskDueDate is not a valid object or string
+	 * @throws \RangeException if $newTaskDueDate is a date that does not exist
+	 * @throws \Exception
+	 */
+	public function setTaskDueDate($newTaskDueDate = null) : void {
+		if($newTaskDueDate === null) {
+			$this->taskDueDate = new \DateTime();
+			return;
+		}
+
+		try {
+			$newTaskDueDate = self::validateDateTime($newTaskDueDate);
+		} catch(\InvalidArgumentException | \RangeException $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		$this->taskDueDate = $newTaskDueDate;
+	}
 }
