@@ -34,5 +34,20 @@ class Comment {
 	/**
 	 * id of the task that the comment belongs to
 	 * @varUuid $commentTaskId
-	 */
+	 **/
+	private $commentTaskId;
+	/**
+	 * id of the user that the comment belongs to
+	 * @varUuid $commentUserId
+	 **/
+	private $commentUserId;
+	/**
+	 * actual textual content that the the Comment will contain and be posted with the group
+	 * @var string $commentContent
+	 **/
+	private $commentContent;
+	/**
+	 * actual time that the comment was posted
+	 * @varDatetime $commentDate
+	 **/
 }
