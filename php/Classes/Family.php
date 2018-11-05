@@ -121,7 +121,7 @@ class Family {
 	 */
 	public function insert(\PDO $pdo) : void {
 		// create template for query
-		$query "INSERT INTO family(familyId, familyName) VALUES (:familyId, :familyName)";
+		$query = "INSERT INTO family(familyId, familyName) VALUES (:familyId, :familyName)";
 		$statement = $pdo->prepare($query);
 
 		// wire variables up to their template place holders

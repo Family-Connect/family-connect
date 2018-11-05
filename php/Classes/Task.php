@@ -182,7 +182,7 @@ class Task {
 			throw(new \InvalidArgumentException("new task description is not a string or is insecure"));
 		}
 		// verify that the new task description is not too long
-		if(strlen($newFamilyName) > 512) {
+		if(strlen($newTaskDescription) > 512) {
 			throw(new \RangeException("new task description is too long"));
 		}
 		// store new task description
@@ -261,7 +261,7 @@ class Task {
 	 */
 	public function insert(\PDO $pdo) : void {
 		// create template for query
-		$query "INSERT INTO task(taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName) VALUES (:taskId, :taskEventId, :taskUserId, :taskDescription, :taskDueDate, :taskName)";
+		$query = "INSERT INTO task(taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName) VALUES (:taskId, :taskEventId, :taskUserId, :taskDescription, :taskDueDate, :taskName)";
 		$statement = $pdo->prepare($query);
 
 		// wire variables up to their template place holders
