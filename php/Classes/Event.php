@@ -15,17 +15,17 @@ use Ramsey\Uuid\Uuid;
 class Event {
 	use ValidateUuid;
 	/**id for the Event, this is the primary key.
-	 * @var uuid eventId
+	 * @var uuid $eventId
 	 **/
 	private $eventId;
 	/**
-	 * id of the event that the family creates; this is a foreign key.
+	 * id of the event that's connected to and created by family; this is a foreign key.
 	 * @var uuid $eventFamilyId ;
 	 **/
 	private $eventFamilyId;
 	/**
-	 * id of the event that the user creates; this is a foreign key.
-	 * @var $eventUserId ;
+	 * id of the event that's connected to and created by the user; this is a foreign key.
+	 * @var uuid $eventUserId ;
 	 **/
 	private $eventUserId;
 	/**
@@ -34,17 +34,17 @@ class Event {
 	 **/
 	private $eventContent;
 	/**
-	 * End date for the event.
+	 * End date of the event.
 	 * @var \DateTime $eventEndDate
 	 **/
 	private $eventEndDate;
 	/**
 	 * Name of the event
-	 * @var $eventName
+	 * @var string $eventName
 	 **/
 	private $eventName;
 	/**
-	 * This is the start date of the event.
+	 * Start date of the event.
 	 * @var \DateTime $eventStartDate
 	 **/
 	private $eventStartDate;
@@ -99,25 +99,25 @@ class Event {
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 		}
 
-		//convert and store the article id
+		//convert and store the event id
 		$this->eventId = $uuid;
 	}
 
-/**
-* accessor method for event family id
-*
-* @return uuid value for event family
-**/
+	/**
+	* accessor method for event family id
+	*
+	* @return uuid value for event family id
+	**/
 	public function getEventFamilyId(): uuid {
 		return ($this->eventFamilyId);
 	}
 
-/**
+	/**
  * mutator method for event family id
  * @param string | Uuid $newEventFamilyId new value of event family id
  * @throws \RangeException if $newEventFamilyId is not positive
  * @throws \TypeError if $newEventFamilyId is not an integer
- **/
+ 	**/
 
 	public function setEventFamilyId($newEventFamilyId): void {
 		try {
@@ -176,7 +176,7 @@ class Event {
 	 * @throws \TypeError if $newEventContent is not a string
 	 **/
 	public function setEventContent(string $newEventContent): void {
-		//verify the article content is secure
+		//verify the event content is secure
 		$newEventContent = trim($newEventContent);
 		$newEventContent = filter_var($newEventContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newEventContent) === true) {
@@ -257,7 +257,35 @@ class Event {
 		$this->eventName = $newEventName;
 	}
 
-
-
-
+	/**
+	 * accessor method for event start date
+	 *
+	 * @return \dateTime value of event start date
+	 **/
+	public function getEventStartDate(): \DateTime {
+		return ($this->EventStartDate);
 	}
+
+	/**
+	 * mutator method for event start date
+	 *
+	 * @param \DateTime $newEventStartDate new value of event start date
+	 * @throws \InvalidArgumentException if $newEventStartDate is not a valid object or string
+	 * @throws \RangeException if $newEventStartDate is a date that does not exist
+	 * @throws \Exception
+	 **/
+	public function setEventStartDate($newEventStartDate = null) : void {
+		if($newEventStartDate === null) {
+			$this->EventStartDate = new \DateTime();
+			return;
+		}
+
+		try {
+			$newEventStartDate = self::validateDateTime($newEventStartDate);
+		} catch(\InvalidArgumentException | \RangeException $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		$this->eventStartDate = $newEventStartDate;
+	}
+}
