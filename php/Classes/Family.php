@@ -112,4 +112,20 @@ class Family {
 		$this->familyName = $newFamilyName;
 	}
 
+	/**
+	 * insert this profile into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors happen
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 */
+	public function insert(\PDO $pdo) : void {
+		// create template for query
+		$query "INSERT INTO family(familyId, familyName) VALUES (:familyId, :familyName)";
+		$statement = $pdo->prepare($query);
+
+		// wire variables up to their template place holders
+		$parameters = ["familyId" => $this->familyId->getBytes(), "familyName" => $this->familyName];
+		$statement->execute($parameters);
+
 }
