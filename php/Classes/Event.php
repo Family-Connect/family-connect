@@ -159,6 +159,39 @@ class Event {
 		$this->eventUserId = $uuid;
 	}
 
+	/**
+	 * accessor method for event content
+	 *
+	 * @return string value of event content
+	 **/
+	public function getEventContent(): string {
+		return ($this->EventContent);
+	}
+	/**
+	 * mutator method for event content
+	 *
+	 * @param string $newEventContent new value of event content
+	 * @throws \InvalidArgumentException if $newEventContent is not a string or insecure
+	 * @throws \RangeException if $newEventContent is > 255 characters
+	 * @throws \TypeError if $newEventContent is not a string
+	 **/
+	public function setEventContent(string $newEventContent): void {
+		//verify the article content is secure
+		$newEventContent = trim($newEventContent);
+		$newEventContent = filter_var($newEventContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newEventContent) === true) {
+			throw(new \InvalidArgumentException("article content is empty or insecure"));
+		}
+
+		//verify the article content will fit in the database
+		if(strlen($newEventContent) >= 255) {
+			throw(new \RangeException("article content too large"));
+		}
+
+		// store the article content
+		$this->eventContent = $newEventContent;
+	}
+
 
 
 
