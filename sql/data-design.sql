@@ -1,11 +1,11 @@
 ALTER DATABASE family_connect_table_CHANGE_ME CHARACTER SET uft8 COLLATE utf8_unicode_ci;
 
 -- drop tables if they already exist
-DROP TABLE IF EXISTS family;
-DROP TABLE IF EXISTS `user`;
-DROP TABLE IF EXISTS event;
+DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS task;
-DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS event;
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS family;
 
 -- create family table
 
@@ -29,7 +29,7 @@ CREATE TABLE `user` (
 	userEmail VARCHAR(128) NOT NULL,
 	userHash CHAR(97) NOT NULL,
 	userPhoneNumber VARCHAR(10) NOT NULL,
-	userPrivilege VARCHAR(250) NOT NULL
+	userPrivilege TINYINT NOT NULL,
 
 	UNIQUE(userDisplayName),
 	UNIQUE(userEmail),
@@ -80,7 +80,7 @@ CREATE TABLE task(
 
 CREATE TABLE comment (
 	commentId BINARY(16) NOT NULL,
-	commentEventId BINARY(16) NOT NULL,
+	commentEventId BINARY(16),
 	commentTaskId BINARY(16),
 	commentUserId BINARY(16) NOT NULL,
 	commentContent VARCHAR(855),
