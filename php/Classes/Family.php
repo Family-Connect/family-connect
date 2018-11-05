@@ -53,5 +53,31 @@ class Family {
 		}
 	}
 
-
+	/**
+	 * accessor method for family id
+	 *
+	 * @return Uuid value of family id - this will be null if new family
+	 */
+	public function getFamilyId() : Uuid {
+		return($this->familyId);
+	}
+	/**
+	 * mutator method for family id
+	 *
+	 * @param Uuid|string $newFamilyId value of new family id
+	 * @throws \RangeException if $newFamilyId is not positive
+	 * @throws \TypeError if family id is not Uuid|String
+	 */
+	public function setFamilyId($newFamilyId) : void {
+		// see if new family uuid is valid
+		try {
+			$uuid = self::validateUuid($newFamilyId);
+		// throw error if Uuid is not valid
+		} catch(\RangeException | \InvalidArgumentException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		// store the new family id
+		$this->familyId = $uuid;
+	}
 }
