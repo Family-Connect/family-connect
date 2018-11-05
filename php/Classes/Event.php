@@ -79,7 +79,7 @@ class Event {
 		//$event->get event id();
 	}
 
-**
+/**
 * mutator method for event id
 * @param uuid $newEventId new value of event id
 * @throws \RangeException if $newEventId is not positive
@@ -93,6 +93,35 @@ class Event {
 
 		//convert and store the article id
 		$this->eventId = $uuid;
+	}
+
+/**
+* accessor method for event family id
+*
+* @return uuid value for event family
+**/
+	public function getEventFamilyId(): uuid {
+		return ($this->eventFamilyId);
+	}
+
+/**
+ * mutator method for event family id
+ *
+ * @param string | Uuid $newEventFamilyId new value of event family id
+ * @throws \RangeException if $newEventFamilyId is not positive
+ * @throws \TypeError if $newEventFamilyId is not an integer
+ **/
+
+	public function setEventFamilyId($newEventFamilyId): void {
+		try {
+			$uuid = self::validateUuid($newEventFamilyId);
+		} catch
+		(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		// convert and store the event family id
+		$this->eventFamilyId = $uuid;
 	}
 
 
