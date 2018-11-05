@@ -8,7 +8,7 @@
 
 namespace FamConn\FamilyConnect;
 require_once("autoload.php");
-require_once(dirname(path:__Dir__, levels: 2) . "/vendor/autoload.php");
+require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -21,6 +21,7 @@ use Ramsey\Uuid\Uuid;
 
 class Comment {
 	use ValidateUuid;
+	use ValidateDate;
 	/**
 	 * id for comment; this is the primary key
 	 * @varUuid $commentId
@@ -133,6 +134,7 @@ public function setCommentEventId( $newCommentEventId) : void {
 	try {
 		$uuid = self::validateUuid($newCommentEventId);
 	}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		$exceptionType = get_class($exception);
 		throw(new $exceptionType($exception->getMessage(), 0, $exception));
 	}
 	// convert and store the comment event id
