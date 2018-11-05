@@ -146,4 +146,21 @@ class Family {
 		$statement->execute($parameters);
 	}
 
+	/**
+	 * updates this family in mySQL
+	 *
+	 * @param \PDO $pdo connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a connection object
+	 */
+	public function update(\PDO $pdo) : void {
+		// create template for query
+		$query = "UPDATE family SET familyId = :familyId, familyName = :familyName";
+		$statement = $pdo->prepare($query);
+
+		// wire up variables to place holders in query
+		$parameters = ["familyId" => $this->familyId->getBytes(), "familyName" => $this->familyName];
+		$statement->execute($parameters);
+	}
+
 }
