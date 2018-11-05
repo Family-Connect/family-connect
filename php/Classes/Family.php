@@ -113,7 +113,7 @@ class Family {
 	}
 
 	/**
-	 * insert this profile into mySQL
+	 * insert this family into mySQL
 	 *
 	 * @param \PDO $pdo PDO connection object
 	 * @throws \PDOException when mySQL related errors happen
@@ -127,5 +127,23 @@ class Family {
 		// wire variables up to their template place holders
 		$parameters = ["familyId" => $this->familyId->getBytes(), "familyName" => $this->familyName];
 		$statement->execute($parameters);
+	}
+
+	/**
+	 * deletes this family from mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a connection object
+	 */
+	public function delete(\PDO $pdo) : void {
+		// create template for query
+		$query = "DELETE FROM family WHERE familyId = :familyId";
+		$statement = $pdo->prepare($query);
+
+		// wire up variable to template placeholder
+		$parameters = ["familyId" => $this->familyId->getBytes()];
+		$statement->execute($parameters);
+	}
 
 }
