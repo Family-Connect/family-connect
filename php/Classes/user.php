@@ -64,7 +64,7 @@ class User {
  *
  * @param string|Uuid $newUserId id of this User or null if a new User
  * @param string|Uuid $newUserFamilyId id of the Family the User belongs to
- * @param string $ewUserActivationToken string containing characters that verifies account
+ * @param string $newUserActivationToken string containing characters that verifies account
  * @param string $newUserAvatar string containing characters for user representation
  * @param string $newUserDisplayName string containing characters to identify user
  * @param string $newUserEmail string containing characters to allow log in
@@ -76,3 +76,48 @@ class User {
  * @throws \TypeError if data types violate type hints
  * @throws \Exception if some other exception occurs
  */
+	public function __construct($newUserId, $newUserFamilyId, $newUserActivationToken, $newUserAvatar, $newUserDisplayName, $newUserEmail, $newUserHash, $newUserPhoneNumber, $userUserPrivilege) {
+		try {
+			$this->setUserId($newUserId);
+			$this->setUserFamilyId($newUserFamilyId);
+			$this->setUserActivationToken($newUserActivationToken);
+			$this->setUserAvatar($newUserAvatar);
+			$this->setUserDisplayName($newUserDisplayName);
+			$this->setUserEmail($newUserEmail);
+			$this->setUserHash($newUserHash);
+			$this->setUserPhoneNumber($newUserPhoneNumber);
+			$this->setUserPrivilege($userUserPrivilege);
+		}
+		catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+}
+
+/**
+ * accessor method for user id
+ *
+ * @return Uuid value of user id
+ */
+public function getUserId() : Uuid {
+	return($this->UserId);
+}
+
+/**
+ * mutator method for tweet id
+ *
+ * @param Uuid|string $newUserId new value of user id
+ * @throws \RangeException if $newUserId is not positive
+ * @throws \TypeError if $newUserId is not a uuid or string
+ **/
+public function setUserId( $newUserId) : void {
+	try {
+		$uuid = self::validateUuid($newUserId);
+	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		$exceptionType = get_class($exception);
+		throw(new $exceptionType($exception->getMessage(), 0, $exception));
+	}
+
+	// convert and store the user id
+	$this->userId = $uuid;
+}
