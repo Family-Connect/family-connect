@@ -288,4 +288,143 @@ class Event {
 		}
 		$this->eventStartDate = $newEventStartDate;
 	}
+
+	/**
+	 * inserts this event into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function insert(\PDO $pdo): void {
+
+		$query = "INSERT INTO event(eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate) VALUES
+(:eventId, :eventFamilyId, :eventUserId, :eventContent, :eventEndDate, :eventName, :eventStartDate)";
+
+		$statement = $pdo->prepare($query);
+
+		$statement->execute($query);
+	}
+
+	/**
+	 * updates this event in mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws	\PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function update(\PDO $pdo): void {
+
+		// create query template
+		$query = "UPDATE event SET eventFamilyId = :eventFamilyId:, eventUserId = :eventUserId, eventContent = :eventContent, 
+eventEndDate = :eventEndDate, eventName = :eventName, eventStartDate = :eventStartDate WHERE eventId = :eventId";
+		$statement = $pdo->prepare($query);
+
+		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" => $this->eventUserId, "eventContent" => $this->eventContent, "eventEndDate" => $this->eventEndDate, "eventName" => $this->eventName, "eventStartDate"=> $this->eventStartDate];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * deletes this event from mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function delete(\PDO $pdo): void {
+
+		// create query template
+		$query = "DELETE FROM event WHERE eventId = :eventId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holder in the template
+		$parameters = ["eventId" => $this->eventId->getBytes()];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * gets the event by eventId
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param Uuid|string $eventId event id to search for
+	 * @return event|null event found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when a variable is not the correct data type
+	 **/
+	public static function getEventByEventId(\PDO $pdo, $eventId) : ?Event {
+		// sanitize the eventId before searching
+		try {
+			$eventId = self::validateUuid($eventId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create query template
+		$query = "SELECT articleId, articleBirdId, articleContent, articleBirdImage FROM article WHERE articleId = :articleId";
+		$statement = $pdo->prepare($query);
+
+		// bind the article id to the place holder in the template
+		$parameters = ["articleId" => $articleId->getBytes()];
+		$statement->execute($parameters);
+
+		// grab the article from mySQL
+		try {
+			$article = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$article = new Article($row["articleId"], $row["articleBirdId"], $row["articleContent"], $row["articleBirdImage"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($article);
+	}
+
+	/**
+	 * gets all Articles
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SplFixedArray of Articles found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getAllArticles(\PDO $pdo) : \SPLFixedArray {
+		// create query template
+		$query = "SELECT articleId, articleBirdId, articleContent, articleBirdImage FROM article";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build an array of articles
+		$articles = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$article = new Article($row["articleId"], $row["articleBirdId"], $row["articleContent"], $row["articleBirdImage"]);
+				$articles[$articles->key()] = $article;
+				$articles->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($articles);
+	}
+
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+	public function jsonSerialize() : array {
+		$fields = get_object_vars($this);
+
+		$fields["articleId"] = $this->articleId->toString();
+		$fields["articleBirdId"] = $this->articleBirdId->toString();
+
+		return($fields);
+	}
 }
+}
+
