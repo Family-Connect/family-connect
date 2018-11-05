@@ -155,7 +155,7 @@ public function setUserFamilyId( $newUserFamilyId) : void {
  *
  * @param string $newUserActivationToken new value of user activation token
  * @throws \InvalidArgumentException if $newUserActivationToken is not a string or insecure
- * @throws \RangeException if $newTweetContent is > 32 characters
+ * @throws \RangeException if $newUserActivationToken is > 32 characters
  * @throws \TypeError if $newUserActivationToken is not a string
  **/
 public function setUserActivationToken(string $newUserActivationToken) : void {
@@ -165,10 +165,32 @@ public function setUserActivationToken(string $newUserActivationToken) : void {
 		throw(new \InvalidArgumentException("tweet content is empty or insecure"));
 	}
 
-	if(strlen($newTweetContent) >= 32) {
+	if(strlen($newUserActivationToken) >= 32) {
 		throw(new \RangeException("user activation token too large"));
 	}
 
 	$this->userActivationToken = $newUserActivationToken;
+}
+
+/**
+ * mutator method for user avatar
+ *
+ * @param string $newUserAvatar new value of user avatar
+ * @throws \InvalidArgumentException if $newUserAvatar is not a string or insecure
+ * @throws \RangeException if $newUserAvatar is > 128 characters
+ * @throws \TypeError if $newUserAvatar is not a string
+ **/
+public function setUserAvatar(string $newUserAvatar) : void {
+	$newUserAvatar = trim($newUserAvatar);
+	$newUserAvatar = filter_var($newUserAvatar, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($newUserAvatar) === true) {
+		throw(new \InvalidArgumentException("tweet content is empty or insecure"));
+	}
+
+	if(strlen($newUserAvatar) >= 128) {
+		throw(new \RangeException("user activation token too large"));
+	}
+
+	$this->userAvatar = $newUserAvatar;
 }
 
