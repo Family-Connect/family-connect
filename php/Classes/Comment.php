@@ -327,7 +327,7 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		$row = $statement->fetch();
 		if($row !== false) {
-			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row[commentDate]);
+			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
 		}
 	} catch(\Exception $exception) {
 		// if the row couldn't be converted, rethrow it
@@ -345,7 +345,7 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
-public static function getCommentEventId(\PDO $pdo, $commentEventId) : ?Comment {
+public static function getCommentByCommentEventId(\PDO $pdo, $commentEventId) : ?Comment {
 	// sanitize the commentEventId before searching
 	try {
 		$commentEventId = self::validateUuid($commentEventId);
@@ -357,7 +357,7 @@ public static function getCommentEventId(\PDO $pdo, $commentEventId) : ?Comment 
 	$statement = $pdo->prepare($query);
 
 	// bind the comment event id to the place holder in the template
-	$parameters = ["commentEvent" => $commentEventId->getBytes()];
+	$parameters = ["commentEventId" => $commentEventId->getBytes()];
 	$statement->execute($parameters);
 
 	// grab the comment from mySQL
@@ -380,11 +380,11 @@ public static function getCommentEventId(\PDO $pdo, $commentEventId) : ?Comment 
  *
  * @param \PDO $pdo PDO connection object
  * @param Uuid|string $commentTaskId comment task id to search for
- * @return Patient|null Patient found or null if not found
+ * @return Comment|null Comment found or null if not found
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
-public static function getCommentTaskId(\PDO $pdo, $commentTaskId) : ?Comment {
+public static function getCommentByTaskId(\PDO $pdo, $commentTaskId) : ?Comment {
 	// sanitize the commentTaskId before searching
 	try {
 		$commentTaskId = self::validateUuid($commentTaskId);
@@ -423,3 +423,33 @@ public static function getCommentTaskId(\PDO $pdo, $commentTaskId) : ?Comment {
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
+public static function getCommentByCommentUserId(\PDO $pdo, $commentUserId) : ?Comment {
+	// sanitize the commentUserId before searching
+	try {
+		$commentUserId = self::validateUuid($commentUserId);
+	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		throw(new \PDOException($exception->getMessage(), 0, $exception));
+	}
+	// create query template
+	$query = "SELECT commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentUserId = :commentUserId";
+	$statement = $pdo->prepare($query);
+
+	// bind the comment user id to the place holder in the template
+	$parameters = ["commentUserId" => $commentUserId->getBytes()];
+	$statement->execute($parameters);
+
+	// grab the comment from mySQL
+	try {
+		$comment = null;
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		$row = $statement->fetch();
+		if($row !== false) {
+			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+		}
+	} catch(\Exception $exception) {
+		// if the row couldn't be converted, rethrow it
+		throw(new \PDOException($exception->getMessage(), 0, $exception));
+	}
+	return($comment);
+}
+
