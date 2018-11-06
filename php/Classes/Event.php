@@ -305,14 +305,17 @@ class Event {
 	* @throws \PDOException when mySQL related errors occur
 	* @throws \TypeError if $pdo is not a PDO connection object
 	**/
-	public function insert(\PDO $pdo): void {
+	public function insert(\PDO $pdo) : void {
 
+		// create query template
 		$query = "INSERT INTO event(eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate) VALUES
 					(:eventId, :eventFamilyId, :eventUserId, :eventContent, :eventEndDate, :eventName, :eventStartDate)";
-
 		$statement = $pdo->prepare($query);
 
-		$statement->execute($query);
+		//bind the member variables to the place holders in the template
+		$formattedDate = $this->eventStartDate->format("Y-m-d H:i:s.u");
+		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" 		=> 	$this->eventUserId->getBytes(), "eventContent" => $this->eventContent, "eventName" => $this->eventName, "eventStartDate" 		=> 	$formattedDate];
+		$statement->execute($parameters);
 	}
 
 	/**
