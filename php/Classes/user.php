@@ -77,7 +77,7 @@ class User {
  * @throws \InvalidArgumentException if $newUserHash is empty
  * @throws \RangeException if data values are out of bounds (e.g., strings too long, negative integers)
  * @throws \RangeException if $newUserActivationToken is longer than 32 characters
- * @throws \RangeException if profile hash is longer than 97 character
+ * @throws \RangeException if user hash is longer than 97 character
  * @throws \TypeError if data types violate type hints
  * @throws \Exception if some other exception occurs
  * @throws \Exception if user hash is not hexadecimal
@@ -152,12 +152,12 @@ class User {
 		throw(new $exceptionType($exception->getMessage(), 0, $exception));
 	}
 
-	// convert and store the profile id
+	// convert and store the user id
 	$this->userFamilyId = $uuid;
 }
 
 	/**
-	 * mutator method for profile activation token
+	 * mutator method for user activation token
 	 *
 	 * @param string $newUserActivationToken new value of the user activation hash
 	 * @throws \InvalidArgumentException if $newUserActivationToken is not a valid data type
@@ -256,13 +256,13 @@ class User {
 	 *
 	 * @param string $newUserHash new value of the user hash
 	 * @throws \InvalidArgumentException if $newUserHash is empty
-	 * @throws \RangeException if profile hash is longer than 97 characters
+	 * @throws \RangeException if user hash is longer than 97 characters
 	 * @throws \Exception if user hash is not hexadecimal
 	 */
 	public function setUserHash(string $newUserHash): void {
-		// verify if the profile hash is not empty
+		// verify if the user hash is not empty
 		if(empty($newUserHash) === true) {
-			throw (new \InvalidArgumentException("profile hash is empty"));
+			throw (new \InvalidArgumentException("user hash is empty"));
 		}
 		// verify the hash is not too long
 		if(strlen($newUserHash) > 97) {
@@ -273,7 +273,7 @@ class User {
 			throw (new \Exception("hash is not hexadecimal"));
 		}
 		// store the string
-		$this->userHash = $newUserHashHash;
+		$this->userHash = $newUserHash;
 	}
 
 	/**
@@ -303,7 +303,7 @@ class User {
 	 *
 	 * @return int for user privilege
 	 **/
-	public function getBeerIbu(): int {
+	public function getUserPrivilege(): int {
 		return $this->userPrivilege;
 	}
 	/**
@@ -316,7 +316,7 @@ class User {
 		if($newUserPrivilege < 0 || $newUserPrivilege > 120) {
 			throw(new \RangeException("user privilege is out of range"));
 		}
-		//convert and store beer ibu
+		//convert and store user privilege
 		$this-> userPrivilege = $newUserPrivilege;
 	}
 
@@ -415,7 +415,7 @@ class User {
 	}
 
 	/**
-	 * gets the User by profile id
+	 * gets the User by user id
 	 *
 	 * @param \PDO $pdo PDO connection object
 	 * @param Uuid|string $userFamilyId family id to search by
