@@ -110,7 +110,7 @@ class User {
 }
 
 /**
- * mutator method for tweet id
+ * mutator method for user id
  *
  * @param Uuid|string $newUserId new value of user id
  * @throws \RangeException if $newUserId is not positive
@@ -334,7 +334,7 @@ class User {
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
-		$parameters = ["userId" => $this->userId->getBytes(), "tweetProfileId" => $this->userFamilyId->getBytes(), "userActivationToken" => $this->userActivationToken, "userAvatar" => $this->userAvatar, "userDisplayName" => $this->userDisplayName, "userEmail" => $this->userEmail, "userHash" => $this->userHash, "userPhoneNumber" => $this->userPhoneNumber, "userPrivilege" => $this->userPrivilege];
+		$parameters = ["userId" => $this->userId->getBytes(), "userFamilyId" => $this->userFamilyId->getBytes(), "userActivationToken" => $this->userActivationToken, "userAvatar" => $this->userAvatar, "userDisplayName" => $this->userDisplayName, "userEmail" => $this->userEmail, "userHash" => $this->userHash, "userPhoneNumber" => $this->userPhoneNumber, "userPrivilege" => $this->userPrivilege];
 		$statement->execute($parameters);
 	}
 
@@ -349,7 +349,7 @@ class User {
 	public function delete(\PDO $pdo) : void {
 
 		// create query template
-		$query = "DELETE FROM user WHERE userId = :tweetId";
+		$query = "DELETE FROM user WHERE userId = :userId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holder in the template
@@ -371,7 +371,7 @@ class User {
 		$statement = $pdo->prepare($query);
 
 
-		$parameters = ["userId" => $this->userId->getBytes(), "tweetProfileId" => $this->userFamilyId->getBytes(), "userActivationToken" => $this->userActivationToken, "userAvatar" => $this->userAvatar, "userDisplayName" => $this->userDisplayName, "userEmail" => $this->userEmail, "userHash" => $this->userHash, "userPhoneNumber" => $this->userPhoneNumber, "userPrivilege" => $this->userPrivilege];
+		$parameters = ["userId" => $this->userId->getBytes(), "userFmailyId" => $this->userFamilyId->getBytes(), "userActivationToken" => $this->userActivationToken, "userAvatar" => $this->userAvatar, "userDisplayName" => $this->userDisplayName, "userEmail" => $this->userEmail, "userHash" => $this->userHash, "userPhoneNumber" => $this->userPhoneNumber, "userPrivilege" => $this->userPrivilege];
 		$statement->execute($parameters);
 	}
 
@@ -380,14 +380,14 @@ class User {
 	 *
 	 * @param \PDO $pdo PDO connection object
 	 * @param Uuid|string $userId user id to search for
-	 * @return Tweet|null User found or null if not found
+	 * @return User|null User found or null if not found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when a variable are not the correct data type
 	 **/
-	public static function getUserByUserId(\PDO $pdo, $tweetId) : ?Tweet {
-		// sanitize the tweetId before searching
+	public static function getUserByUserId(\PDO $pdo, $userId) : User {
+		// sanitize the userId before searching
 		try {
-			$tweetId = self::validateUuid($tweetId);
+			$userId = self::validateUuid($userId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
@@ -437,7 +437,7 @@ class User {
 		// bind the user family id to the place holder in the template
 		$parameters = ["userFamilyId" => $userFamilyId->getBytes()];
 		$statement->execute($parameters);
-		// build an array of tweets
+		// build an array of userss
 		$users = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
@@ -458,7 +458,7 @@ class User {
 	 *
 	 * @param \PDO $pdo PDO connection object
 	 * @param string $userEmail user email to search for
-	 * @return \SplFixedArray SplFixedArray of Tweets found
+	 * @return \SplFixedArray SplFixedArray of users found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
@@ -467,7 +467,7 @@ class User {
 		$userEmail = trim($userEmail);
 		$userEmail = filter_var($userEmail, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($userEmail) === true) {
-			throw(new \PDOException("tweet content is invalid"));
+			throw(new \PDOException("user email is invalid"));
 		}
 
 		// escape any mySQL wild cards
@@ -479,53 +479,53 @@ class User {
 
 		// bind the user email to the place holder in the template
 		$userEmail = "%$userEmail%";
-		$parameters = ["tweetContent" => $tweetContent];
+		$parameters = ["userEmail" => $userEmail];
 		$statement->execute($parameters);
 
-		// build an array of tweets
-		$tweets = new \SplFixedArray($statement->rowCount());
+		// build an array of users
+		$users = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$tweet = new Tweet($row["tweetId"], $row["tweetProfileId"], $row["tweetContent"], $row["tweetDate"]);
-				$tweets[$tweets->key()] = $tweet;
-				$tweets->next();
+				$user = new User($row["userId"], $row["userFamilyId"], $row["userActivationToken"], $row["userAvatar"], $row["userDisplayName"], $row["userEmail"], $row["userHash"], $row["userPhoneNumber"], $row["userPrivilege"]);
+				$users[$users->key()] = $user;
+				$users->next();
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($tweets);
+		return($users);
 	}
 
 	/**
-	 * gets all Tweets
+	 * gets all Users
 	 *
 	 * @param \PDO $pdo PDO connection object
-	 * @return \SplFixedArray SplFixedArray of Tweets found or null if not found
+	 * @return \SplFixedArray SplFixedArray of Users found or null if not found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	public static function getAllTweets(\PDO $pdo) : \SPLFixedArray {
+	public static function getAllUsers(\PDO $pdo) : \SPLFixedArray {
 		// create query template
-		$query = "SELECT tweetId, tweetProfileId, tweetContent, tweetDate FROM tweet";
+		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
-		// build an array of tweets
-		$tweets = new \SplFixedArray($statement->rowCount());
+		// build an array of users
+		$users = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$tweet = new Tweet($row["tweetId"], $row["tweetProfileId"], $row["tweetContent"], $row["tweetDate"]);
-				$tweets[$tweets->key()] = $tweet;
-				$tweets->next();
+				$user = new User($row["userId"], $row["userFamilyId"], $row["userActivationToken"], $row["userAvatar"], $row["userDisplayName"], $row["userEmail"], $row["userHash"], $row["userPhoneNumber"], $row["userPrivilege"]);
+				$users[$users->key()] = $user;
+				$users->next();
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return ($tweets);
+		return ($users);
 	}
 
 	/**
@@ -536,12 +536,9 @@ class User {
 	public function jsonSerialize() : array {
 		$fields = get_object_vars($this);
 
-		$fields["tweetId"] = $this->tweetId->toString();
-		$fields["tweetProfileId"] = $this->tweetProfileId->toString();
+		$fields["userId"] = $this->userId->toString();
+		$fields["userFamilyId"] = $this->userFamilyId->toString();
 
-		//format the date so that the front end can consume it
-		$fields["tweetDate"] = round(floatval($this->tweetDate->format("U.u")) * 1000);
-		return($fields);
 	}
 
 }
