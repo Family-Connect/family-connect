@@ -1,9 +1,8 @@
 <?php
-namespace sharonromero\FamilyConnect;
+namespace FamConn\FamilyConnect;
 
 require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
 require_once("autoload.php");
-
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -59,7 +58,7 @@ class Event {
 	 * @param \DateTime $newEventStartDate string containing the start date of the event
 	 **/
 	public function __construct($newEventId, $newEventFamilyId, $newEventUserId, string $newEventContent, $newEventEndDate,
-										 $newEventName, $newEventStartDate) {
+										 string $newEventName, $newEventStartDate) {
 		try {
 			$this->setEventId($newEventId);
 			$this->setEventFamilyId($newEventFamilyId);
@@ -142,7 +141,7 @@ class Event {
 
 	/**
 	 * mutator method for event user id
-	 * @param string | Uuid $newEventUserId new value of event user id
+	 * @param string | Uuid\ $newEventUserId new value of event user id
 	 * @throws \RangeException if $newEventUserId is not positive
 	 * @throws \TypeError if $newEventUserId is not an integer
 	 **/
@@ -165,7 +164,7 @@ class Event {
 	 * @return string value of event content
 	 **/
 	public function getEventContent(): string {
-		return ($this->EventContent);
+		return ($this->eventContent);
 	}
 	/**
 	 * mutator method for event content
@@ -198,7 +197,7 @@ class Event {
 	 	* @return \dateTime value of event end date
 	 	**/
 	public function getEventEndDate(): \DateTime {
-		return ($this->EventEndDate);
+		return ($this->eventEndDate);
 	}
 
 	/**
@@ -211,7 +210,7 @@ class Event {
 	 **/
 	public function setEventEndDate($newEventEndDate = null) : void {
 		if($newEventEndDate === null) {
-			$this->EventEndDate = new \DateTime();
+			$this->eventEndDate = new \DateTime();
 			return;
 		}
 
@@ -230,7 +229,7 @@ class Event {
 	 * @return string value of event name
 	 **/
 	public function getEventName(): string {
-		return ($this->EventName);
+		return ($this->eventName);
 	}
 	/**
 	 * mutator method for event name
@@ -263,7 +262,7 @@ class Event {
 	 * @return \dateTime value of event start date
 	 **/
 	public function getEventStartDate(): \DateTime {
-		return ($this->EventStartDate);
+		return ($this->eventStartDate);
 	}
 
 	/**
@@ -276,7 +275,7 @@ class Event {
 	 **/
 	public function setEventStartDate($newEventStartDate = null) : void {
 		if($newEventStartDate === null) {
-			$this->EventStartDate = new \DateTime();
+			$this->eventStartDate = new \DateTime();
 			return;
 		}
 
@@ -320,7 +319,7 @@ class Event {
 					eventEndDate = :eventEndDate, eventName = :eventName, eventStartDate = :eventStartDate WHERE eventId = :eventId";
 		$statement = $pdo->prepare($query);
 
-		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" 		=> 	$this->eventUserId, "eventContent" => $this->eventContent, "eventEndDate" => $this->eventEndDate, "eventName" => 		$this->eventName, "eventStartDate"=> $this->eventStartDate];
+		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" 		=> $this->eventUserId, "eventContent" => $this->eventContent, "eventEndDate" => $this->eventEndDate, "eventName" => 		$this->eventName, "eventStartDate"=> $this->eventStartDate];
 		$statement->execute($parameters);
 	}
 
@@ -346,7 +345,7 @@ class Event {
 	* gets the event by eventId
 	*
 	* @param \PDO $pdo PDO connection object
-	* @param Uuid|string $eventId event id to search for
+	* @param Uuid\|string $eventId event id to search for
 	* @return event|null event found or null if not found
 	* @throws \PDOException when mySQL related errors occur
 	* @throws \TypeError when a variable is not the correct data type
