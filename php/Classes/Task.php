@@ -419,4 +419,43 @@ class Task {
 		}
 		return($task);
 	}
+
+	/**
+	 * get task by task due date
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param \DateTime|string $taskDueDate task due date used in query
+	 * @return Task|null - task if there's a result, null if there isn't
+	 * @throws \PDOException when mySQL errors occur
+	 * @throws \TypeError when the variables are not the correct data type
+	 */
+	public static function getTaskByTaskDueDate(\PDO $pdo, $taskDueDate) : ?Task {
+		// sanitize string / DateTime
+		try {
+			$taskDueDate = self::validateDateTime($taskDueDate);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create template for new query
+		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName FROM task WHERE taskDueDate = :taskDueDate";
+		$statement = $pdo->prepare($query);
+
+		// wire up variable (taskUserId) to query
+		$parameters = ["taskDueDate" => $taskDueDate];
+		$statement->execute($parameters);
+
+		// grab task from mySQL
+		try {
+			$task = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskName"]);
+			}
+		} catch(\Exception $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($task);
+	}
 }
