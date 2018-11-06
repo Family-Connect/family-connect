@@ -90,15 +90,15 @@ class Event {
 		return ($this->eventId);
 
 		//this outside of class
-		//$event->get event id();
+		//$event->getEventId();
 	}
 
 	/**
 	* mutator method for event id
-	 *
+	*
 	* @param string|Uuid $newEventId new value of event id
 	* @throws \RangeException if $newEventId is not positive
-	* @throws \TypeError if $newEventId is not a uuid
+	* @throws \TypeError if $newEventId is not a uuid or string
 	**/
 	public function setEventId($newEventId): void {
 		try {
@@ -121,6 +121,7 @@ class Event {
 
 	/**
  	* mutator method for event family id
+	*
  	* @param string | Uuid $newEventFamilyId new value of event family id
  	* @throws \RangeException if $newEventFamilyId is not positive
  	* @throws \TypeError if $newEventFamilyId is not an integer
@@ -148,12 +149,12 @@ class Event {
 	}
 
 	/**
-	 * mutator method for event user id
-	 *
-	 * @param string | Uuid $newEventUserId new value of event user id
-	 * @throws \RangeException if $newEventUserId is not positive
-	 * @throws \TypeError if $newEventUserId is not an integer
-	 **/
+	* mutator method for event user id
+	*
+	* @param string | Uuid $newEventUserId new value of event user id
+	* @throws \RangeException if $newEventUserId is not positive
+	* @throws \TypeError if $newEventUserId is not an integer
+	**/
 
 	public function setEventUserId($newEventUserId): void {
 		try {
@@ -176,13 +177,13 @@ class Event {
 		return ($this->eventContent);
 	}
 	/**
-	 * mutator method for event content
-	 *
-	 * @param string $newEventContent new value of event content
-	 * @throws \InvalidArgumentException if $newEventContent is not a string or insecure
-	 * @throws \RangeException if $newEventContent is > 255 characters
-	 * @throws \TypeError if $newEventContent is not a string
-	 **/
+	* mutator method for event content
+	*
+	* @param string $newEventContent new value of event content
+	* @throws \InvalidArgumentException if $newEventContent is not a string or insecure
+	* @throws \RangeException if $newEventContent is > 255 characters
+	* @throws \TypeError if $newEventContent is not a string
+	**/
 	public function setEventContent(string $newEventContent): void {
 		//verify the event content is secure
 		$newEventContent = trim($newEventContent);
@@ -196,27 +197,27 @@ class Event {
 			throw(new \RangeException("event content too large"));
 		}
 
-		// store the event content
+		//store the event content
 		$this->eventContent = $newEventContent;
 	}
 
-		/**
-	 	* accessor method for event end date
-	 	*
-	 	* @return \dateTime value of event end date
-	 	**/
+	/**
+	* accessor method for event end date
+	*
+	* @return \dateTime value of event end date
+	**/
 	public function getEventEndDate(): \DateTime {
 		return ($this->eventEndDate);
 	}
 
 	/**
-	 * mutator method for event end date
-	 *
-	 * @param \DateTime $newEventEndDate new value of event end date
-	 * @throws \InvalidArgumentException if $newEventEndDate is not a valid object or string
-	 * @throws \RangeException if $newEventEndDate is a date that does not exist
-	 * @throws \Exception
-	 **/
+	* mutator method for event end date
+	*
+	* @param \DateTime $newEventEndDate new value of event end date
+	* @throws \InvalidArgumentException if $newEventEndDate is not a valid object or string
+	* @throws \RangeException if $newEventEndDate is a date that does not exist
+	* @throws \Exception
+	**/
 	public function setEventEndDate($newEventEndDate = null) : void {
 		if($newEventEndDate === null) {
 			$this->eventEndDate = new \DateTime();
@@ -233,21 +234,21 @@ class Event {
 	}
 
 	/**
-	 * accessor method for event name
-	 *
-	 * @return string value of event name
-	 **/
+	* accessor method for event name
+	*
+	* @return string value of event name
+	**/
 	public function getEventName(): string {
 		return ($this->eventName);
 	}
 	/**
-	 * mutator method for event name
-	 *
-	 * @param string $newEventName new value of event name
-	 * @throws \InvalidArgumentException if $newEventName is not a string or insecure
-	 * @throws \RangeException if $newEventName is > 30 characters
-	 * @throws \TypeError if $newEventName is not a string
-	 **/
+	* mutator method for event name
+	*
+	* @param string $newEventName new value of event name
+	* @throws \InvalidArgumentException if $newEventName is not a string or insecure
+	* @throws \RangeException if $newEventName is > 30 characters
+	* @throws \TypeError if $newEventName is not a string
+	**/
 	public function setEventName(string $newEventName): void {
 		//verify the event name is secure
 		$newEventName = trim($newEventName);
@@ -266,22 +267,22 @@ class Event {
 	}
 
 	/**
-	 * accessor method for event start date
-	 *
-	 * @return \dateTime value of event start date
-	 **/
+	* accessor method for event start date
+	*
+	* @return \dateTime value of event start date
+	**/
 	public function getEventStartDate(): \DateTime {
 		return ($this->eventStartDate);
 	}
 
 	/**
-	 * mutator method for event start date
-	 *
-	 * @param \DateTime $newEventStartDate new value of event start date
-	 * @throws \InvalidArgumentException if $newEventStartDate is not a valid object or string
-	 * @throws \RangeException if $newEventStartDate is a date that does not exist
-	 * @throws \Exception
-	 **/
+	* mutator method for event start date
+	*
+	* @param \DateTime $newEventStartDate new value of event start date
+	* @throws \InvalidArgumentException if $newEventStartDate is not a valid object or string
+	* @throws \RangeException if $newEventStartDate is a date that does not exist
+	* @throws \Exception
+	**/
 	public function setEventStartDate($newEventStartDate = null) : void {
 		if($newEventStartDate === null) {
 			$this->eventStartDate = new \DateTime();
@@ -298,12 +299,12 @@ class Event {
 	}
 
 	/**
-	 * inserts this event into mySQL
-	 *
-	 * @param \PDO $pdo PDO connection object
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError if $pdo is not a PDO connection object
-	 **/
+	* inserts this event into mySQL
+	*
+	* @param \PDO $pdo PDO connection object
+	* @throws \PDOException when mySQL related errors occur
+	* @throws \TypeError if $pdo is not a PDO connection object
+	**/
 	public function insert(\PDO $pdo): void {
 
 		$query = "INSERT INTO event(eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate) VALUES
@@ -315,12 +316,12 @@ class Event {
 	}
 
 	/**
-	 * updates this event in mySQL
-	 *
-	 * @param \PDO $pdo PDO connection object
-	 * @throws	\PDOException when mySQL related errors occur
-	 * @throws \TypeError if $pdo is not a PDO connection object
-	 **/
+	* updates this event in mySQL
+	*
+	* @param \PDO $pdo PDO connection object
+	* @throws	\PDOException when mySQL related errors occur
+	* @throws \TypeError if $pdo is not a PDO connection object
+	**/
 	public function update(\PDO $pdo): void {
 
 		// create query template
@@ -333,12 +334,12 @@ class Event {
 	}
 
 	/**
-	 * deletes this event from mySQL
-	 *
-	 * @param \PDO $pdo PDO connection object
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError if $pdo is not a PDO connection object
-	 **/
+	* deletes this event from mySQL
+	*
+	* @param \PDO $pdo PDO connection object
+	* @throws \PDOException when mySQL related errors occur
+	* @throws \TypeError if $pdo is not a PDO connection object
+	**/
 	public function delete(\PDO $pdo): void {
 
 		// create query template
