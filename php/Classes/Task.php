@@ -467,7 +467,14 @@ class Task {
 	public function jsonSerialize() : array {
 		$fields = get_object_vars($this);
 
-		$fields["familyId"] = $this->familyId->toString();
+		$fields["taskId"] = $this->familyId->toString();
+		$fields["taskEventId"] = $this->familyId->toString();
+		$fields["taskUserId"] = $this->familyId->toString();
+
+		$fields["taskDueDate"] = round(floatval($this->taskDueDate->format("U.u")) * 1000);
+
 		return($fields);
 	}
+
 }
+
