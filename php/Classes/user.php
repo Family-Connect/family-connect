@@ -1,6 +1,6 @@
 <?php
 
-namespace agarcia707\FamilyConnect;
+namespace agarcia707\FamConn\FamilyConnect;
 
 require_once("autoload.php");
 require_once(dirname(__DIR__,2)."/vendor/autoload.php");
@@ -64,17 +64,22 @@ class User {
  *
  * @param string|Uuid $newUserId id of this User or null if a new User
  * @param string|Uuid $newUserFamilyId id of the Family the User belongs to
- * @param string $newUserActivationToken string containing characters that verifies account
+ * @param int $newUserPrivilege tinyint containing privilege for user
+ * @param string $newUserActivationToken new value of the user activation hash
  * @param string $newUserAvatar string containing characters for user representation
  * @param string $newUserDisplayName string containing characters to identify user
  * @param string $newUserEmail string containing characters to allow log in
- * @param string $newUserHash string containing characters to look up information in database
+ * @param string $newUserHash new value of the user hash
  * @param string $newUserPhoneNumber string containing characters to use as user information
- * @param int $newUserPrivilege
  * @throws \InvalidArgumentException if data types are not valid
+ * @throws \InvalidArgumentException if $newUserActivationToken is not a valid data type
+ * @throws \InvalidArgumentException if $newUserHash is empty
  * @throws \RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+ * @throws \RangeException if $newUserActivationToken is longer than 32 characters
+ * @throws \RangeException if profile hash is longer than 97 character
  * @throws \TypeError if data types violate type hints
  * @throws \Exception if some other exception occurs
+ * @throws \Exception if user hash is not hexadecimal
  */
 	public function __construct($newUserId, $newUserFamilyId, $newUserActivationToken, $newUserAvatar, $newUserDisplayName, $newUserEmail, $newUserHash, $newUserPhoneNumber, $userUserPrivilege) {
 		try {
@@ -150,28 +155,27 @@ class User {
 	$this->userFamilyId = $uuid;
 }
 
-/**
- * mutator method for user activation token
- *
- * @param string $newUserActivationToken new value of user activation token
- * @throws \InvalidArgumentException if $newUserActivationToken is not a string or insecure
- * @throws \RangeException if $newUserActivationToken is > 32 characters
- * @throws \TypeError if $newUserActivationToken is not a string
- **/
-	public function setUserActivationToken(string $newUserActivationToken) : void {
-	$newUserActivationToken = trim($newUserActivationToken);
-	$newUserActivationToken = filter_var($newUserActivationToken, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	if(empty($newUserActivationToken) === true) {
-		throw(new \InvalidArgumentException("user activation token is empty or insecure"));
+	/**
+	 * mutator method for profile activation token
+	 *
+	 * @param string $newUserActivationToken new value of the user activation hash
+	 * @throws \InvalidArgumentException if $newUserActivationToken is not a valid data type
+	 * @throws \RangeException if $newUserActivationToken is longer than 32 characters
+	 */
+	public function setUserActivationToken(string $newUserActivationToken): void {
+		// verify the string is 32 characters
+		if(strlen($newUserActivationToken) !== 32) {
+			throw (new \RangeException("string is not 32 characters"));
+		}
+		// verify the string is hexadecimal
+		if(ctype_xdigit($newUserActivationToken) === false) {
+			throw (new \InvalidArgumentException("String is not hexadecimal"));
+		}
+		// sanitize activation token string
+		$newUserActivationToken = filter_var($newUserActivationToken, FILTER_SANITIZE_STRING);
+		// store the string
+		$this->userActivationToken = $newUserActivationToken;
 	}
-
-	if(strlen($newUserActivationToken) >= 32) {
-		throw(new \RangeException("user activation token too large"));
-	}
-
-	$this->userActivationToken = $newUserActivationToken;
-}
-
 /**
  * mutator method for user avatar
  *
@@ -238,26 +242,37 @@ class User {
 	$this->userEmail = $newUserEmail;
 }
 
-/**
- * mutator method for user hash
- *
- * @param string $newUserHash new value of user hash
- * @throws \InvalidArgumentException if $newUserHash is not a string or insecure
- * @throws \RangeException if $newUserHash >= 97 characters
- * @throws \TypeError if $newUserAvatar is not a string
- **/
-	public function setUserHash(string $newUserHash) : void {
-	$newUserHash = trim($newUserHash);
-	$newUserHash = filter_var($newUserHash, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	if(empty($newUserHash) === true) {
-		throw(new \InvalidArgumentException("user hash is empty or insecure"));
+	/**
+	 * accessor method for user hash
+	 *
+	 * @return string of user hash
+	 */
+	public function getUserHash(): string {
+		return $this->userHash;
 	}
-
-	if(strlen($newUserHash) >= 97) {
-		throw(new \RangeException("user hash too large"));
-	}
-
-	$this->userHash = $newUserHash;
+	/**
+	 * mutator method for user hash
+	 *
+	 * @param string $newUserHash new value of the user hash
+	 * @throws \InvalidArgumentException if $newUserHash is empty
+	 * @throws \RangeException if profile hash is longer than 97 characters
+	 * @throws \Exception if user hash is not hexadecimal
+	 */
+	public function setUserHash(string $newUserHash): void {
+		// verify if the profile hash is not empty
+		if(empty($newUserHash) === true) {
+			throw (new \InvalidArgumentException("profile hash is empty"));
+		}
+		// verify the hash is not too long
+		if(strlen($newUserHash) > 97) {
+			throw (new \RangeException("hash is too long"));
+		}
+		// verify that hash is hexadecimal
+		if(ctype_xdigit($newUserHash) === false) {
+			throw (new \Exception("hash is not hexadecimal"));
+		}
+		// store the string
+		$this->userHash = $newUserHashHash;
 	}
 
 	/**
@@ -282,5 +297,26 @@ class User {
 		$this->userPhoneNumber = $newUserPhoneNumber;
 	}
 
+	/**
+	 * accessor method for user privilege
+	 *
+	 * @return int for user pivilege
+	 **/
+	public function getBeerIbu(): int {
+		return $this->beerIbu;
+	}
+	/**
+	 * mutator method for user privilege
+	 *
+	 * @param int $newUserPrivilege user privilege range is from 0-120
+	 * @throws \RangeException when input is out of range
+	 **/
+	public function setNewUserPrivilege(int $newUserPrivilege): void {
+		if($newUserPrivilege < 0 || $newUserPrivilege > 120) {
+			throw(new \RangeException("user privilege is out of range"));
+		}
+		//convert and store beer ibu
+		$this-> userPrivilege = $newUserPrivilege;
+	}
 
 }
