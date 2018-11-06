@@ -453,3 +453,128 @@ public static function getCommentByCommentUserId(\PDO $pdo, $commentUserId) : ?C
 	return($comment);
 }
 
+/**
+ * gets the Comment by comment content
+ *
+ * @param \PDO $pdo PDO connection object
+ * @param Uuid|string $commentContent comment content to search by
+ * @return \SplFixedArray SplFixedArray of Comments found
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError when variables are not the correct data type
+ **/
+public static function getCommentByCommentContent(\PDO $pdo, $commentContent) : \SplFixedArray {
+
+	try {
+		$commentContent = self::validateUuid($commentContent);
+	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		throw(new \PDOException($exception->getMessage(), 0, $exception));
+	}
+
+	// create query template
+	$query = "SELECT commentId, commentTaskId, commentEventId, commentUserId, commentContent, commentDate FROM comment WHERE commentContent = :commentContent";
+	$statement = $pdo->prepare($query);
+
+	// bind the comment content to the place holder in the template
+	$parameters = ["commentContent" => $commentContent->getBytes()];
+	$statement->execute($parameters);
+
+	// build an array of comments
+	$comments = new \SplFixedArray($statement->rowCount());
+	$statement->setFetchMode(\PDO::FETCH_ASSOC);
+	while(($row = $statement->fetch()) !== false) {
+		try {
+			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentEventId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+			$comment[$comment->key()] = $comment;
+			$comment->next();
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+	}
+	return($comment);
+}
+
+/**
+ * gets the Comment by comment date
+ *
+ * @param \PDO $pdo PDO connection object
+ * @param Uuid|string $commentDate commment id to search by
+ * @return \SplFixedArray SplFixedArray of Comments found
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError when variables are not the correct data type
+ **/
+	public static function getCommentByCommentDate(\PDO $pdo, $commentDate) : \SplFixedArray {
+
+		try {
+			$commentDate = self::validateUuid($commentDate);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create query template
+		$query = "SELECT commentId, commentEventId,commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentDate = :commentDate";
+		$statement = $pdo->prepare($query);
+
+		// bind the comment date to the place holder in the template
+		$parameters = ["commentDate" => $commentDate->getBytes()];
+		$statement->execute($parameters);
+
+		// build an array of comments
+		$comment = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+				$comment [$comment->key()] = $comment;
+				$comment->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($comment);
+	}
+
+/**
+ * gets all Comments
+ *
+ * @param \PDO $pdo PDO connection object
+ * @return \SplFixedArray SplFixedArray of Comments found or null if not found
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError when variables are not the correct data type
+ **/
+public static function getAllComments(\PDO $pdo) : \SPLFixedArray {
+	// create query template
+	$query = "SELECT commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate FROM comment";
+	$statement = $pdo->prepare($query);
+	$statement->execute();
+
+	// build an array of comments
+	$comments = new \SplFixedArray($statement->rowCount());
+	$statement->setFetchMode(\PDO::FETCH_ASSOC);
+	while(($row = $statement->fetch()) !== false) {
+		try {
+			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+			$comment[$comment->key()] = $comment;
+			$comment->next();
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+	}
+	return ($comment);
+}
+
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+	public function jsonSerialize() : array {
+		$fields = get_object_vars($this);
+
+		$fields["commentContent"] = $this->commentContent->toString();
+		$fields["commentDate"] = $this->commentDate->toString();
+
+	}
+}
