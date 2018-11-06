@@ -292,8 +292,7 @@ public function delete(\PDO $pdo) : void {
  **/
 public function update(\PDO $pdo) : void {
 	// create query template
-	$query = "UPDATE comment SET patientProfileId = :patientProfileId, patientEmail =
- 		:patientEmail, patientUsername = :patientUsername, patientInformation = :patientInformation WHERE patientId = :patientId";
+	$query = "UPDATE comment SET commentId = :commentId, commentEventId = :commentEventId, commentTaskId = :commentTaskId, commentUserId = :commentUserId, commentContent = :commentContent, commentDate = :commentDate WHERE patientId = :patientId";
 	$statement = $pdo->prepare($query);
 }
 
@@ -491,7 +490,7 @@ public static function getCommentByCommentContent(\PDO $pdo, $commentContent) : 
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 	}
-	return($comment);
+	return($comments);
 }
 
 /**
@@ -562,7 +561,7 @@ public static function getAllComments(\PDO $pdo) : \SPLFixedArray {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 	}
-	return ($comment);
+	return ($comments);
 }
 
 	/**
