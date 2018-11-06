@@ -394,3 +394,32 @@ public static function getCommentTaskId(\PDO $pdo, $commentTaskId) : ?Comment {
 	// create query template
 	$query = "SELECT commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentTaskId = :commentTaskId";
 	$statement = $pdo->prepare($query);
+
+	// bind the comment task id to the place holder in the template
+	$parameters = ["commentTaskId" => $commentTaskId->getBytes()];
+	$statement->execute($parameters);
+
+	// grab the comment from mySQL
+	try {
+		$comment = null;
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		$row = $statement->fetch();
+		if($row !== false) {
+			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+		}
+	} catch(\Exception $exception) {
+		// if the row couldn't be converted, rethrow it
+		throw(new \PDOException($exception->getMessage(), 0, $exception));
+	}
+	return($comment);
+}
+
+/**
+ * gets the comment by commentUserId
+ *
+ * @param \PDO $pdo PDO connection object
+ * @param Uuid|string $commentUserId comment user id to search for
+ * @return Comment|null Comment found or null if not found
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError when a variable are not the correct data type
+ **/
