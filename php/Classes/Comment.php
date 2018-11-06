@@ -296,3 +296,13 @@ public function update(\PDO $pdo) : void {
  		:patientEmail, patientUsername = :patientUsername, patientInformation = :patientInformation WHERE patientId = :patientId";
 	$statement = $pdo->prepare($query);
 }
+
+/**
+* gets the comment by commentId
+*
+* @param \PDO $pdo PDO connection object
+* @param Uuid|string $commentId comment id to search for
+* @return Comment|null Comment found or null if not found
+* @throws \PDOException when mySQL related errors occur
+* @throws \TypeError when a variable are not the correct data type
+**/
