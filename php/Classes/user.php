@@ -5,6 +5,7 @@ namespace agarcia707\FamConn\FamilyConnect;
 require_once("autoload.php");
 require_once(dirname(__DIR__,2)."/vendor/autoload.php");
 
+use FamConn\FamilyConnect\ValidateUuid;
 use Ramsey\Uuid\Uuid;
 /**
  * @author agarcia707 <antgarcia014@gmail.com>
@@ -300,10 +301,10 @@ class User {
 	/**
 	 * accessor method for user privilege
 	 *
-	 * @return int for user pivilege
+	 * @return int for user privilege
 	 **/
 	public function getBeerIbu(): int {
-		return $this->beerIbu;
+		return $this->userPrivilege;
 	}
 	/**
 	 * mutator method for user privilege
@@ -317,6 +318,230 @@ class User {
 		}
 		//convert and store beer ibu
 		$this-> userPrivilege = $newUserPrivilege;
+	}
+
+	/**
+	 * inserts this user into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function insert(\PDO $pdo) : void {
+
+		// create query template
+		$query = "INSERT INTO user(userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege) VALUES(:userId, :userFamilyId, :userActivationToken, :userAvatar, :userDisplayName, :userEmail, :userHash, :userPhoneNumber, :userPrivilege)";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = ["userId" => $this->userId->getBytes(), "tweetProfileId" => $this->userFamilyId->getBytes(), "userActivationToken" => $this->userActivationToken, "userAvatar" => $this->userAvatar, "userDisplayName" => $this->userDisplayName, "userEmail" => $this->userEmail, "userHash" => $this->userHash, "userPhoneNumber" => $this->userPhoneNumber, "userPrivilege" => $this->userPrivilege];
+		$statement->execute($parameters);
+	}
+
+
+	/**
+	 * deletes this User from mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function delete(\PDO $pdo) : void {
+
+		// create query template
+		$query = "DELETE FROM user WHERE userId = :tweetId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holder in the template
+		$parameters = ["userId" => $this->userId->getBytes()];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * updates this User in mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function update(\PDO $pdo) : void {
+
+		// create query template
+		$query = "UPDATE user SET userFamilyId = :userFamilyId, userActivationToken = :userActivationToken, userAvatar = :userAvatar, userDisplayName = ;userDisplayName, userEmail = :userEmail, userHash = :userHash, userPhoneNumber = :userPhoneNumber, userPrivilege = :userPrivilege WHERE userId = :userId";
+		$statement = $pdo->prepare($query);
+
+
+		$parameters = ["userId" => $this->userId->getBytes(), "tweetProfileId" => $this->userFamilyId->getBytes(), "userActivationToken" => $this->userActivationToken, "userAvatar" => $this->userAvatar, "userDisplayName" => $this->userDisplayName, "userEmail" => $this->userEmail, "userHash" => $this->userHash, "userPhoneNumber" => $this->userPhoneNumber, "userPrivilege" => $this->userPrivilege];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * gets the User by userId
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param Uuid|string $userId user id to search for
+	 * @return Tweet|null User found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when a variable are not the correct data type
+	 **/
+	public static function getUserByUserId(\PDO $pdo, $tweetId) : ?Tweet {
+		// sanitize the tweetId before searching
+		try {
+			$tweetId = self::validateUuid($tweetId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create query template
+		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userId = :userId";
+		$statement = $pdo->prepare($query);
+
+		$parameters = ["userId" => $userId->getBytes()];
+		$statement->execute($parameters);
+
+		// grab the user from mySQL
+		try {
+			$user = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$user = new User($row["userId"], $row["userFamilyId"], $row["userActivationToken"], $row["userAvatar"], $row["userDisplayName"], $row["userEmail"], $row["userHash"], $row["userPhoneNumber"], $row["userPrivilege"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($user);
+	}
+
+	/**
+	 * gets the User by profile id
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param Uuid|string $userFamilyId family id to search by
+	 * @return \SplFixedArray SplFixedArray of Users found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getUserByUserFamilyId(\PDO $pdo, $userFamilyId) : \SplFixedArray {
+
+		try {
+			$userFamilyIdId = self::validateUuid($userFamilyId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create query template
+		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userId = :userId";
+		$statement = $pdo->prepare($query);
+		// bind the user family id to the place holder in the template
+		$parameters = ["userFamilyId" => $userFamilyId->getBytes()];
+		$statement->execute($parameters);
+		// build an array of tweets
+		$users = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$user = new User($row["userId"], $row["userFamilyId"], $row["userActivationToken"], $row["userAvatar"], $row["userDisplayName"], $row["userEmail"], $row["userHash"], $row["userPhoneNumber"], $row["userPrivilege"]);
+				$users[$users->key()] = $user;
+				$users->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($users);
+	}
+
+	/**
+	 * gets the User by content
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $userEmail user email to search for
+	 * @return \SplFixedArray SplFixedArray of Tweets found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getUserByUserEmail(\PDO $pdo, string $userEmail) : \SplFixedArray {
+		// sanitize the description before searching
+		$userEmail = trim($userEmail);
+		$userEmail = filter_var($userEmail, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($userEmail) === true) {
+			throw(new \PDOException("tweet content is invalid"));
+		}
+
+		// escape any mySQL wild cards
+		$userEmail = str_replace("_", "\\_", str_replace("%", "\\%", $userEmail));
+
+		// create query template
+		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userEmail LIKE :userEmail";
+		$statement = $pdo->prepare($query);
+
+		// bind the user email to the place holder in the template
+		$userEmail = "%$userEmail%";
+		$parameters = ["tweetContent" => $tweetContent];
+		$statement->execute($parameters);
+
+		// build an array of tweets
+		$tweets = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$tweet = new Tweet($row["tweetId"], $row["tweetProfileId"], $row["tweetContent"], $row["tweetDate"]);
+				$tweets[$tweets->key()] = $tweet;
+				$tweets->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($tweets);
+	}
+
+	/**
+	 * gets all Tweets
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SplFixedArray of Tweets found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getAllTweets(\PDO $pdo) : \SPLFixedArray {
+		// create query template
+		$query = "SELECT tweetId, tweetProfileId, tweetContent, tweetDate FROM tweet";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build an array of tweets
+		$tweets = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$tweet = new Tweet($row["tweetId"], $row["tweetProfileId"], $row["tweetContent"], $row["tweetDate"]);
+				$tweets[$tweets->key()] = $tweet;
+				$tweets->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($tweets);
+	}
+
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+	public function jsonSerialize() : array {
+		$fields = get_object_vars($this);
+
+		$fields["tweetId"] = $this->tweetId->toString();
+		$fields["tweetProfileId"] = $this->tweetProfileId->toString();
+
+		//format the date so that the front end can consume it
+		$fields["tweetDate"] = round(floatval($this->tweetDate->format("U.u")) * 1000);
+		return($fields);
 	}
 
 }
