@@ -13,6 +13,7 @@ use Ramsey\Uuid\Uuid;
  **/
 class Event {
 	use ValidateUuid;
+	use validateDate;
 	/**id for the Event, this is the primary key.
 	 * @var uuid $eventId
 	 **/
@@ -319,30 +320,12 @@ class Event {
 	}
 
 	/**
-	* updates this event in mySQL
-	*
-	* @param \PDO $pdo PDO connection object
-	* @throws	\PDOException when mySQL related errors occur
-	* @throws \TypeError if $pdo is not a PDO connection object
-	**/
-	public function update(\PDO $pdo): void {
-
-		// create query template
-		$query = "UPDATE event SET eventFamilyId = :eventFamilyId:, eventUserId = :eventUserId, eventContent = :eventContent, 
-					eventEndDate = :eventEndDate, eventName = :eventName, eventStartDate = :eventStartDate WHERE eventId = :eventId";
-		$statement = $pdo->prepare($query);
-
-		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" 		=> $this->eventUserId, "eventContent" => $this->eventContent, "eventEndDate" => $this->eventEndDate, "eventName" => 		$this->eventName, "eventStartDate"=> $this->eventStartDate];
-		$statement->execute($parameters);
-	}
-
-	/**
-	* deletes this event from mySQL
-	*
-	* @param \PDO $pdo PDO connection object
-	* @throws \PDOException when mySQL related errors occur
-	* @throws \TypeError if $pdo is not a PDO connection object
-	**/
+	 * deletes this event from mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
 	public function delete(\PDO $pdo): void {
 
 		// create query template
@@ -351,6 +334,27 @@ class Event {
 
 		// bind the member variables to the place holder in the template
 		$parameters = ["eventId" => $this->eventId->getBytes()];
+		$statement->execute($parameters);
+	}
+
+
+
+	/**
+	* updates this event in mySQL
+	*
+	* @param \PDO $pdo PDO connection object
+	* @throws \PDOException when mySQL related errors occur
+	* @throws \TypeError if $pdo is not a PDO connection object
+	**/
+	public function update(\PDO $pdo) : void {
+
+		// create query template
+		$query = "UPDATE event SET eventFamilyId = :eventFamilyId, eventUserId = :eventUserId, eventContent = :eventContent, 
+					eventEndDate = :eventEndDate, eventName = :eventName, eventStartDate = :eventStartDate WHERE eventId = :eventId";
+		$statement = $pdo->prepare($query);
+
+		$formattedDate = $this->eventStartDate->format("Y-m-d H:i:s.u");
+		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" => 	$this->eventUserId->getBytes(), "eventContent" => $this->eventContent, "eventName" => $this->eventName, "eventStartDate" => 		$formattedDate];
 		$statement->execute($parameters);
 	}
 
