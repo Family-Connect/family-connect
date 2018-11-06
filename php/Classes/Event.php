@@ -49,13 +49,19 @@ class Event {
 	private $eventStartDate;
 	/**
 	 * constructor for event class
-	 * @param uuid $newEventId id of this event or null if new event
-	 * @param uuid $newEventFamilyId id of the family channel the event is tied to
-	 * @param uuid $newEventUserId id of the user who created the event
+	 *
+	 * @param string|Uuid $newEventId id of this event or null if new event
+	 * @param string|Uuid $newEventFamilyId id of the family channel the event is tied to
+	 * @param string|Uuid $newEventUserId id of the user who created the event
 	 * @param string $newEventContent string containing the content of the event
 	 * @param \DateTime $newEventEndDate string containing the end date of the event
 	 * @param string $newEventName string containing the name of the event
 	 * @param \DateTime $newEventStartDate string containing the start date of the event
+	 * @throws \InvalidArgumentException if data types are not valid
+	 * @throws \RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+	 * @throws \TypeError if data types violate type hints
+	 * @throws \Exception if some other exception occurs
+	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
 	 **/
 	public function __construct($newEventId, $newEventFamilyId, $newEventUserId, string $newEventContent, $newEventEndDate,
 										 string $newEventName, $newEventStartDate) {
@@ -67,7 +73,8 @@ class Event {
 			$this->setEventEndDate($newEventEndDate);
 			$this->setEventName($newEventName);
 			$this->setEventStartDate($newEventStartDate);
-		} //determine what exception was thrown
+		}
+			//determine what exception was thrown
 		catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
@@ -88,7 +95,8 @@ class Event {
 
 	/**
 	* mutator method for event id
-	* @param uuid $newEventId new value of event id
+	 *
+	* @param string|Uuid $newEventId new value of event id
 	* @throws \RangeException if $newEventId is not positive
 	* @throws \TypeError if $newEventId is not a uuid
 	**/
@@ -105,17 +113,17 @@ class Event {
 	/**
 	* accessor method for event family id
 	*
-	* @return uuid value for event family id
+	* @return Uuid value for event family id
 	**/
-	public function getEventFamilyId(): uuid {
+	public function getEventFamilyId(): Uuid {
 		return ($this->eventFamilyId);
 	}
 
 	/**
- * mutator method for event family id
- * @param string | Uuid $newEventFamilyId new value of event family id
- * @throws \RangeException if $newEventFamilyId is not positive
- * @throws \TypeError if $newEventFamilyId is not an integer
+ 	* mutator method for event family id
+ 	* @param string | Uuid $newEventFamilyId new value of event family id
+ 	* @throws \RangeException if $newEventFamilyId is not positive
+ 	* @throws \TypeError if $newEventFamilyId is not an integer
  	**/
 
 	public function setEventFamilyId($newEventFamilyId): void {
@@ -131,17 +139,18 @@ class Event {
 	}
 
 	/**
-	 * accessor method for event user id
-	 *
-	 * @return uuid value for event user id
-	 **/
-	public function getEventUserId(): uuid {
+ 	* accessor method for event user id
+	*
+	* @return Uuid value for event user id
+	**/
+	public function getEventUserId(): Uuid {
 		return ($this->eventUserId);
 	}
 
 	/**
 	 * mutator method for event user id
-	 * @param string | Uuid\ $newEventUserId new value of event user id
+	 *
+	 * @param string | Uuid $newEventUserId new value of event user id
 	 * @throws \RangeException if $newEventUserId is not positive
 	 * @throws \TypeError if $newEventUserId is not an integer
 	 **/
@@ -345,7 +354,7 @@ class Event {
 	* gets the event by eventId
 	*
 	* @param \PDO $pdo PDO connection object
-	* @param Uuid\|string $eventId event id to search for
+	* @param Uuid | string $eventId event id to search for
 	* @return event|null event found or null if not found
 	* @throws \PDOException when mySQL related errors occur
 	* @throws \TypeError when a variable is not the correct data type
