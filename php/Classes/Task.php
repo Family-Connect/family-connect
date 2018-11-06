@@ -341,4 +341,82 @@ class Task {
 		}
 		return($task);
 	}
+
+	/**
+	 * get task by task event id
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param Uuid|string $taskEventId task evebt id used in query
+	 * @return Task|null - task if there's a result, null if there isn't
+	 * @throws \PDOException when mySQL errors occur
+	 * @throws \TypeError when the variables are not the correct data type
+	 */
+	public static function getTaskByTaskEventId(\PDO $pdo, $taskEventId) : ?Task {
+		// sanitize string / Uuid
+		try {
+			$taskEventId = self::validateUuid($taskEventId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create template for new query
+		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName FROM task WHERE taskEventId = :taskEventId";
+		$statement = $pdo->prepare($query);
+
+		// wire up variable (taskEventId) to query
+		$parameters = ["taskEventId" => $taskEventId->getBytes()];
+		$statement->execute($parameters);
+
+		// grab task from mySQL
+		try {
+			$task = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskName"]);
+			}
+		} catch(\Exception $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($task);
+	}
+
+	/**
+	 * get task by task user id
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param Uuid|string $taskUserId task user id used in query
+	 * @return Task|null - task if there's a result, null if there isn't
+	 * @throws \PDOException when mySQL errors occur
+	 * @throws \TypeError when the variables are not the correct data type
+	 */
+	public static function getTaskByTaskUserId(\PDO $pdo, $taskUserId) : ?Task {
+		// sanitize string / Uuid
+		try {
+			$taskUserId = self::validateUuid($taskUserId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create template for new query
+		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName FROM task WHERE taskUserId = :taskUserId";
+		$statement = $pdo->prepare($query);
+
+		// wire up variable (taskUserId) to query
+		$parameters = ["taskUserId" => $taskUserId->getBytes()];
+		$statement->execute($parameters);
+
+		// grab task from mySQL
+		try {
+			$task = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskName"]);
+			}
+		} catch(\Exception $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($task);
+	}
 }
