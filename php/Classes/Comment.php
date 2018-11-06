@@ -258,6 +258,41 @@ public function setCommentDate($newCommentDate = null) : void {
 	}
 	$this->commentDate = $newCommentDate;
 	}
+
+public function insert(\PDO $pdo) : void {
+
+	// create query template
+	$query = "INSERT INTO comment(commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate) VALUES(:commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate)";
+	$statement = $pdo->prepare($query);
 }
 
+/**
+ * deletes this Comment from mySQL
+ *
+ * @param \PDO $pdo PDO connection object
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError if $pdo is not a PDO connection object
+ **/
+public function delete(\PDO $pdo) : void {
+	// create query template
+	$query = "DELETE FROM comment WHERE commentId = :commentId";
+	$statement = $pdo->prepare($query);
 
+	// bind the member variables to the place holder in the template
+	$parameters = ["commentId" => $this->commentId->getBytes()];
+	$statement->execute($parameters);
+}
+
+/**
+ * updates this Comment in mySQL
+ *
+ * @param \PDO $pdo PDO connection object
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError if $pdo is not a PDO connection object
+ **/
+public function update(\PDO $pdo) : void {
+	// create query template
+	$query = "UPDATE comment SET patientProfileId = :patientProfileId, patientEmail =
+ 		:patientEmail, patientUsername = :patientUsername, patientInformation = :patientInformation WHERE patientId = :patientId";
+	$statement = $pdo->prepare($query);
+}
