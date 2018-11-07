@@ -83,9 +83,8 @@ class User implements \JsonSerializable{
  * @throws \Exception if some other exception occurs
  * @throws \Exception if user hash is not hexadecimal
  */
-//Todo add typehints to construct
 
-	public function __construct($newUserId, $newUserFamilyId, $newUserActivationToken, $newUserAvatar, $newUserDisplayName, $newUserEmail, $newUserHash, $newUserPhoneNumber, $userUserPrivilege) {
+	public function __construct($newUserId, $newUserFamilyId, string $newUserActivationToken, $newUserAvatar, $newUserDisplayName, $newUserEmail, $newUserHash, $newUserPhoneNumber, int $userUserPrivilege) {
 		try {
 			$this->setUserId($newUserId);
 			$this->setUserFamilyId($newUserFamilyId);
@@ -422,11 +421,11 @@ class User implements \JsonSerializable{
 	 *
 	 * @param \PDO $pdo PDO connection object
 	 * @param Uuid|string $userFamilyId family id to search by
-	 * @return \SplFixedArray SplFixedArray of Users found
+	 * @return User|null user found or null if not found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	public static function getUserByUserFamilyId(\PDO $pdo, $userFamilyId) : \SplFixedArray {
+	public static function getUserByUserFamilyId(\PDO $pdo, $userFamilyId) : User {
 
 		try {
 			$userFamilyIdId = self::validateUuid($userFamilyId);
@@ -435,38 +434,38 @@ class User implements \JsonSerializable{
 		}
 
 		// create query template
-		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userId = :userId";
+		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userFamilyId = :userFamilyId";
 		$statement = $pdo->prepare($query);
 		// bind the user family id to the place holder in the template
 		$parameters = ["userFamilyId" => $userFamilyId->getBytes()];
 		$statement->execute($parameters);
-		// build an array of userss
-		$users = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false) {
-			try {
+
+
+		try {
+			$user = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
 				$user = new User($row["userId"], $row["userFamilyId"], $row["userActivationToken"], $row["userAvatar"], $row["userDisplayName"], $row["userEmail"], $row["userHash"], $row["userPhoneNumber"], $row["userPrivilege"]);
-				$users[$users->key()] = $user;
-				$users->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
+
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($users);
+		return ($user);
 	}
 
 	/**
-	 * gets the User by content
+	 * gets the User by email
 	 *
 	 * @param \PDO $pdo PDO connection object
 	 * @param string $userEmail user email to search for
-	 * @return \SplFixedArray SplFixedArray of users found
+	 *  @return User|null user found or null if not found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	//Todo rewrite function to return a single object
-	public static function getUserByUserEmail(\PDO $pdo, string $userEmail) : \SplFixedArray {
+	public static function getUserByUserEmail(\PDO $pdo, string $userEmail) : User {
 		// sanitize the description before searching
 		$userEmail = trim($userEmail);
 		$userEmail = filter_var($userEmail, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
