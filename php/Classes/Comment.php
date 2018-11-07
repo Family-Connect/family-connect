@@ -29,17 +29,17 @@ class Comment {
 	private $commentId;
 	/**
 	 * id of the event that the comment belongs to
-	 * @varUuid $commentEventId
+	 * @var Uuid $commentEventId
 	 **/
 	private $commentEventId;
 	/**
 	 * id of the task that the comment belongs to
-	 * @varUuid $commentTaskId
+	 * @var Uuid $commentTaskId
 	 **/
 	private $commentTaskId;
 	/**
 	 * id of the user that the comment belongs to
-	 * @varUuid $commentUserId
+	 * @var Uuid $commentUserId
 	 **/
 	private $commentUserId;
 	/**
@@ -49,17 +49,17 @@ class Comment {
 	private $commentContent;
 	/**
 	 * actual time that the comment was posted
-	 * @varDatetime $commentDate
+	 * @var Datetime $commentDate
 	 **/
 	private $commentDate;
 
 	/**
 	 * constructor for Comment
 	 *
-	 * @param string|Uuid $newCommentId id of the comment or null if new Comment
-	 * @param string|Uuid $newCommentEventId of the event that the comment is associated with
-	 * @param string|Uuid $newCommentTaskId of the task that the comment is assiciated with
-	 * @param string|Uuid $newCommentUserId of the user that the comment s associated with
+	 * @param string|null|Uuid $newCommentId id of the comment or null if new Comment
+	 * @param string|null|Uuid $newCommentEventId of the event that the comment is associated with
+	 * @param string|null|Uuid $newCommentTaskId of the task that the comment is assiciated with
+	 * @param string|null|Uuid $newCommentUserId of the user that the comment s associated with
 	 * @param string $newCommentContent string containing actual comment content posted
 	 * @param string $newCommentDate string with actual date and time when comment is posted
 	 * @throws \InvalidArgumentException if data types are not valid
@@ -68,7 +68,7 @@ class Comment {
 	 * @throws \Exception if some other exception occurs
 	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
 	 */
-	public function __construct($newCommentId, $newCommentEventId, $newCommentTaskId, $newCommentUserId, $newCommentContent, $newCommentDate = null) {
+	public function __construct($newCommentId, $newCommentEventId = null, $newCommentTaskId = null, $newCommentUserId, $newCommentContent, $newCommentDate = null) {
 		try {
 			$this->setCommentId($newCommentId);
 			$this->setCommentEventId($newCommentEventId);
@@ -119,7 +119,7 @@ public function setCommentId( $newCommentId) : void {
  *
  * @return Uuid values of comment event id
  **/
-public function getCommentEventId() : Uuid{
+public function getCommentEventId() : ?Uuid{
 	return($this->commentEventId);
 }
 
@@ -130,7 +130,10 @@ public function getCommentEventId() : Uuid{
  * @throws \RangeException if $newCommentEventId is not positive
  * @throws \ TypeError if $newCommentEventId is not an integer
  **/
-public function setCommentEventId( $newCommentEventId) : void {
+public function setCommentEventId( $newCommentEventId =null) : void {
+	if($newCommentEventId === null) {
+		$this->commentEventId=null;
+	}
 	try {
 		$uuid = self::validateUuid($newCommentEventId);
 	}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -140,7 +143,7 @@ public function setCommentEventId( $newCommentEventId) : void {
 	// convert and store the comment event id
 	$this->commentEventId = $uuid;
 }
-
+//TODO make accessor/mutator for commentTaskId nullable commentEventId can be used for reference
 /**
  * accessor method for comment task id
  *
@@ -233,7 +236,7 @@ public function setCommentContent(string $newCommentContent) : void {
  *
  * @return \DateTime value of comment date
  */
-public function getCommentDate(): \DateTime {
+public function getCommentDate(): DateTime {
 	return($this->commentDate);
     }
 /**
@@ -261,6 +264,7 @@ public function setCommentDate($newCommentDate = null) : void {
 
 public function insert(\PDO $pdo) : void {
 
+	//TODO format commentDate to mySql specifications
 	// create query template
 	$query = "INSERT INTO comment(commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate) VALUES(:commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate)";
 	$statement = $pdo->prepare($query);
@@ -293,6 +297,7 @@ public function delete(\PDO $pdo) : void {
 public function update(\PDO $pdo) : void {
 	// create query template
 	$query = "UPDATE comment SET commentId = :commentId, commentEventId = :commentEventId, commentTaskId = :commentTaskId, commentUserId = :commentUserId, commentContent = :commentContent, commentDate = :commentDate WHERE patientId = :patientId";
+	//TODO create parameters for date and format date to mysql specifications
 	$statement = $pdo->prepare($query);
 }
 
@@ -344,6 +349,7 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
+//TODO rewrite method to return spl fixed array
 public static function getCommentByCommentEventId(\PDO $pdo, $commentEventId) : ?Comment {
 	// sanitize the commentEventId before searching
 	try {
@@ -383,6 +389,7 @@ public static function getCommentByCommentEventId(\PDO $pdo, $commentEventId) : 
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
+//TODO rewrite method to return spl fixed array
 public static function getCommentByTaskId(\PDO $pdo, $commentTaskId) : ?Comment {
 	// sanitize the commentTaskId before searching
 	try {
@@ -422,6 +429,7 @@ public static function getCommentByTaskId(\PDO $pdo, $commentTaskId) : ?Comment 
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
+//TODO rewrite method to return spl fixed array
 public static function getCommentByCommentUserId(\PDO $pdo, $commentUserId) : ?Comment {
 	// sanitize the commentUserId before searching
 	try {
@@ -502,6 +510,7 @@ public static function getCommentByCommentContent(\PDO $pdo, $commentContent) : 
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when variables are not the correct data type
  **/
+//TODO get rid of comment by comment date/ but use the spl fixed array as a template first
 	public static function getCommentByCommentDate(\PDO $pdo, $commentDate) : \SplFixedArray {
 
 		try {
@@ -542,6 +551,7 @@ public static function getCommentByCommentContent(\PDO $pdo, $commentContent) : 
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when variables are not the correct data type
  **/
+//TODO  get rid of get all comments but use spl fixed array template
 public static function getAllComments(\PDO $pdo) : \SPLFixedArray {
 	// create query template
 	$query = "SELECT commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate FROM comment";
