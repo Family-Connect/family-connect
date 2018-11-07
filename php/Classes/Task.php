@@ -18,8 +18,7 @@ use Ramsey\Uuid\Uuid;
  * @author Michael Bovee <michael.j.bovee@gmail.com>
  * @version 1.0.0
  */
-//Todo add JsonSerializable and add taskIsCompleted state variable
-class Task {
+class Task implements \JsonSerializable {
 	use ValidateDate;
 	use ValidateUuid;
 	/**
@@ -57,8 +56,8 @@ class Task {
 	 * constructor for this task
 	 *
 	 * @param string|Uuid $newTaskId if this comment is null or a new comment
-	 * @param string|Uuid $newTaskEventId if this comment is null or a new comment
-	 * @param string|Uuid $newTaskUserId if this comment is null or a new comment
+	 * @param string|Uuid|null $newTaskEventId if this comment is null or a new comment
+	 * @param string|Uuid|null $newTaskUserId if this comment is null or a new comment
 	 * @param string $newTaskDescription for content of task description
 	 * @param \DateTime $newTaskDueDate for datetime task is due
 	 * @param string $newTaskName for name of task
@@ -67,7 +66,7 @@ class Task {
 	 * @throws \TypeError if data values are wrong type
 	 * @throws \Exception for any others
 	 */
-	public function __construct($newTaskId, $newTaskEventId, $newTaskUserId, $newTaskDescription, $newTaskDueDate, $newTaskName) {
+	public function __construct($newTaskId, $newTaskEventId = null, $newTaskUserId = null, $newTaskDescription, $newTaskDueDate, $newTaskName) {
 		try {
 			$this->setTaskId($newTaskId);
 			$this->setTaskEventId($newTaskEventId);
@@ -104,7 +103,7 @@ class Task {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
-		$this->taskId = $newTaskId;
+		$this->taskId = $uuid;
 	}
 
 	/**
@@ -112,7 +111,7 @@ class Task {
 	 *
 	 * @return Uuid value of taskEventId
 	 */
-	public function getTaskEventId() : Uuid {
+	public function getTaskEventId() : ?Uuid {
 		return ($this->taskEventId);
 	}
 	/**
@@ -122,14 +121,17 @@ class Task {
 	 *@throws \RangeException if $newTaskEventId is not positive
 	 *@throws \TypeError if $newTaskEventId is not Uuid or string
 	 */
-	public function setTaskEventId($newTaskEventId) : void {
+	public function setTaskEventId($newTaskEventId = null) : void {
+		if ($newTaskEventId === null) {
+			$this->taskEventId = null;
+		}
 		try {
 			$uuid = self::validateUuid($newTaskEventId);
 		} catch(\RangeException | \InvalidArgumentException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
-		$this->taskEventId = $newTaskEventId;
+		$this->taskEventId = $uuid;
 	}
 
 	/**
@@ -137,7 +139,7 @@ class Task {
 	 *
 	 * @return Uuid value of taskUserId
 	 */
-	public function getTaskUserId() : Uuid {
+	public function getTaskUserId() : ?Uuid {
 		return ($this->taskUserId);
 	}
 	/**
@@ -147,7 +149,10 @@ class Task {
 	 *@throws \RangeException if $newTaskUserId is not positive
 	 *@throws \TypeError if $newTaskUserId is not Uuid or string
 	 */
-	public function setTaskUserId($newTaskUserId) : void {
+	public function setTaskUserId($newTaskUserId = null) : void {
+		if ($newTaskUserId === null) {
+			$this->taskUserId = null;
+		}
 		try {
 			$uuid = self::validateUuid($newTaskUserId);
 		} catch(\RangeException | \InvalidArgumentException | \Exception | \TypeError $exception) {
@@ -262,8 +267,9 @@ class Task {
 		$statement = $pdo->prepare($query);
 
 		// wire variables up to their template place holders
-		//Todo format date to mySQL specifications
-		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $this->taskDueDate, "taskName" => $this->taskName];
+
+		$formattedDate = $this->taskDueDate->format("Y-m-d H:i:s.u");
+		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $formattedDate, "taskName" => $this->taskName];
 		$statement->execute($parameters);
 	}
 
@@ -297,8 +303,8 @@ class Task {
 		$statement = $pdo->prepare($query);
 
 		// wire up variables to place holders in query
-		//Todo format date to mySQL specifications
-		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $this->taskDueDate, "taskName" => $this->taskName];
+		$formattedDate = $this->taskDueDate->format("Y-m-d H:i:s.u");
+		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $formattedDate, "taskName" => $this->taskName];
 		$statement->execute($parameters);
 	}
 
