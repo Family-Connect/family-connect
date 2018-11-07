@@ -11,21 +11,22 @@ use Ramsey\Uuid\Uuid;
  * @author Sharon Romero <sromero130@cnm.edu>
  * @version 1.0.0
  **/
+//TODO implement json serializable
 class Event {
 	use ValidateUuid;
 	use validateDate;
 	/**id for the Event, this is the primary key.
-	 * @var uuid $eventId
+	 * @var Uuid $eventId
 	 **/
 	private $eventId;
 	/**
 	 * id of the event that's connected to and created by family; this is a foreign key.
-	 * @var uuid $eventFamilyId ;
+	 * @var Uuid $eventFamilyId ;
 	 **/
 	private $eventFamilyId;
 	/**
 	 * id of the event that's connected to and created by the user; this is a foreign key.
-	 * @var uuid $eventUserId ;
+	 * @var Uuid $eventUserId ;
 	 **/
 	private $eventUserId;
 	/**
@@ -219,11 +220,7 @@ class Event {
 	* @throws \RangeException if $newEventEndDate is a date that does not exist
 	* @throws \Exception
 	**/
-	public function setEventEndDate($newEventEndDate = null) : void {
-		if($newEventEndDate === null) {
-			$this->eventEndDate = new \DateTime();
-			return;
-		}
+	public function setEventEndDate($newEventEndDate) : void {
 
 		try {
 			$newEventEndDate = self::validateDateTime($newEventEndDate);
@@ -284,11 +281,7 @@ class Event {
 	* @throws \RangeException if $newEventStartDate is a date that does not exist
 	* @throws \Exception
 	**/
-	public function setEventStartDate($newEventStartDate = null) : void {
-		if($newEventStartDate === null) {
-			$this->eventStartDate = new \DateTime();
-			return;
-		}
+	public function setEventStartDate($newEventStartDate) : void {
 
 		try {
 			$newEventStartDate = self::validateDateTime($newEventStartDate);
@@ -315,6 +308,7 @@ class Event {
 
 		//bind the member variables to the place holders in the template
 		$formattedDate = $this->eventStartDate->format("Y-m-d H:i:s.u");
+		//todo format end date time to mySQL specifications
 		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" 		=> 	$this->eventUserId->getBytes(), "eventContent" => $this->eventContent, "eventName" => $this->eventName, "eventStartDate" 		=> 	$formattedDate];
 		$statement->execute($parameters);
 	}
@@ -410,7 +404,7 @@ class Event {
 		// sanitize the userId before searching
 		try {
 			$eventUserId = self::validateUuid($eventUserId);
-		} catch(\InvalidArgumentException:: | \RangeException | \Exception | \TypeError $exception) {
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 
@@ -425,9 +419,11 @@ class Event {
 		try {
 			$eventUserId = null;
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
-			$row = $statement->fetch(;
+			$row = $statement->fetch();
 			if($row !== false) {
-				$eventUserId = new EventUserId($row["eventId"], $row["eventFamilyId"], $row["eventContent"], $row["eventEndDate"], 				$row["eventName"], $row["eventName"], $row["eventStartDate"]);
+				$event = new Event($row["eventId"], $row["eventFamilyId"], $row["eventContent"],
+					$row["eventEndDate"],
+					$row["eventName"], $row["eventName"], $row["eventStartDate"]);
 			}
 		} catch(\Exception $exception) {
 				//if the row couldn't be converted, rethrow it
@@ -435,10 +431,9 @@ class Event {
 			}
 			return($eventUserId);
 		}
-	}
 
 /**
-* gets the event by content
+* get the event by event family id
 *
 * @param \PDO $pdo PDO connection object
 * @param string eventContent event content to search for
@@ -448,7 +443,7 @@ class Event {
 **/
 
 	/**
-	* gets all Events
+	* get current Events by family id
 	*
 	* @param \PDO $pdo PDO connection object
 	* @return \SplFixedArray SplFixedArray of Events found or null if not found
