@@ -393,7 +393,7 @@ class Event {
 	}
 
 	/**
-	* gets the Event by event user id
+	* get the Event by event user id
 	*
 	* @param \PDO $pdo PDO connection object
 	* @param Uuid|string $eventUserId event id to search by
@@ -409,11 +409,12 @@ class Event {
 		}
 
 		// create query template
-		$query = "SELECT eventUserId, eventFamilyId, eventContent, eventEndDate, eventName, eventStartDate WHERE eventUserId = :userId";
+		$query = "SELECT eventUserId, eventFamilyId, eventContent, eventEndDate, eventName, eventStartDate FROM event WHERE 					eventUserId	 = :eventUserId";
 		$statement = $pdo->prepare($query);
 
 		// bind the eventUserId to the place holder in the template
 		$parameters = ["eventUserId" => $eventUserId->getBytes()];
+		$statement->execute($parameters);
 
 		// grab the event from mySQL
 		try {
@@ -421,9 +422,8 @@ class Event {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$event = new Event($row["eventId"], $row["eventFamilyId"], $row["eventContent"],
-					$row["eventEndDate"],
-					$row["eventName"], $row["eventName"], $row["eventStartDate"]);
+				$eventUserId = new EventUserId($row["eventId"], $row["eventFamilyId"], $row["eventUserId"],
+				$row["eventContent"], $row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
 			}
 		} catch(\Exception $exception) {
 				//if the row couldn't be converted, rethrow it
@@ -433,14 +433,46 @@ class Event {
 		}
 
 /**
-* get the event by event family id
-*
-* @param \PDO $pdo PDO connection object
-* @param string eventContent event content to search for
-* @return \splFixedArray splFixedArray of content found
-* @throws \PDOException when mySQL related errors occur
-* @throws \TypeError when variables are not the correct data type
-**/
+* get the Event by event family id
+ *
+ * @param \PDO $pdo PDO connection object
+ * @param Uuid|string $eventFamilyId event id to search by
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError when variables are not the correct data type
+ **/
+	public static function getEventByEventFamilyId(\PDO $pdo, $eventFamilyId) : ?Event {
+		// sanitize the eventId before searching
+		try {
+			$eventFamilyId = self::validateUuid($eventFamilyId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create query template
+		$query = "SELECT eventUserId, eventFamilyId, eventContent, eventEndDate, eventName, eventStartDate WHERE eventFamilyId = :userId";
+		$statement = $pdo->prepare($query);
+
+		// bind the eventUserId to the place holder in the template
+		$parameters = ["eventFamilyId" => $eventFamilyId->getBytes()];
+		$statement->execute($parameters);
+
+		// grab the event from mySQL
+		try {
+			$eventFamilyId = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$eventFamilyId = new EventFamilyId($row["eventId"], $row["eventFamilyId"], $row["eventUserId"], $row["eventContent"],
+					$row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
+			}
+		} catch(\Exception $exception) {
+			//if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($eventFamilyId);
+	}
+
+
 
 	/**
 	* get current Events by family id
@@ -452,7 +484,7 @@ class Event {
 	**/
 	public static function getAllEvents(\PDO $pdo) : \SPLFixedArray {
 		// create query template
-		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM event";
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM event WHERE 					eventFamilyId = eventFamilyId";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
