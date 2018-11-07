@@ -24,8 +24,8 @@ CREATE TABLE `user` (
 	userId BINARY(16) NOT NULL,
 	userFamilyId BINARY(16) NOT NULL,
 	userActivationToken CHAR(32) NOT NULL,
-	userAvatar VARCHAR(128) NOT NULL,
-	userDisplayName VARCHAR(128) NOT NULL,
+	userAvatar VARCHAR(255) NOT NULL,
+	userDisplayName VARCHAR(32) NOT NULL,
 	userEmail VARCHAR(128) NOT NULL,
 	userHash CHAR(97) NOT NULL,
 	userPhoneNumber VARCHAR(32) NOT NULL,
@@ -67,6 +67,7 @@ CREATE TABLE task(
 	taskDescription VARCHAR(512),
 	taskDueDate DATETIME(6) NOT NULL,
 	taskName VARCHAR(30) NOT NULL,
+	taskIsCompleted
 
 	INDEX(taskEventId),
 	INDEX(taskUserId),

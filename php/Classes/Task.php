@@ -18,8 +18,8 @@ use Ramsey\Uuid\Uuid;
  * @author Michael Bovee <michael.j.bovee@gmail.com>
  * @version 1.0.0
  */
-
-class Task implements \JsonSerializable {
+//Todo add JsonSerializable and add taskIsCompleted state variable
+class Task {
 	use ValidateDate;
 	use ValidateUuid;
 	/**
@@ -154,7 +154,7 @@ class Task implements \JsonSerializable {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
-		$this->taskUserId = $newTaskUserId;
+		$this->taskUserId = $uuid;
 	}
 
 
@@ -207,14 +207,11 @@ class Task implements \JsonSerializable {
 	 * @throws \Exception
 	 */
 	public function setTaskDueDate($newTaskDueDate = null) : void {
-		if($newTaskDueDate === null) {
-			$this->taskDueDate = new \DateTime();
-			return;
-		}
+
 
 		try {
 			$newTaskDueDate = self::validateDateTime($newTaskDueDate);
-		} catch(\InvalidArgumentException | \RangeException $exception) {
+		} catch(\InvalidArgumentException | \Exception | \RangeException | \TypeError $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
@@ -265,6 +262,7 @@ class Task implements \JsonSerializable {
 		$statement = $pdo->prepare($query);
 
 		// wire variables up to their template place holders
+		//Todo format date to mySQL specifications
 		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $this->taskDueDate, "taskName" => $this->taskName];
 		$statement->execute($parameters);
 	}
@@ -299,6 +297,7 @@ class Task implements \JsonSerializable {
 		$statement = $pdo->prepare($query);
 
 		// wire up variables to place holders in query
+		//Todo format date to mySQL specifications
 		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $this->taskDueDate, "taskName" => $this->taskName];
 		$statement->execute($parameters);
 	}
@@ -351,6 +350,7 @@ class Task implements \JsonSerializable {
 	 * @throws \PDOException when mySQL errors occur
 	 * @throws \TypeError when the variables are not the correct data type
 	 */
+	//Todo refactor method to return spl fixed array
 	public static function getTaskByTaskEventId(\PDO $pdo, $taskEventId) : ?Task {
 		// sanitize string / Uuid
 		try {
@@ -390,6 +390,7 @@ class Task implements \JsonSerializable {
 	 * @throws \PDOException when mySQL errors occur
 	 * @throws \TypeError when the variables are not the correct data type
 	 */
+	//Todo refactor method to return spl fixed array
 	public static function getTaskByTaskUserId(\PDO $pdo, $taskUserId) : ?Task {
 		// sanitize string / Uuid
 		try {
@@ -429,6 +430,7 @@ class Task implements \JsonSerializable {
 	 * @throws \PDOException when mySQL errors occur
 	 * @throws \TypeError when the variables are not the correct data type
 	 */
+	//Todo Change method get task by start interval and end interval
 	public static function getTaskByTaskDueDate(\PDO $pdo, $taskDueDate) : ?Task {
 		// sanitize string / DateTime
 		try {

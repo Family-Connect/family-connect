@@ -41,7 +41,7 @@ class Family implements \JsonSerializable {
 	 * @throws \Exception for any other mysqli_sql_exception
 	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
 	 */
-	public function __construct($newFamilyId, $newFamilyName) {
+	public function __construct($newFamilyId, string $newFamilyName) {
 		try {
 			$this->setFamilyId($newFamilyId);
 			$this->setFamilyName($newFamilyName);

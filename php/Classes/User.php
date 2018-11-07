@@ -1,18 +1,19 @@
 <?php
 
-namespace agarcia707\FamConn\FamilyConnect;
+namespace FamConn\FamilyConnect;
 
 require_once("autoload.php");
 require_once(dirname(__DIR__,2)."/vendor/autoload.php");
 
 use FamConn\FamilyConnect\ValidateUuid;
 use Ramsey\Uuid\Uuid;
+//Todo implement jsonSerializable
 /**
  * @author agarcia707 <antgarcia014@gmail.com>
  *version 1.0.0
  */
 
-class User {
+class User implements \JsonSerializable{
 	use ValidateUuid;
 	/**
 	 * id for this User; this is the primary key
@@ -82,6 +83,8 @@ class User {
  * @throws \Exception if some other exception occurs
  * @throws \Exception if user hash is not hexadecimal
  */
+//Todo add typehints to construct
+
 	public function __construct($newUserId, $newUserFamilyId, $newUserActivationToken, $newUserAvatar, $newUserDisplayName, $newUserEmail, $newUserHash, $newUserPhoneNumber, $userUserPrivilege) {
 		try {
 			$this->setUserId($newUserId);
@@ -106,7 +109,7 @@ class User {
  * @return Uuid value of user id
  */
 	public function getUserId() : Uuid {
-	return($this->UserId);
+	return($this->userId);
 }
 
 /**
@@ -172,8 +175,7 @@ class User {
 		if(ctype_xdigit($newUserActivationToken) === false) {
 			throw (new \InvalidArgumentException("String is not hexadecimal"));
 		}
-		// sanitize activation token string
-		$newUserActivationToken = filter_var($newUserActivationToken, FILTER_SANITIZE_STRING);
+
 		// store the string
 		$this->userActivationToken = $newUserActivationToken;
 	}
@@ -192,7 +194,7 @@ class User {
 		throw(new \InvalidArgumentException("user avatar is empty or insecure"));
 	}
 
-	if(strlen($newUserAvatar) > 128) {
+	if(strlen($newUserAvatar) > 255) {
 		throw(new \RangeException("user avatar too large"));
 	}
 
@@ -214,7 +216,7 @@ class User {
 		throw(new \InvalidArgumentException("user display name empty or insecure"));
 	}
 
-	if(strlen($newUserDisplayName) > 128) {
+	if(strlen($newUserDisplayName) > 32) {
 		throw(new \RangeException("user display name too large"));
 	}
 
@@ -231,7 +233,7 @@ class User {
  **/
 	public function setUserEmail(string $newUserEmail) : void {
 	$newUserEmail = trim($newUserEmail);
-	$newUserEmail = filter_var($newUserEmail, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$newUserEmail = filter_var($newUserEmail, FILTER_VALIDATE_EMAIL);
 	if(empty($newUserEmail) === true) {
 		throw(new \InvalidArgumentException("user email is empty or insecure"));
 	}
@@ -259,13 +261,14 @@ class User {
 	 * @throws \RangeException if user hash is longer than 97 characters
 	 * @throws \Exception if user hash is not hexadecimal
 	 */
+	//TODO update hash mutator
 	public function setUserHash(string $newUserHash): void {
 		// verify if the user hash is not empty
 		if(empty($newUserHash) === true) {
 			throw (new \InvalidArgumentException("user hash is empty"));
 		}
 		// verify the hash is not too long
-		if(strlen($newUserHash) > 97) {
+		if(strlen($newUserHash) !== 97) {
 			throw (new \RangeException("hash is too long"));
 		}
 		// verify that hash is hexadecimal
@@ -313,7 +316,7 @@ class User {
 	 * @throws \RangeException when input is out of range
 	 **/
 	public function setNewUserPrivilege(int $newUserPrivilege): void {
-		if($newUserPrivilege < 0 || $newUserPrivilege > 120) {
+		if($newUserPrivilege !== 0 || $newUserPrivilege !== 1) {
 			throw(new \RangeException("user privilege is out of range"));
 		}
 		//convert and store user privilege
@@ -415,7 +418,7 @@ class User {
 	}
 
 	/**
-	 * gets the User by user id
+	 * gets the User by family id
 	 *
 	 * @param \PDO $pdo PDO connection object
 	 * @param Uuid|string $userFamilyId family id to search by
@@ -462,6 +465,7 @@ class User {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
+	//Todo rewrite function to return a single object
 	public static function getUserByUserEmail(\PDO $pdo, string $userEmail) : \SplFixedArray {
 		// sanitize the description before searching
 		$userEmail = trim($userEmail);
@@ -497,37 +501,7 @@ class User {
 		}
 		return($users);
 	}
-
-	/**
-	 * gets all Users
-	 *
-	 * @param \PDO $pdo PDO connection object
-	 * @return \SplFixedArray SplFixedArray of Users found or null if not found
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when variables are not the correct data type
-	 **/
-	public static function getAllUsers(\PDO $pdo) : \SPLFixedArray {
-		// create query template
-		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user";
-		$statement = $pdo->prepare($query);
-		$statement->execute();
-
-		// build an array of users
-		$users = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false) {
-			try {
-				$user = new User($row["userId"], $row["userFamilyId"], $row["userActivationToken"], $row["userAvatar"], $row["userDisplayName"], $row["userEmail"], $row["userHash"], $row["userPhoneNumber"], $row["userPrivilege"]);
-				$users[$users->key()] = $user;
-				$users->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
-			}
-		}
-		return ($users);
-	}
-
+//Todo write get user by userEmail will return a single object
 	/**
 	 * formats the state variables for JSON serialization
 	 *
@@ -535,10 +509,8 @@ class User {
 	 **/
 	public function jsonSerialize() : array {
 		$fields = get_object_vars($this);
-
-		$fields["userId"] = $this->userId->toString();
-		$fields["userFamilyId"] = $this->userFamilyId->toString();
-
+		//Todo unset both hash and activationToken
+		return $fields;
 	}
 
 }
