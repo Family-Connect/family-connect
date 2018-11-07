@@ -351,13 +351,13 @@ class Task implements \JsonSerializable {
 	 * get task by task event id
 	 *
 	 * @param \PDO $pdo PDO connection object
-	 * @param Uuid|string $taskEventId task evebt id used in query
-	 * @return Task|null - task if there's a result, null if there isn't
+	 * @param Uuid|string $taskEventId task event id used in query
+	 * @return \SplFixedArray SplFixedArray of tasks found
 	 * @throws \PDOException when mySQL errors occur
 	 * @throws \TypeError when the variables are not the correct data type
 	 */
-	//Todo refactor method to return spl fixed array
-	public static function getTaskByTaskEventId(\PDO $pdo, $taskEventId) : ?Task {
+	// Todo
+	public static function getTaskByTaskEventId(\PDO $pdo, $taskEventId) : \SplFixedArray {
 		// sanitize string / Uuid
 		try {
 			$taskEventId = self::validateUuid($taskEventId);
@@ -373,18 +373,19 @@ class Task implements \JsonSerializable {
 		$parameters = ["taskEventId" => $taskEventId->getBytes()];
 		$statement->execute($parameters);
 
-		// grab task from mySQL
-		try {
-			$task = null;
-			$statement->setFetchMode(\PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false) {
+		// build array of tasks
+		$tasks = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
 				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskName"]);
+				$tasks[$tasks->key()] = $task;
+				$tasks->next();
+			} catch(\Exception $exception) {
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
-		} catch(\Exception $exception) {
-			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($task);
+		return($tasks);
 	}
 
 	/**
