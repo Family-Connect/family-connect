@@ -421,7 +421,7 @@ class Event {
 		// bind the eventUserId to the place holder in the template
 		$parameters = ["eventUserId" => $eventUserId->getBytes()];
 
-		// grabe the event from mySQL
+		// grab the event from mySQL
 		try {
 			$eventUserId = null;
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
@@ -429,7 +429,7 @@ class Event {
 			if($row !== false) {
 				$eventUserId = new EventUserId($row["eventId"], $row["eventFamilyId"], $row["eventContent"], $row["eventEndDate"], 				$row["eventName"], $row["eventName"], $row["eventStartDate"]);
 			}
-			{ catch(\Exception $exception) {
+		} catch(\Exception $exception) {
 				//if the row couldn't be converted, rethrow it
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
@@ -437,8 +437,18 @@ class Event {
 		}
 	}
 
+/**
+* gets the event by content
+*
+* @param \PDO $pdo PDO connection object
+* @param string eventContent event content to search for
+* @return \splFixedArray splFixedArray of content found
+* @throws \PDOException when mySQL related errors occur
+* @throws \TypeError when variables are not the correct data type
+**/
+
 	/**
-	* gets all Event
+	* gets all Events
 	*
 	* @param \PDO $pdo PDO connection object
 	* @return \SplFixedArray SplFixedArray of Events found or null if not found
