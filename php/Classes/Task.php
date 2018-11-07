@@ -19,7 +19,7 @@ use Ramsey\Uuid\Uuid;
  * @version 1.0.0
  */
 
-class Task {
+class Task implements \JsonSerializable {
 	use ValidateDate;
 	use ValidateUuid;
 	/**

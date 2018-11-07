@@ -18,7 +18,7 @@ use Ramsey\Uuid\Uuid;
  * version 1.0.0
  */
 
-class Family {
+class Family implements \JsonSerializable {
 	use ValidateUuid;
 	/**
 	 * id for this family, this is the primary key
