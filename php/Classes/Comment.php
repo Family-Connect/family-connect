@@ -143,33 +143,36 @@ public function setCommentEventId( $newCommentEventId =null) : void {
 	// convert and store the comment event id
 	$this->commentEventId = $uuid;
 }
-//TODO make accessor/mutator for commentTaskId nullable commentEventId can be used for reference
-/**
- * accessor method for comment task id
- *
- * @return Uuid value of comment task id
- **/
-public function getCommentTaskId() : Uuid{
-	return($this->commentTaskId);
-}
-
-/**
- * mutator method for comment task id
- *
- * @param | Uuid $newCommentTaskId new value of comment task id
- * @throws \RangeException if $newCommentTaskId is not positive
- * @throws \TypeError if $newCommentTaskId is not an integer
- */
-public function setCommentTaskId( $newCommentTaskId) : void {
-	try {
-		$uuid = self::validateUuid($newCommentTaskId);
-	} catch(\InvalidArgumentException | \RangeException | \Exception |\TypeError $exception) {
-		$exceptionType = get_class($exception);
-		throw(new $exceptionType($exception->getMessage(), 0, $exception));
+//TODO make accessor/mutator for commentTaskId nullable commentEventId can be used for reference(done)
+	/**
+	 * accessor method for comment task id
+	 *
+	 * @return Uuid values of comment task id
+	 **/
+	public function getCommenTaskId() : ?Uuid{
+		return($this->commentTaskId);
 	}
-	// convert and store the comment task id
-	$this->commentTaskId = $uuid;
-}
+
+	/**
+	 * mutator method for comment task id
+	 *
+	 * @param | Uuid $newCommentTaskId new value of comment task id
+	 * @throws \RangeException if $newCommentTaskId is not positive
+	 * @throws \ TypeError if $newCommentTaskId is not an integer
+	 **/
+	public function setCommentTaskId( $newCommentTaskId =null) : void {
+		if($newCommentTaskId === null) {
+			$this->commentTaskId=null;
+		}
+		try {
+			$uuid = self::validateUuid($newCommentTaskId);
+		}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		// convert and store the comment task id
+		$this->commentTaskId = $uuid;
+	}
 
 /**
  * accessor method for comment user id
@@ -345,120 +348,126 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
  *
  * @param \PDO $pdo PDO connection object
  * @param Uuid|string $commentEventId comment event id to search for
- * @return Comment|null Comment found or null if not found
+ * @return \SplFixedArray SplFixedArray of Comments found
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
-//TODO rewrite method to return spl fixed array
-public static function getCommentByCommentEventId(\PDO $pdo, $commentEventId) : ?Comment {
-	// sanitize the commentEventId before searching
-	try {
-		$commentEventId = self::validateUuid($commentEventId);
-	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
-	}
-	// create query template
-	$query = "SELECT commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentEventId = :commentEventId";
-	$statement = $pdo->prepare($query);
+//TODO rewrite method to return spl fixed array(done)
+	public static function getCommentByCommentEventId(\PDO $pdo, $commentEventId) : \SplFixedArray {
 
-	// bind the comment event id to the place holder in the template
-	$parameters = ["commentEventId" => $commentEventId->getBytes()];
-	$statement->execute($parameters);
-
-	// grab the comment from mySQL
-	try {
-		$comment = null;
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		$row = $statement->fetch();
-		if($row !== false) {
-			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["CommentUserId"], $row["commentContent"], $row["commentDate"]);
+		try {
+			$commentEventId = self::validateUuid($commentEventId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-	} catch(\Exception $exception) {
-		// if the row couldn't be converted, rethrow it
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
+
+		// create query template
+		$query = "SELECT commentId, commentEventId,commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentEventId = :commentEventId";
+		$statement = $pdo->prepare($query);
+
+		// bind the comment event id to the place holder in the template
+		$parameters = ["commentEventId" => $commentEventId->getBytes()];
+		$statement->execute($parameters);
+
+		// build an array of comments
+		$comment = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+				$comment [$comment->key()] = $comment;
+				$comment->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($comment);
 	}
-	return($comment);
-}
 
 /**
  * gets the Comment by commentTaskId
  *
  * @param \PDO $pdo PDO connection object
  * @param Uuid|string $commentTaskId comment task id to search for
- * @return Comment|null Comment found or null if not found
+ * @return \SplFixedArray SplFixedArray of Comments found
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
 //TODO rewrite method to return spl fixed array
-public static function getCommentByTaskId(\PDO $pdo, $commentTaskId) : ?Comment {
-	// sanitize the commentTaskId before searching
-	try {
-		$commentTaskId = self::validateUuid($commentTaskId);
-	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
-	}
-	// create query template
-	$query = "SELECT commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentTaskId = :commentTaskId";
-	$statement = $pdo->prepare($query);
+	public static function getCommentByCommentDate(\PDO $pdo, $commentDate) : \SplFixedArray {
 
-	// bind the comment task id to the place holder in the template
-	$parameters = ["commentTaskId" => $commentTaskId->getBytes()];
-	$statement->execute($parameters);
-
-	// grab the comment from mySQL
-	try {
-		$comment = null;
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		$row = $statement->fetch();
-		if($row !== false) {
-			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+		try {
+			$commentDate = self::validateUuid($commentDate);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-	} catch(\Exception $exception) {
-		// if the row couldn't be converted, rethrow it
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
+
+		// create query template
+		$query = "SELECT commentId, commentEventId,commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentDate = :commentDate";
+		$statement = $pdo->prepare($query);
+
+		// bind the comment date to the place holder in the template
+		$parameters = ["commentDate" => $commentDate->getBytes()];
+		$statement->execute($parameters);
+
+		// build an array of comments
+		$comment = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+				$comment [$comment->key()] = $comment;
+				$comment->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($comment);
 	}
-	return($comment);
-}
 
 /**
  * gets the comment by commentUserId
  *
  * @param \PDO $pdo PDO connection object
  * @param Uuid|string $commentUserId comment user id to search for
- * @return Comment|null Comment found or null if not found
+ * @return \SplFixedArray SplFixedArray of Comments found
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
 //TODO rewrite method to return spl fixed array
-public static function getCommentByCommentUserId(\PDO $pdo, $commentUserId) : ?Comment {
-	// sanitize the commentUserId before searching
-	try {
-		$commentUserId = self::validateUuid($commentUserId);
-	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
-	}
-	// create query template
-	$query = "SELECT commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentUserId = :commentUserId";
-	$statement = $pdo->prepare($query);
+	public static function getCommentByCommentDate(\PDO $pdo, $commentDate) : \SplFixedArray {
 
-	// bind the comment user id to the place holder in the template
-	$parameters = ["commentUserId" => $commentUserId->getBytes()];
-	$statement->execute($parameters);
-
-	// grab the comment from mySQL
-	try {
-		$comment = null;
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		$row = $statement->fetch();
-		if($row !== false) {
-			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+		try {
+			$commentDate = self::validateUuid($commentDate);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-	} catch(\Exception $exception) {
-		// if the row couldn't be converted, rethrow it
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
+
+		// create query template
+		$query = "SELECT commentId, commentEventId,commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentDate = :commentDate";
+		$statement = $pdo->prepare($query);
+
+		// bind the comment date to the place holder in the template
+		$parameters = ["commentDate" => $commentDate->getBytes()];
+		$statement->execute($parameters);
+
+		// build an array of comments
+		$comment = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+				$comment [$comment->key()] = $comment;
+				$comment->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($comment);
 	}
-	return($comment);
-}
 
 /**
  * gets the Comment by comment content
