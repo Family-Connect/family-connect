@@ -326,7 +326,7 @@ class Event {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError if $pdo is not a PDO connection object
 	 **/
-	public function delete(\PDO $pdo): void {
+	public function delete(\PDO $pdo) : void {
 
 		// create query template
 		$query = "DELETE FROM event WHERE eventId = :eventId";
@@ -336,8 +336,6 @@ class Event {
 		$parameters = ["eventId" => $this->eventId->getBytes()];
 		$statement->execute($parameters);
 	}
-
-
 
 	/**
 	* updates this event in mySQL
@@ -354,7 +352,7 @@ class Event {
 		$statement = $pdo->prepare($query);
 
 		$formattedDate = $this->eventStartDate->format("Y-m-d H:i:s.u");
-		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" => 	$this->eventUserId->getBytes(), "eventContent" => $this->eventContent, "eventName" => $this->eventName, "eventStartDate" => 		$formattedDate];
+		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" 		=> $this->eventUserId->getBytes(), "eventContent" => $this->eventContent, "eventName" => $this->eventName, "eventStartDate" 		=> $formattedDate];
 		$statement->execute($parameters);
 	}
 
@@ -362,8 +360,8 @@ class Event {
 	* gets the event by eventId
 	*
 	* @param \PDO $pdo PDO connection object
-	* @param Uuid | string $eventId event id to search for
-	* @return event|null event found or null if not found
+	* @param Uuid|string $eventId event id to search for
+	* @return Event|null event found or null if not found
 	* @throws \PDOException when mySQL related errors occur
 	* @throws \TypeError when a variable is not the correct data type
 	**/
@@ -384,7 +382,7 @@ class Event {
 		$parameters = ["eventId" => $eventId->getBytes()];
 		$statement->execute($parameters);
 
-		// grab the article from mySQL
+		// grab the event from mySQL
 		try {
 			$event = null;
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
@@ -398,6 +396,45 @@ class Event {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 		return($event);
+	}
+
+	/**
+	* gets the Event by event user id
+	*
+	* @param \PDO $pdo PDO connection object
+	* @param Uuid|string $eventUserId event id to search by
+	* @throws \PDOException when mySQL related errors occur
+	* @throws \TypeError when variables are not the correct data type
+	**/
+	public static function getEventByEventUserId(\PDO $pdo, $eventUserId) : ?Event {
+		// sanitize the userId before searching
+		try {
+			$eventUserId = self::validateUuid($eventUserId);
+		} catch(\InvalidArgumentException:: | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create query template
+		$query = "SELECT eventUserId, eventFamilyId, eventContent, eventEndDate, eventName, eventStartDate WHERE eventUserId = :userId";
+		$statement = $pdo->prepare($query);
+
+		// bind the eventUserId to the place holder in the template
+		$parameters = ["eventUserId" => $eventUserId->getBytes()];
+
+		// grabe the event from mySQL
+		try {
+			$eventUserId = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch(;
+			if($row !== false) {
+				$eventUserId = new EventUserId($row["eventId"], $row["eventFamilyId"], $row["eventContent"], $row["eventEndDate"], 				$row["eventName"], $row["eventName"], $row["eventStartDate"]);
+			}
+			{ catch(\Exception $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+			return($eventUserId);
+		}
 	}
 
 	/**
