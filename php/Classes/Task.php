@@ -366,7 +366,7 @@ class Task implements \JsonSerializable {
 		}
 
 		// create template for new query
-		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName FROM task WHERE taskEventId = :taskEventId";
+		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskName, event.eventName, FROM task INNER JOIN event ON task.taskEventId = event.eventId WHERE taskEventId = :taskEventId";
 		$statement = $pdo->prepare($query);
 
 		// wire up variable (taskEventId) to query
@@ -406,7 +406,7 @@ class Task implements \JsonSerializable {
 		}
 
 		// create template for new query
-		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName FROM task WHERE taskUserId = :taskUserId";
+		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskName, `user`.userName FROM task INNER JOIN `user` ON task.taskUserId = `user`.userId WHERE taskUserId = :taskUserId";
 		$statement = $pdo->prepare($query);
 
 		// wire up variable (taskUserId) to query
