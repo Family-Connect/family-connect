@@ -394,7 +394,7 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
-//TODO rewrite method to return spl fixed array
+//TODO rewrite method to return spl fixed array (done)
 	public static function getCommentByCommentTaskId(\PDO $pdo, $commentTaskId) : \SplFixedArray {
 
 		try {
@@ -436,7 +436,7 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
-//TODO rewrite method to return spl fixed array
+//TODO rewrite method to return spl fixed array(done)
 	public static function getCommentByCommentUserId(\PDO $pdo, $commentUserId) : \SplFixedArray {
 
 		try {
@@ -444,9 +444,9 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-
+//TODO inner join name, use userdisplayname (done)
 		// create query template
-		$query = "SELECT commentId, commentEventId,commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentUserId = :commentUserId";
+		$query = "SELECT commentId, commentEventId,commentTaskId, commentUserId, commentContent, commentDate, UserDisplayName FROM comment WHERE commentUserId = :commentUserId";
 		$statement = $pdo->prepare($query);
 
 		// bind the comment user id to the place holder in the template
@@ -520,6 +520,5 @@ public static function getCommentByCommentContent(\PDO $pdo, $commentContent) : 
 
 		$fields["commentContent"] = $this->commentContent->toString();
 		$fields["commentDate"] = $this->commentDate->toString();
-
 	}
 }
