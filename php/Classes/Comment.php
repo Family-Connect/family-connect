@@ -344,7 +344,7 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
 }
 
 /**
- * gets the Patient by commentEventId
+ * gets the comment by commentEventId
  *
  * @param \PDO $pdo PDO connection object
  * @param Uuid|string $commentEventId comment event id to search for
@@ -446,7 +446,7 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
 		}
 //TODO inner join name, use userdisplayname (done)
 		// create query template
-		$query = "SELECT commentId, commentEventId,commentTaskId, commentUserId, commentContent, commentDate, UserDisplayName FROM comment WHERE commentUserId = :commentUserId";
+		$query = "SELECT comment.commentId, comment.commentEventId,comment.commentTaskId, comment.commentUserId, comment.commentContent, comment.commentDate, `user`.userDisplayName FROM comment INNER JOIN `user` WHERE commentUserId = :commentUserId";
 		$statement = $pdo->prepare($query);
 
 		// bind the comment user id to the place holder in the template
@@ -459,7 +459,7 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
-				$comment [$comment->key()] = $comment;
+				$comment [$comment->key()] = (object) ["comment"=>$comment, "userDisplayName"=>$row["userDisplayName"]];
 				$comment->next();
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it
