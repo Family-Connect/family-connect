@@ -11,8 +11,8 @@ use Ramsey\Uuid\Uuid;
  * @author Sharon Romero <sromero130@cnm.edu>
  * @version 1.0.0
  **/
-//TODO implement json serializable
-class Event {
+//TODO implement json serializable - completed
+class Event implements \JsonSerializable {
 	use ValidateUuid;
 	use validateDate;
 	/**id for the Event, this is the primary key.
@@ -307,9 +307,10 @@ class Event {
 		$statement = $pdo->prepare($query);
 
 		//bind the member variables to the place holders in the template
-		$formattedDate = $this->eventStartDate->format("Y-m-d H:i:s.u");
-		//todo format end date time to mySQL specifications
-		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" 		=> 	$this->eventUserId->getBytes(), "eventContent" => $this->eventContent, "eventName" => $this->eventName, "eventStartDate" 		=> 	$formattedDate];
+		$formattedStartDate = $this->eventStartDate->format("Y-m-d H:i:s.u");
+		$formattedEndDate = $this->eventEndDate->format("Y-m-d H:i:s.u");
+		//todo format end date time to mySQL specifications - completed
+		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), 							"eventUserId" => $this->eventUserId->getBytes(), "eventEndDate" => $formattedEndDate, "eventContent" => 							$this->eventContent, "eventName" => $this->eventName, "eventStartDate" => $formattedStartDate];
 		$statement->execute($parameters);
 	}
 
