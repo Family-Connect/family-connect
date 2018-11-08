@@ -472,19 +472,19 @@ class Event {
 		return($eventFamilyId);
 	}
 
-
-
 	/**
 	* get current Events by family id
 	*
 	* @param \PDO $pdo PDO connection object
-	* @return \SplFixedArray SplFixedArray of Events found or null if not found
+	* @param string|Uuid $eventEndDate end date to search for
 	* @throws \PDOException when mySQL related errors occur
 	* @throws \TypeError when variables are not the correct data type
 	**/
-	public static function getAllEvents(\PDO $pdo) : \SPLFixedArray {
+	public function getAllEvents(\PDO $pdo) : void {
+
 		// create query template
-		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM event WHERE 					eventFamilyId = eventFamilyId";
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM event WHERE 	
+					eventFamilyId = >eventEndDate = Uuid";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
@@ -516,6 +516,8 @@ class Event {
 		$fields["eventId"] = $this->eventId->toString();
 		$fields["eventFamilyId"] = $this->eventFamilyId->toString();
 
+		//format the date so that the front end can consume it
+		$fields["eventStartDate"]
 		return($fields);
 	}
 }
