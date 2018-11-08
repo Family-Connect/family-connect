@@ -10,6 +10,7 @@ use Ramsey\Uuid\Uuid;
  * @author agarcia707 <antgarcia014@gmail.com>
  *version 1.0.0
  */
+//Todo implement json
 
 class User implements \JsonSerializable{
 	use ValidateUuid;
@@ -422,6 +423,7 @@ class User implements \JsonSerializable{
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
+	//Todo return single item
 	public static function getUserByUserFamilyId(\PDO $pdo, $userFamilyId) : User {
 
 		try {
@@ -462,6 +464,7 @@ class User implements \JsonSerializable{
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
+	//Todo return single item
 	public static function getUserByUserEmail(\PDO $pdo, $userEmail) : User {
 
 		try {
@@ -498,10 +501,15 @@ class User implements \JsonSerializable{
 	 *
 	 * @return array resulting state variables to serialize
 	 **/
-	public function jsonSerialize() : array {
+	//Todo unset both hash and activationToken
+
+	public function jsonSerialize() {
 		$fields = get_object_vars($this);
-		//Todo unset both hash and activationToken
-		return $fields;
+		$fields["userId"] = $this->userId->toString();
+		unset($fields["userHash"]);
+		unset($fields["userActivationToken"]);
+
+		return ($fields);
 	}
 
 }
