@@ -302,8 +302,7 @@ class Event implements \JsonSerializable {
 	public function insert(\PDO $pdo) : void {
 
 		// create query template
-		$query = "INSERT INTO event(eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate) VALUES
-					(:eventId, :eventFamilyId, :eventUserId, :eventContent, :eventEndDate, :eventName, :eventStartDate)";
+		$query = "INSERT INTO event(eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate) VALUES (:eventId, :eventFamilyId, :eventUserId, :eventContent, :eventEndDate, :eventName, :eventStartDate)";
 		$statement = $pdo->prepare($query);
 
 		//bind the member variables to the place holders in the template
@@ -453,7 +452,7 @@ class Event implements \JsonSerializable {
 		$query = "SELECT eventUserId, eventFamilyId, eventContent, eventEndDate, eventName, eventStartDate WHERE eventFamilyId = :userId";
 		$statement = $pdo->prepare($query);
 
-		// bind the eventUserId to the place holder in the template
+		// bind the eventFamilyId to the place holder in the template
 		$parameters = ["eventFamilyId" => $eventFamilyId->getBytes()];
 		$statement->execute($parameters);
 
@@ -481,13 +480,22 @@ class Event implements \JsonSerializable {
 	* @throws \PDOException when mySQL related errors occur
 	* @throws \TypeError when variables are not the correct data type
 	**/
-	public function getAllEvents(\PDO $pdo) : void {
+	public static function getCurrentEventByFamilyId(\PDO $pdo, $eventFamilyId) : ?Event {
+		// sanitize the eventFamilyId before searching
+		try {
+			$eventFamilyId = self::validateUuid($eventFamilyId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
 
 		// create query template
-		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM event WHERE 	
-					eventFamilyId = >eventEndDate = Uuid";
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM event 					WHERE eventStartDate >= NOW() AND eventFamilyId = eventId";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
+
+		// bind the eventFamilyId to the place holder in the template
+		$parameters = ["eventFamilyId" => $eventFamilyId->getBytes()];
+		$statement->execute($parameters);
 
 		// build an array of events
 		$events = new \SplFixedArray($statement->rowCount());
@@ -506,6 +514,22 @@ class Event implements \JsonSerializable {
 		return ($events);
 	}
 
+		// grab the events from mySQL
+		try {
+			$eventFamilyId = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$eventFamilyId = new EventFamilyId($row["eventId"], $row["eventFamilyId"], $row["eventUserId"],
+				$row["eventContent"], $row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
+			}
+		} catch(\Exception $exception) {
+			//if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($eventFamilyId);
+	}
+
 	/**
 	* formats the state variables for JSON serialization
 	*
@@ -516,9 +540,11 @@ class Event implements \JsonSerializable {
 
 		$fields["eventId"] = $this->eventId->toString();
 		$fields["eventFamilyId"] = $this->eventFamilyId->toString();
+		$fields["eventUserId"] = $this->eventUserId->toString();
 
 		//format the date so that the front end can consume it
 		$fields["eventStartDate"] = round(floatval($this->eventStartDate->format("U.u")) * 1000);
 		return($fields);
+		$fields["eventEndDate"] = round(floatval($this->eventEndDate->format("U.u")) * 1000);
+		return($fields);
 	}
-}
