@@ -517,7 +517,7 @@ class Event {
 		$fields["eventFamilyId"] = $this->eventFamilyId->toString();
 
 		//format the date so that the front end can consume it
-		$fields["eventStartDate"]
+		$fields["eventStartDate"] = round(floatval($this->eventStartDate->format("U.u")) * 1000);
 		return($fields);
 	}
 }
