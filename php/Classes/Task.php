@@ -379,7 +379,7 @@ class Task implements \JsonSerializable {
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskName"]);
-				$tasks[$tasks->key()] = $task;
+				$tasks[$tasks->key()] = (object) ["task" => $task, "eventName" => $row["eventName"]];
 				$tasks->next();
 			} catch(\Exception $exception) {
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
@@ -419,7 +419,7 @@ class Task implements \JsonSerializable {
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskName"]);
-				$tasks[$tasks->key()] = $task;
+				$tasks[$tasks->key()] = (object) ["task" => $task, "userName" => $row["eventName"]];
 				$tasks->next();
 			} catch(\Exception $exception) {
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
