@@ -5,9 +5,7 @@ namespace FamConn\FamilyConnect;
 require_once("autoload.php");
 require_once(dirname(__DIR__,2)."/vendor/autoload.php");
 
-use FamConn\FamilyConnect\ValidateUuid;
 use Ramsey\Uuid\Uuid;
-//Todo implement jsonSerializable
 /**
  * @author agarcia707 <antgarcia014@gmail.com>
  *version 1.0.0
@@ -257,10 +255,9 @@ class User implements \JsonSerializable{
 	 *
 	 * @param string $newUserHash new value of the user hash
 	 * @throws \InvalidArgumentException if $newUserHash is empty
-	 * @throws \RangeException if user hash is longer than 97 characters
+	 * @throws \RangeException if user hash is not 97 characters
 	 * @throws \Exception if user hash is not hexadecimal
 	 */
-	//TODO update hash mutator
 	public function setUserHash(string $newUserHash): void {
 		// verify if the user hash is not empty
 		if(empty($newUserHash) === true) {
@@ -460,47 +457,42 @@ class User implements \JsonSerializable{
 	 * gets the User by email
 	 *
 	 * @param \PDO $pdo PDO connection object
-	 * @param string $userEmail user email to search for
-	 *  @return User|null user found or null if not found
+	 * @param Uuid|string $userEmail email to search by
+	 * @return User|null user found or null if not found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	public static function getUserByUserEmail(\PDO $pdo, string $userEmail) : User {
-		// sanitize the description before searching
-		$userEmail = trim($userEmail);
-		$userEmail = filter_var($userEmail, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($userEmail) === true) {
-			throw(new \PDOException("user email is invalid"));
-		}
+	public static function getUserByUserEmail(\PDO $pdo, $userEmail) : User {
 
-		// escape any mySQL wild cards
-		$userEmail = str_replace("_", "\\_", str_replace("%", "\\%", $userEmail));
+		try {
+			$userEmail = self::validateUuid($userEmail);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
 
 		// create query template
-		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userEmail LIKE :userEmail";
+		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userFamilyId = :userFamilyId";
 		$statement = $pdo->prepare($query);
-
-		// bind the user email to the place holder in the template
-		$userEmail = "%$userEmail%";
-		$parameters = ["userEmail" => $userEmail];
+		// bind the user family id to the place holder in the template
+		$parameters = ["userEmail" => $userEmail->getBytes()];
 		$statement->execute($parameters);
 
-		// build an array of users
-		$users = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false) {
-			try {
+
+		try {
+			$user = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
 				$user = new User($row["userId"], $row["userFamilyId"], $row["userActivationToken"], $row["userAvatar"], $row["userDisplayName"], $row["userEmail"], $row["userHash"], $row["userPhoneNumber"], $row["userPrivilege"]);
-				$users[$users->key()] = $user;
-				$users->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
+
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($users);
+		return ($user);
 	}
-//Todo write get user by userEmail will return a single object
+
 	/**
 	 * formats the state variables for JSON serialization
 	 *
