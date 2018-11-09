@@ -1,0 +1,33 @@
+<?php
+namespace FamConn\FamilyConnect;
+
+use Edu\Cnm\DataDesign\{Profile, Tweet};
+
+// grab the class under scrutiny
+require_once(dirname(__DIR__) . "/autoload.php");
+
+// grab the uuid generator
+require_once(dirname(__DIR__, 2) . "/lib/uuid.php");
+
+/**
+ * Full PHPUnit test for the Comment class
+ *
+ * This is a complete PHPUnit test of the Comment class. It is complete because *ALL* mySQL/PDO enabled methods
+ * are tested for both invalid and valid inputs.
+ *
+ * @see Comment
+ * @author Feliz Munoz <fmunoz111@cnm.edu>
+ **/
+
+class CommentTest extends DataDesignTest {
+	/**
+	 * Id that belongs to the comment; this a primary key
+	 * @var Id id
+	 **/
+	protected $id = null;
+
+	/**
+   	 * valid profile hash to create the profile object to own the test
+   	 * @var $VALID_HASH
+   	 */
+   	protected $VALID_PROFILE_HASH;
