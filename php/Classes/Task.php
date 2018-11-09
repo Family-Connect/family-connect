@@ -64,6 +64,7 @@ class Task implements \JsonSerializable {
 	 * @param string|Uuid|null $newTaskEventId if this comment is null or a new comment
 	 * @param string|Uuid|null $newTaskUserId if this comment is null or a new comment
 	 * @param string $newTaskDescription for content of task description
+	 * @param int $newTaskIsComplete for status of task
 	 * @param \DateTime $newTaskDueDate for datetime task is due
 	 * @param string $newTaskName for name of task
 	 * @throws \InvalidArgumentException if data types aren't valid
@@ -71,13 +72,14 @@ class Task implements \JsonSerializable {
 	 * @throws \TypeError if data values are wrong type
 	 * @throws \Exception for any others
 	 */
-	public function __construct($newTaskId, $newTaskEventId = null, $newTaskUserId = null, $newTaskDescription, $newTaskDueDate, $newTaskName) {
+	public function __construct($newTaskId, $newTaskEventId = null, $newTaskUserId = null, $newTaskDescription, $newTaskDueDate, $newTaskIsComplete, $newTaskName) {
 		try {
 			$this->setTaskId($newTaskId);
 			$this->setTaskEventId($newTaskEventId);
 			$this->setTaskUserId($newTaskUserId);
 			$this->setTaskDescription($newTaskDescription);
 			$this->setTaskDueDate($newTaskDueDate);
+			$this->setTaskIsComplete($newTaskIsComplete);
 			$this->setTaskName($newTaskName);
 		}
 		catch(\InvalidArgumentException | \RangeException | \TypeError | \Exception $exception) {
@@ -300,13 +302,13 @@ class Task implements \JsonSerializable {
 	 */
 	public function insert(\PDO $pdo) : void {
 		// create template for query
-		$query = "INSERT INTO task(taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName) VALUES (:taskId, :taskEventId, :taskUserId, :taskDescription, :taskDueDate, :taskName)";
+		$query = "INSERT INTO task(taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete taskName) VALUES (:taskId, :taskEventId, :taskUserId, :taskDescription, :taskDueDate, :taskIsComplete, :taskName)";
 		$statement = $pdo->prepare($query);
 
 		// wire variables up to their template place holders
 
 		$formattedDate = $this->taskDueDate->format("Y-m-d H:i:s.u");
-		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $formattedDate, "taskName" => $this->taskName];
+		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $formattedDate, "taskIsComplete" => $this->taskIsComplete, "taskName" => $this->taskName];
 		$statement->execute($parameters);
 	}
 
@@ -336,12 +338,12 @@ class Task implements \JsonSerializable {
 	 */
 	public function update(\PDO $pdo) : void {
 		// create template for query
-		$query = "UPDATE task SET taskId = :taskId, taskEventId = :taskEventId, taskUserId = :taskUserId, taskDescription = :taskDescription, taskDueDate = :taskDueDate, taskName = :taskName";
+		$query = "UPDATE task SET taskId = :taskId, taskEventId = :taskEventId, taskUserId = :taskUserId, taskDescription = :taskDescription, taskDueDate = :taskDueDate, taskIsComplete = :taskIsComplete, taskName = :taskName";
 		$statement = $pdo->prepare($query);
 
 		// wire up variables to place holders in query
 		$formattedDate = $this->taskDueDate->format("Y-m-d H:i:s.u");
-		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $formattedDate, "taskName" => $this->taskName];
+		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $formattedDate, "taskIsComplete" => $this->taskIsComplete, "taskName" => $this->taskName];
 		$statement->execute($parameters);
 	}
 
@@ -363,7 +365,7 @@ class Task implements \JsonSerializable {
 		}
 
 		// create template for new query
-		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName FROM task WHERE taskId = :taskId";
+		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskId = :taskId";
 		$statement = $pdo->prepare($query);
 
 		// wire up variable (taskId) to query
@@ -376,7 +378,7 @@ class Task implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskName"]);
+				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskIsComplete"], $row["taskName"]);
 			}
 		} catch(\Exception $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
@@ -403,7 +405,7 @@ class Task implements \JsonSerializable {
 		}
 
 		// create template for new query
-		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskName, event.eventName, FROM task INNER JOIN event ON task.taskEventId = event.eventId WHERE taskEventId = :taskEventId";
+		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskIsComplete, task.taskName, event.eventName, FROM task INNER JOIN event ON task.taskEventId = event.eventId WHERE taskEventId = :taskEventId";
 		$statement = $pdo->prepare($query);
 
 		// wire up variable (taskEventId) to query
@@ -415,7 +417,7 @@ class Task implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskName"]);
+				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskIsComplete"], $row["taskName"]);
 				$tasks[$tasks->key()] = (object) ["task" => $task, "eventName" => $row["eventName"]];
 				$tasks->next();
 			} catch(\Exception $exception) {
@@ -443,7 +445,7 @@ class Task implements \JsonSerializable {
 		}
 
 		// create template for new query
-		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskName, `user`.userDisplayName FROM task INNER JOIN `user` ON task.taskUserId = `user`.userId WHERE taskUserId = :taskUserId";
+		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskIsComplete, task.taskName, `user`.userDisplayName FROM task INNER JOIN `user` ON task.taskUserId = `user`.userId WHERE taskUserId = :taskUserId";
 		$statement = $pdo->prepare($query);
 
 		// wire up variable (taskUserId) to query
@@ -455,7 +457,7 @@ class Task implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskName"]);
+				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskIsComplete"], $row["taskName"]);
 				$tasks[$tasks->key()] = (object) ["task" => $task, "userName" => $row["userDisplayName"]];
 				$tasks->next();
 			} catch(\Exception $exception) {
@@ -484,7 +486,7 @@ class Task implements \JsonSerializable {
 		}
 
 		// create template for new query
-		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskName FROM task WHERE taskDueDate = :taskDueDate OR taskDueDate BETWEEN :taskDueDate AND :taskDueDate ";
+		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskDueDate = :taskDueDate OR taskDueDate BETWEEN :taskDueDate AND :taskDueDate ";
 		$statement = $pdo->prepare($query);
 
 		// wire up variables to query
@@ -497,7 +499,7 @@ class Task implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskName"]);
+				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskIsComplete"], $row["taskName"]);
 				$tasks[$tasks->key()] = $task;
 				$tasks->next();
 			} catch(\Exception $exception){
