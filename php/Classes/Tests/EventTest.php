@@ -31,5 +31,34 @@ class EventTest extends FamilyConnectTest {
 	 **/
 	protected $user = null;
 
+	/**
+	 * content of the Event
+	 * @var string $VALID_EVENTCONTENT
+	 **/
+	protected $VALID_EVENTCONTENT = "PHPUnit test passing";
+
+	/**
+	 * content of the updated Event
+	 * @var string $VALID_EVENTCONTENT2
+	 **/
+	protected $VALID_TWEETCONTENT2 = "PHPUnit Test Still Passing";
+
+	/**
+	 * end date of the event
+	 * @var \DateTime $VALID_EVENTENDDATE
+	 **/
+	protected $VALID_EVENTENDDATE = null;
+
+	/**
+	 *name of the event
+	 * @var string $VALID_EVENTNAME
+	 **/
+	protected $VALID_EVENTNAME
+
+	/**
+	 * start date of the event
+	 * @var \DateTime $VALID_EVENTSTARTDATE
+	 **/
+	protected $VALID_EVENTSTARTDATE = null;
 
 }
