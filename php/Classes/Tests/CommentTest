@@ -1,7 +1,7 @@
 <?php
 namespace FamConn\FamilyConnect;
 
-use Edu\Cnm\DataDesign\{Profile, Tweet};
+use FamConn\FamilyConnect{Id, EventId, TaskId, UserId, Content, Comment};
 
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/autoload.php");
@@ -22,12 +22,38 @@ require_once(dirname(__DIR__, 2) . "/lib/uuid.php");
 class CommentTest extends DataDesignTest {
 	/**
 	 * Id that belongs to the comment; this a primary key
-	 * @var Id id
+	 * @var STRING $VALID_COMMENTID
 	 **/
-	protected $id = null;
+	protected $id = $VALID_COMMENTID = "PHPUnit test passing";
 
 	/**
-   	 * valid profile hash to create the profile object to own the test
-   	 * @var $VALID_HASH
-   	 */
-   	protected $VALID_PROFILE_HASH;
+	 * eventid of the Comment; this starts as null and is assigned later
+	 * @var \Binary $VALID_COMMENTEVENTID
+	 **/
+	protected $VALID_COMMENTEVENTID = null;
+
+	/**
+	 * taskid of the Comment; this starts as null and is assigned later
+	 * @var \Binary $VALID_COMMENTTASKID
+	 **/
+	protected $VALID_COMMENTTASKID = null;
+
+	/**
+	 * userid of the Comment
+	 * @var \Binary $VALID_COMMENTUSERID
+	 **/
+	protected $VALID_COMMENTUSERID = "PHPUnit test passing";
+
+	/**
+	 * content of the Comment
+	 * @var string $VALID_COMMENTCONTENT
+	 **/
+	protected $VALID_COMMENTCONTENT = "PHPUnit test passing";
+	public final function setUp()  : void {
+			// run the default setUp() method first
+         parent::setUp();
+	}
+
+
+
+
