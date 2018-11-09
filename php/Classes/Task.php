@@ -436,7 +436,7 @@ class Task implements \JsonSerializable {
 	 * @throws \PDOException when mySQL errors occur
 	 * @throws \TypeError when the variables are not the correct data type
 	 */
-	public static function getTaskByTaskUserId(\PDO $pdo, $taskUserId) : ?Task {
+	public static function getTaskByTaskUserId(\PDO $pdo, $taskUserId) : \SplFixedArray {
 		// sanitize string / Uuid
 		try {
 			$taskUserId = self::validateUuid($taskUserId);
@@ -458,7 +458,44 @@ class Task implements \JsonSerializable {
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskIsComplete"], $row["taskName"]);
-				$tasks[$tasks->key()] = (object) ["task" => $task, "userName" => $row["userDisplayName"]];
+				$tasks[$tasks->key()] = (object) ["task" => $task, "userDisplayName" => $row["userDisplayName"]];
+				$tasks->next();
+			} catch(\Exception $exception) {
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($tasks);
+	}
+
+	/**
+	 * get task by task is due
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param int $taskIsComplete task status used in query
+	 * @return \SplFixedArray SplFixedArray of tasks found
+	 * @throws \PDOException when mySQL errors occur
+	 * @throws \TypeError when the variables are not the correct data type
+	 */
+	public static function getTaskByTaskIsComplete(\PDO $pdo, $taskIsComplete) : \SplFixedArray {
+		// sanitize int
+		$taskIsComplete = intval($taskIsComplete);
+		$taskIsComplete = filter_var($taskIsComplete, FILTER_SANITIZE_NUMBER_INT);
+
+		// create template for new query
+		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskIsComplete, task.taskName, event.eventName, `user`.userDisplayName FROM task INNER JOIN event ON task.taskEventId = event.eventId INNER JOIN `user` ON task.taskUserId = `user`.userId WHERE taskIsComplete = :taskIsComplete";
+		$statement = $pdo->prepare($query);
+
+		// wire up variable (taskUserId) to query
+		$parameters = ["taskIsComplete" => $taskIsComplete];
+		$statement->execute($parameters);
+
+		// build array of tasks
+		$tasks = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskIsComplete"], $row["taskName"]);
+				$tasks[$tasks->key()] = (object) ["task" => $task, "userDisplayName" => $row["userDisplayName"], "eventName" => $row["eventName"]];
 				$tasks->next();
 			} catch(\Exception $exception) {
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
