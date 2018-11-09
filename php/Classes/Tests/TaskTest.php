@@ -26,7 +26,22 @@ require_once(dirname(__DIR__, 2) . "/");
  */
 
 class TaskTest extends FamilyConnectTest {
+
 	/**
-	 *
+	 * Event linked to the Task; this is for foreign key relations
+	 * @var Event event
 	 */
+	protected $event = null;
+
+	/**
+	 * User linked with the Task; this is also for foreign key relations
+	 * @var User user
+	 */
+	protected $user = null;
+
+	/**
+	 * Timestamp of when this task is due; this starts as null, value is assigned later
+	 * @var \DateTime $VALID_TASKDUEDATE
+	 */
+	protected $VALID_TASKDUEDATE = null;
 }

@@ -67,7 +67,7 @@ CREATE TABLE task(
 	taskDescription VARCHAR(512),
 	taskDueDate DATETIME(6) NOT NULL,
 	taskName VARCHAR(30) NOT NULL,
-	taskIsCompleted
+	taskIsCompleted BOOLEAN,
 
 	INDEX(taskEventId),
 	INDEX(taskUserId),
