@@ -41,7 +41,7 @@ class EventTest extends FamilyConnectTest {
 	 * content of the updated Event
 	 * @var string $VALID_EVENTCONTENT2
 	 **/
-	protected $VALID_TWEETCONTENT2 = "PHPUnit Test Still Passing";
+	protected $VALID_EVENTCONTENT2 = "PHPUnit Test Still Passing";
 
 	/**
 	 * end date of the event
@@ -50,10 +50,10 @@ class EventTest extends FamilyConnectTest {
 	protected $VALID_EVENTENDDATE = null;
 
 	/**
-	 *name of the event
+	 * name of the event
 	 * @var string $VALID_EVENTNAME
 	 **/
-	protected $VALID_EVENTNAME
+	protected $VALID_EVENTNAME = "PHPUnit test passing";
 
 	/**
 	 * start date of the event
