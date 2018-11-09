@@ -47,6 +47,11 @@ class Task implements \JsonSerializable {
 	 */
 	private $taskDueDate;
 	/**
+	 * tiny int value regarding whether or not task has been completed
+	 * @var int $taskIsComplete
+	 */
+	private $taskIsComplete;
+	/**
 	 * string value holding name of this task
 	 * @var string $taskName
 	 */
@@ -221,6 +226,38 @@ class Task implements \JsonSerializable {
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 		$this->taskDueDate = $newTaskDueDate;
+	}
+
+	/**
+	 * accesor method for task is complete
+	 *
+	 * @return int value of task is complete
+	 */
+	public function getTaskIsComplete() : int {
+		return ($this->taskIsComplete);
+	}
+	/**
+	 * mutator method for task is complete
+	 *
+	 * @param int $newTaskIsComplete value of new task is complete
+	 * @throws \InvalidArgumentException if task is complete value is not an int or if it's insecure
+	 * @throws \RangeException if task is complete value is not equal to 0 or 1
+	 * @throws \TypeError if task is complete is no an int
+	 */
+	public function setTaskIsComplete(int $newTaskIsComplete) {
+		// sanitize value
+		$newTaskIsComplete = intval($newTaskIsComplete);
+		$newTaskIsComplete = filter_var($newTaskIsComplete, FILTER_SANITIZE_NUMBER_INT);
+		// verify that the value is an int
+		if($newTaskIsComplete === false) {
+			throw(new \InvalidArgumentException("new task is complete is not an int or is insecure"));
+		}
+		// verify that the value is a 0 or a 1
+		if(intval($newTaskIsComplete !== 0 || $newTaskIsComplete !== 1)) {
+			throw(new \RangeException("value does not fit set parameters"));
+		}
+		// store the new task is complete value
+		$this->taskIsComplete = $newTaskIsComplete;
 	}
 
 	/**
