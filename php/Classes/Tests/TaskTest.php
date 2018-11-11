@@ -6,7 +6,7 @@
  * Time: 8:28 AM
  */
 
-namespace FamConn\FamilyConnect\Test
+namespace FamConn\FamilyConnect\Test;
 
 use FamConn\FamilyConnect\{Task, Event, User};
 
