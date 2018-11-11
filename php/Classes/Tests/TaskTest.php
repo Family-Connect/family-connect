@@ -40,19 +40,22 @@ class TaskTest extends FamilyConnectTest {
 	protected $user = null;
 
 	/**
-	 * valid userHash to create user object to own the test
-	 */
-	protected $VALID_USERHASH;
-
-	/**
 	 * timestamp to use as eventEndDate; starts as null, value assigned later
+	 * @var $VALID_EVENTENDDATE
 	 */
-	protected $VALID_EVENTENDDATE;
+	protected $VALID_EVENTENDDATE = null;
 
 		/**
 		 * timestamp to use as eventStartDate; starts as null, value assigned later
+		 * @var $VALID_EVENTSTARTDATE
 		 */
-	protected $VALID_EVENTSTARTDATE;
+	protected $VALID_EVENTSTARTDATE = null;
+
+	/**
+	 * valid description for task
+	 * @var $VALID_TASKDESCRIPTION
+	 */
+	protected $VALID_TASKDESCRIPTION = "PHPUnit test is passing";
 
 	/**
 	 * Timestamp of when this task is due; this starts as null, value is assigned later
@@ -61,14 +64,40 @@ class TaskTest extends FamilyConnectTest {
 	protected $VALID_TASKDUEDATE = null;
 
 	/**
+	 * valid value indicating whether or not task has been completed
+	 * @var $VALID_TASKISCOMPLETE
+	 */
+	protected $VALID_TASKISCOMPLETE = "1";
+
+	/**
+	 * valid name for task
+	 * @var $VALID_TASKNAME
+	 */
+	protected $VALID_TASKNAME = "PHPUnit test is passing";
+
+	/**
+	 * valid updated task name
+	 * @var $VALID_TASKNAME2
+	 */
+	protected $VALID_TASKNAME2 = "PHPUnit test is still passing";
+
+	/**
 	 * valid timestamp to use as sunriseTaskDueDate
+	 * @var $VALID_SUNRISEDATE
 	 */
 	protected $VALID_SUNRISEDATE = null;
 
 	/**
 	 * valid timestampt to use as sunsetTaskDueDate
+	 * @var $VALID_SUNSETDATE
 	 */
 	protected $VALID_SUNSETDATE = null;
+
+	/**
+	 * valid userHash to create user object to own the test
+	 * @var $VALID_USERHASH
+	 */
+	protected $VALID_USERHASH;
 
 	/**
 	 * create dependent objects before running each test
@@ -98,6 +127,18 @@ class TaskTest extends FamilyConnectTest {
 		// format sunset date to use for testing
 		$this->VALID_SUNSETDATE = new \DateTime();
 		$this->VALID_SUNSETDATE->add(new \DateInterval("P10D"));
+	}
+
+	/**
+	 * test inserting a valid Task and see if the mySQL data matches expectations
+	 */
+	public function testInsertValidTask() : void {
+		// count the number of rows and save for later
+		$numRows = $this->getConnection()->getRowCount("task");
+
+		// create a new Task and insert into mySQL
+		$taskId = generateUuid4;
+		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
 	}
 
 
