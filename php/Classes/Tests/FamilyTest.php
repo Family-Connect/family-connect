@@ -105,4 +105,31 @@ class FamilyTest extends FamilyConnectTest {
 		$this->assertNull($pdoFamily);
 		$this->assertEquals($numRows, $this->getConnection()->getRowCount("family"));
 	}
+
+	/**
+	 * test inserting a Family and grabbing it by familyName from mySQL
+	 */
+	public function testGetValidFamilyByFamilyName() : void {
+		// count rows, save for later
+		$numRows = $this->getConnection()->getRowCount("family");
+
+		// create a new family and insert to mySQL
+		$familyId = "829039af-2f23-440f-b540-7c1e3761379";
+		$family = new Family($familyId, $this->VALID_FAMILYNAME);
+		$family->insert($this->getPDO());
+
+		// grab the data from sql and make sure the fields match expectations
+		$results = Family::getFamilyByFamilyName($this->getPDO(), $family->getFamilyName());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("family"));
+		$this->assertCount(1, $results);
+
+		// make sure no other objects are bleeding into the test
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Family", $results);
+
+		// grab the result from the array and validate it
+		$pdoFamily = $results[0];
+		$this->assertEquals($pdoFamily->getFamilyId(), $familyId);
+		$this->assertEquals($pdoFamily->getFamilyName(), $this->VALID_FAMILYNAME);
+
+	}
 }
