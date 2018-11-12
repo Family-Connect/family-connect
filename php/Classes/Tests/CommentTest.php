@@ -109,4 +109,28 @@ class CommentTest extends DataDesignTest {
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
 	}
+
+	/**
+	 * test creating a Comment and then deleting it
+	 **/
+	public function testDeleteValidComment() : void {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("comment");
+
+		// create a new Comment and insert to into mySQL
+		$commentId = generateUuidV4();
+		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment->insert($this->getPDO());
+
+		// delete the Comment from mySQL
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
+		$comment->delete($this->getPDO());
+
+		// grab the data from mySQL and enforce the Comment does not exist
+		$pdoComment = Comment::getCommentByCommentId($this->getPDO(), $comment->getCommentId());
+		$this->assertNull($pdoComment);
+		$this->assertEquals($numRows, $this->getConnection()->getRowCount("comment"));
+	}
+
+
 }
