@@ -168,4 +168,26 @@ class EventTest extends FamilyConnectTest {
 		$event = Event::getEventByEventId($this->getPDO(), generateUuidV4());
 		$this->assertNull($event);
 	}
+
+	/**
+	 * test inserting an Event and regrabbing it from mySQL
+	 **/
+	public function testGetValidEventByEventFamilyId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("event");
+
+		// create a new Event and insert it into mySQL
+		$eventId = generateUuidV4();
+		$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId(), $this->VALID_EVENTCONTENT,
+			$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
+		$event->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$results = Event::getEventByEventFamilyId($this->getPDO(), $event->getEventFamilyId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("event"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Event", $results);
+	}
+
+
 }
