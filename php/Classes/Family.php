@@ -212,9 +212,9 @@ class Family implements \JsonSerializable {
 	 * @throws \TypeError when the variables are not the correct data type
 	 */
 	public static function getFamilyByFamilyName(\PDO $pdo, $familyName) : ?Family {
-		// sanitize string / Uuid
+		// sanitize string
 		try {
-			$familyName = self::validateUuid($familyName);
+			$familyName = filter_var($familyName, FILTER_SANITIZE_STRING);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}

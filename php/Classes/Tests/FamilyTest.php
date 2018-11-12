@@ -10,6 +10,8 @@ namespace FamConn\FamilyConnect\Test;
 
 use FamConn\FamilyConnect\{Family};
 
+require_once ("FamilyConnectTest.php");
+
 // grab class to be tested
 require_once(dirname(__DIR__) . "/autoload.php");
 
