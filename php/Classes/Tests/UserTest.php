@@ -26,6 +26,12 @@ class UserTest extends FamilyConnectTest {
 	protected $family = null;
 
 	/**
+	 * Name of family that is being created by user
+	 * @var string $VALID_FAMILYNAME
+	 */
+	protected $VALID_FAMILYNAME = "Gonzalez";
+
+	/**
 	 * valid user activation token for user object to own test
 	 * @var $VALID_ACTIVATION_TOKEN;
 	 */
@@ -124,5 +130,36 @@ class UserTest extends FamilyConnectTest {
 		$userId = generateUuidV4();
 		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
 		$user->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
+		$this->assertEquals($pdoUser->getUserId(), $UserId);
+		$this->assertEquals($pdoUser->getUserFamilyId(), $this->user->getUserId());
+		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
+	}
+
+		/**
+		 * test inserting a User, editing it, and then updating it
+		 **/
+		public function testUpdateValidUser() : void {
+			// count the number of rows and save it for later
+			$numRows = $this->getConnection()->getRowCount("user");
+
+			// create a new User and insert to into mySQL
+			$userId = generateUuidV4();
+			$user = new User($userId, $this->user->getUserId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+			$user->insert($this->getPDO());
+
+			// edit the User and update it in mySQL
+			$user->setUserAvatar($this->VALID_AVATAR2);
+			$user->update($this->getPDO());
+
+			// grab the data from mySQL and enforce the fields match our expectations
+			$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
+			$this->assertEquals($pdoUser->getUserId(), $userId);
+			$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
+			$this->assertEquals($pdoUser->getUserAvatarId(), $this->user->getUserId());
+			$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR2);
 	}
 }
