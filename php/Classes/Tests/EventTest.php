@@ -89,8 +89,21 @@ class EventTest extends FamilyConnectTest {
 
 		// create a new Event and insert it into mySQL
 		$eventId = generateUuidv4();
-		$event = new Event($eventId, $this->user->getUserId(), $this->VALID_EVENTCONTENT, $this->VALID_EVENTDATE);
+		$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId() $this->VALID_EVENTCONTENT,
+			$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
 		$event->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoEvent = Event::getEventByEventId($this->getPDO(), $event->getEventId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("event"));
+		$this->assertEquals($pdoEvent->getEventId(), $eventId);
+		$this->assertEquals($pdoEvent->getEventFamilyId(), $this->family->getFamilyId());
+		$this->assertEquals($pdoEvent->getEventUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoEvent->getEventContent(), $this->VALID_EVENTCONTENT);
+		$this->assertEquals($pdoEvent->getEventName(), $this->VALID_EVENTNAME);
+		//format the date to seconds since the beginning of time to avoid round off error
+		$this->assertEquals($pdoEvent->getEventEndDate()->getTimestamp(), $this->VALID_EVENTENDDATE->getTimestamp());
+		$this->assertEquals($pdoEvent->getEventStartDate()->getTimestamp(), $this->VALID_EVENTSTARTDATE->getTimestamp());
 
 	}
 
