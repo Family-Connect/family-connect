@@ -67,7 +67,13 @@ class TaskTest extends FamilyConnectTest {
 	 * valid value indicating whether or not task has been completed
 	 * @var $VALID_TASKISCOMPLETE
 	 */
-	protected $VALID_TASKISCOMPLETE = "1";
+	protected $VALID_TASKISCOMPLETE = "0";
+
+	/**
+	 * valid value indicating whether or not task has been completed
+	 * @var $VALID_TASKISCOMPLETE2
+	 */
+	protected $VALID_TASKISCOMPLETE2 = "1";
 
 	/**
 	 * valid name for task
@@ -139,7 +145,19 @@ class TaskTest extends FamilyConnectTest {
 		// create a new Task and insert into mySQL
 		$taskId = generateUuid4;
 		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
-	}
+		$task->insert($this->getPDO());
 
+		// grab data from mySQL and make sure the fields match expectations
+		$pdoTask = Task::getTaskByTaskId($this->getPDO(), $task->getTaskId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("task"));
+		$this->assertEquals($pdoTask->getTaskId(), $taskId);
+		$this->assertEquals($pdoTask->getTaskEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoTask->getTaskUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoTask->getTaskDescription(), $this->VALID_TASKDESCRIPTION);
+		// format date to seconds since the beginning of time to avoid rounding error
+		$this->assertEquals($pdoTask->getTaskDueDate()->getTimestamp(), $this->VALID_TASKDUEDATE->getTimestamp());
+		$this->assertEquals($pdoTask->getTaskIsComplete(), $this->VALID_TASKISCOMPLETE2);
+		$this->assertEquals($pdoTask->getTaskName(), $this->VALID_TASKNAME);
+	}
 
 }
