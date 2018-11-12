@@ -89,7 +89,7 @@ class EventTest extends FamilyConnectTest {
 
 		// create a new Event and insert it into mySQL
 		$eventId = generateUuidv4();
-		$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId() $this->VALID_EVENTCONTENT,
+		$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId(), $this->VALID_EVENTCONTENT,
 			$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
 		$event->insert($this->getPDO());
 
@@ -105,6 +105,24 @@ class EventTest extends FamilyConnectTest {
 		$this->assertEquals($pdoEvent->getEventEndDate()->getTimestamp(), $this->VALID_EVENTENDDATE->getTimestamp());
 		$this->assertEquals($pdoEvent->getEventStartDate()->getTimestamp(), $this->VALID_EVENTSTARTDATE->getTimestamp());
 
+	}
+
+	/**
+	 * test inserting an Event, editing it, and then updating it
+	 **/
+	public function testUpdateValidEvent() : void {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("event");
+
+		// create a new Event and insert it into mySQL
+		$eventId = generateUuidV4();
+		$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId(), $this->VALID_EVENTCONTENT,
+			$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
+		$event->update($this->getPDO());
+
+		// edit the Event and update it in mySQL
+		$event->setEventContent($this->VALID_EVENTCONTENT2);
+		$event->update($this->getPDO());
 	}
 
 }
