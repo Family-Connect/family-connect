@@ -132,5 +132,44 @@ class CommentTest extends DataDesignTest {
 		$this->assertEquals($numRows, $this->getConnection()->getRowCount("comment"));
 	}
 
+	/**
+	 * test grabbing a Comment that does not exist
+	 **/
+	public function testGetInvalidCommentByCommentId() : void {
+		// grab an id that exceeds the maximum allowable id
+		$comment = Comment::getCommentByCommentId($this->getPDO(), generateUuidV4());
+		$this->assertNull($comment);
+	}
 
-}
+	/**
+	 * test inserting a Comment and regrabbing it from mySQL
+	 **/
+	public function testGetValidCommentByCommentId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("comment");
+
+		// create a new Comment and insert to into mySQL
+		$commentId = generateUuidV4();
+		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$results = Comment::getCommentbyCommentId($this->getPDO(), $comment->getCommentId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInsancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+
+		//grab the result form the array and validate it
+		$pdoComment = $results[0];
+
+		$this->assertEquals($pdoComment->getCommentId(), $commentId);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getCommentEventId());
+		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getCommentTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+	}
+
+
+
+
+	}
