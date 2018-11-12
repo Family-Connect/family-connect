@@ -123,6 +123,18 @@ class EventTest extends FamilyConnectTest {
 		// edit the Event and update it in mySQL
 		$event->setEventContent($this->VALID_EVENTCONTENT2);
 		$event->update($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoEvent = Event::getEventByEventId($this->getPDO(), $event->getEventId());
+		$this->assertEquals($pdoEvent->getEventId(), $eventId);
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("event"));
+		$this->assertEquals($pdoEvent->getEventFamilyId(), $this->family->getFamilyId());
+		$this->assertEquals($pdoEvent->getEventUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoEvent->getEventContent(), $this->VALID_EVENTCONTENT2);
+		$this->assertEquals($pdoEvent->getEventName(), $this->VALID_EVENTNAME);
+		//format the date to seconds since the beginning of time to avoid round off error
+		$this->assertEquals($pdoEvent->getEventEndDate()->getTimestamp(), $this->VALID_EVENTENDDATE->getTimestamp());
+		$this->assertEquals($pdoEvent->getEventStartDate()->getTimestamp(), $this->VALID_EVENTSTARTDATE->getTimestamp());
 	}
 
 }
