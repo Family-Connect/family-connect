@@ -15,7 +15,7 @@ use PHPUnit\DbUnit\Database\Connection;
 use PHPUnit\DbUnit\Operation\{Composite, Factory, Operation};
 
 // grab the encrypted properties file
-require_once("/etc/apache2/capstone-mysql/Secret.php");
+require_once("/etc/apache2/capstone-mysql/cohort22/familyconnect");
 
 require_once(dirname(__DIR__, 3) . "/vendor/autoload.php");
 
@@ -98,7 +98,7 @@ abstract class FamilyConnectTest extends TestCase {
 			// connect to mySQL and provide the interface to PHPUnit
 
 
-			$secrets =  new Secrets("/etc/apache2/capstone-mysql/.ini");
+			$secrets =  new Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect");
 			$pdo = $secrets->getPdoObject();
 			$this->connection = $this->createDefaultDBConnection($pdo, $secrets->getDatabase());
 		}
