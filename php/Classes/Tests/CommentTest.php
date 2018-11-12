@@ -78,6 +78,15 @@ class CommentTest extends DataDesignTest {
 		$pdoComment = Comment::getCommentByCommentId($this->getPDO(), $comment->getCommentId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertEquals($pdoComment->getCommentId(), $commentId);
-
-
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getCommentEventId());
+		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getCommentTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
 	}
+
+	/**
+	 * test inserting a Comment, editing it, and then updating it
+	 **/
+	public function testUpdateValidComment() : void {
+	}
+}
