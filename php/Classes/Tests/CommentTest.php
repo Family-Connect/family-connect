@@ -66,7 +66,7 @@ class CommentTest extends DataDesignTest {
 	 *test inserting a valid Comment and verify that the actual mySQL data matches
 	 **/
 	public function testInsertValidComment() : void {
-		// count thenumber of rows and save it for later
+		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("comment");
 
 		// create a new Comment and insert to into mySQL
@@ -88,5 +88,25 @@ class CommentTest extends DataDesignTest {
 	 * test inserting a Comment, editing it, and then updating it
 	 **/
 	public function testUpdateValidComment() : void {
+		// count the number of rows and save it for later
+		$numRows  = $this->getConnection()->getRowCount("comment");
+
+		//create a new Comment and insert to into mySQL
+		$commentId = generateUuidV4();
+		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment->insert($this->getPDO());
+
+		//edit the Comment and update it in mySQL
+		$comment->setCommentContent($this->VALID_COMMENTCONTENT2);
+		$comment->update($this->getPDO());
+
+		//grab the data from mySQL and enforce the fields match our expectations
+		$pdoComment = Comment::getCommentByCommentId($this->getPDO(), $comment->getCommentId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
+		$this->assertEquals($pdoComment->getCommentId(), $commentId);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getCommentEventId());
+		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getCommentTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
 	}
 }
