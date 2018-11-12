@@ -159,4 +159,13 @@ class EventTest extends FamilyConnectTest {
 		$this->assertNull($pdoEvent);
 		$this->assertEquals($numRows, $this->getConnection()->getRowCount("event"));
 	}
+
+	/**
+	 * test grabbing an Event that does not exist
+	 **/
+	public function testGetInvalidEventByEventId() : void {
+		// grab a family id that exceeds the maximum allowable family id
+		$event = Event::getEventByEventId($this->getPDO(), generateUuidV4());
+		$this->assertNull($event);
+	}
 }
