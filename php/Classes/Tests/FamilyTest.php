@@ -14,7 +14,7 @@ use FamConn\FamilyConnect\{Family};
 require_once(dirname(__DIR__) . "/autoload.php");
 
 // grab uuid generator
-require_once(dirname(__DIR__, 2) . "/lib/uuid.php");
+require_once(dirname(__DIR__, 2) . "../lib/uuid.php");
 
 /**
  * Full PHPUnit test for Family class
