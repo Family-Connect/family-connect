@@ -242,6 +242,35 @@ class TaskTest extends FamilyConnectTest {
 		$this->assertEquals($pdoTask->getTaskIsComplete(), $this->VALID_TASKISCOMPLETE);
 		$this->assertEquals($pdoTask->getTaskName(), $this->VALID_TASKNAME);
 	}
-}
 
+	/**
+	 * test creating a Task and retreiving it by task user id
+	 */
+	public function testGetValidTaskByTaskUserId() {
+		// count the number of rows and save for later
+		$numRows = $this->getConnection()->getRowCount("task");
+
+		// create a new Task and insert into mySQL
+		$taskId = generateUuid4;
+		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
+		$task->insert($this->getPDO());
+
+		// grab data from mySQL and make sure the fields match expectations
+		$results = Task::getTaskByTaskUserId($this->getPDO(), $task->getTaskUserId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("task"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Task", $results);
+
+		// grab the result from an array and validate it
+		$pdoTask = $results[0];
+
+		$this->assertEquals($pdoTask->getTaskId(), $taskId);
+		$this->assertEquals($pdoTask->getTaskEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoTask->getTaskUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoTask->getTaskDescription(), $this->VALID_TASKDESCRIPTION);
+		// format date to seconds since the beginning of time to avoid rounding error
+		$this->assertEquals($pdoTask->getTaskDueDate()->getTimestamp(), $this->VALID_TASKDUEDATE->getTimestamp());
+		$this->assertEquals($pdoTask->getTaskIsComplete(), $this->VALID_TASKISCOMPLETE);
+		$this->assertEquals($pdoTask->getTaskName(), $this->VALID_TASKNAME);
+	}
 }
