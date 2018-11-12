@@ -26,4 +26,40 @@ class UserTest extends FamilyConnectTest {
 	protected $family = null;
 
 	/**
+	 * valid user activation token for user object to own test
+	 * @var $VALID_ACTIVATION_TOKEN;
+	 */
+	protected $VALID_ACTIVATION_TOKEN;
+
+	/**
+	 * valid user hash to create object to own test
+	 * @var $VALID_HASH
+	 */
+	protected $VALID_HASH;
+
+	 /**
+	  *avatar of the user
+	  * @var string $VALID_AVATAR
+	  */
+	 protected $VALID_AVATAR = "PHPUnit test passing";
+
+	 /**
+	  * updated avatar of the user
+	  * @var string $VALID_AVATAR2
+	  */
+	 protected $VALID_AVATAR2 = "PHPUnit test still passing";
+
+	/**
+ 	* Display name that identifies who the user is
+ 	* @var string $VALID_DISPLAY_NAME
+ 	*/
+	protected $VALID_DISPLAY_NAME = "Good news, the test is passing";
+
+	/**
+	 * Updated display name that identifies who the user is
+	 * @var string $VALID_DISPLAY_NAME2
+	 */
+	protected $VALID_DISPLAY_NAME2 = "It works!";
+
+
 }
