@@ -190,4 +190,26 @@ class TaskTest extends FamilyConnectTest {
 		$this->assertEquals($pdoTask->getTaskName(), $this->VALID_TASKNAME);
 	}
 
+	/**
+	 * test creating a task and then deleting it
+	 */
+	public function testDeleteValidTask() : void {
+		// count the number of rows and save for later
+		$numRows = $this->getConnection()->getRowCount("task");
+
+		// create a new Task and insert into mySQL
+		$taskId = generateUuid4;
+		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
+		$task->insert($this->getPDO());
+
+		// delete the task from mySQL
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("task"));
+		$task->delete($this->getPDO());
+
+		// grab the data from mySQL and make sure the task doesn't exist
+		$pdoTask = Task::getTaskByTaskId($this->getPDO(), $task->getTaskId());
+		$this->assertNull($pdoTask);
+		$this->assertEquals($numRows, $this->getConnection()->getRowCount("task"));
+	}
+
 }
