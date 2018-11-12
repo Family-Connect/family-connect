@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: felizmunoz
+ * Date: 11/12/18
+ * Time: 2:41 PM
+ */
 namespace FamConn\FamilyConnect;
 
 use FamConn\FamilyConnect{Id, EventId, TaskId, UserId, Content, Comment};
@@ -50,14 +56,18 @@ class CommentTest extends DataDesignTest {
 	 **/
 	protected $VALID_COMMENTCONTENT = "PHPUnit test passing";
 	public final function setUp()  : void {
-			// run the default setUp() method first
-         parent::setUp();
-         $this->id = new Comment(generateUuidV4();
-         $this->id->inset($this->getPDO());
-
-         // ...
-         $this->VALID_COMMENTEVENTID = new Comment(generateUuidV4();
-
+		// run the default setUp() method first
+		parent::setUp();
+		$this->VALID_COMMENTID = new CommentId(generateUuidV4();
+		$this->id->inset($this->getPDO());
 	}
 
+	/**
+	 *test inserting a valid Comment and verify that the actual mySQL data matches
+	 **/
+	public function testInsertValidComment() : void {
+		// count thenumber of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("comment");
 
+
+	}
