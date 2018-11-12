@@ -31,12 +31,6 @@ class UserTest extends FamilyConnectTest {
 	 */
 	protected $VALID_ACTIVATION_TOKEN;
 
-	/**
-	 * valid user hash to create object to own test
-	 * @var $VALID_HASH
-	 */
-	protected $VALID_HASH;
-
 	 /**
 	  *avatar of the user
 	  * @var string $VALID_AVATAR
@@ -61,5 +55,45 @@ class UserTest extends FamilyConnectTest {
 	 */
 	protected $VALID_DISPLAY_NAME2 = "It works!";
 
+	/**
+	 * Email used by user to log in
+	 * @var string $VALID_EMAIL
+	 */
+	protected $VALID_EMAIL = "thisisaemail34@yahoo.com";
 
+	/**
+	 * Updated email used by user
+	 * @var string $VALID_EMAIL2
+	 */
+	protected $VALID_EMAIL2 = "newemail35@yahoo.com";
+
+	/**
+	 * valid user hash to create object to own test
+	 * @var $VALID_HASH
+	 */
+	protected $VALID_HASH;
+
+	/**
+	 * Phone number user uses for information
+	 * @var string $VALID_PHONE_NUMBER
+	 */
+	protected $VALID_PHONE_NUMBER = "5555555";
+
+	/**
+	 * Updated phone number user uses for information
+	 * @var string $VALID_PHONE_NUMBER2
+	 */
+	protected $VALID_PHONE_NUMBER2 = "5655656";
+
+	/**
+	 * Privilege allows user to do administrative tasks
+	 * @var int $VALID_PRIVILEGE
+	 */
+	protected $VALID_PRIVILEGE = "0";
+
+	/**
+	 * Privilege allows user to do administrative tasks
+	 * @var int $VALID_PRIVILEGE2
+	 */
+	protected $VALID_PRIVILEGE2 = "1";
 }
