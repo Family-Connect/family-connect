@@ -302,7 +302,7 @@ class Task implements \JsonSerializable {
 	 */
 	public function insert(\PDO $pdo) : void {
 		// create template for query
-		$query = "INSERT INTO task(taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete taskName) VALUES (:taskId, :taskEventId, :taskUserId, :taskDescription, :taskDueDate, :taskIsComplete, :taskName)";
+		$query = "INSERT INTO task(taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName) VALUES (:taskId, :taskEventId, :taskUserId, :taskDescription, :taskDueDate, :taskIsComplete, :taskName)";
 		$statement = $pdo->prepare($query);
 
 		// wire variables up to their template place holders
@@ -405,7 +405,7 @@ class Task implements \JsonSerializable {
 		}
 
 		// create template for new query
-		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskIsComplete, task.taskName, event.eventName, FROM task INNER JOIN event ON task.taskEventId = event.eventId WHERE taskEventId = :taskEventId";
+		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskIsComplete, task.taskName, event.eventName FROM task INNER JOIN event ON task.taskEventId = event.eventId WHERE taskEventId = :taskEventId";
 		$statement = $pdo->prepare($query);
 
 		// wire up variable (taskEventId) to query
@@ -476,22 +476,22 @@ class Task implements \JsonSerializable {
 	 * @throws \PDOException when mySQL errors occur
 	 * @throws \TypeError when the variables are not the correct data type
 	 */
-	//Todo Change method get task by start interval and end interval
-	public static function getTaskByTaskDueDate(\PDO $pdo, $taskDueDate) : \SplFixedArray {
+	public static function getTaskByTaskDueDate(\PDO $pdo, $taskDueDate, $taskStartInterval) : \SplFixedArray {
 		// sanitize string / DateTime
 		try {
 			$taskDueDate = self::validateDateTime($taskDueDate);
+			$taskStartInterval = self::validateDateTime($taskStartInterval);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 
 		// create template for new query
-		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskDueDate = :taskDueDate";
+		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskDueDate BETWEEN :taskStartInterval AND :taskDueDate";
 		$statement = $pdo->prepare($query);
 
 		// wire up variables to query
 
-		$parameters = ["taskDueDate" => $taskDueDate];
+		$parameters = ["taskDueDate" => $taskDueDate, "taskStart" => $taskStartInterval];
 		$statement->execute($parameters);
 
 		// build array of tasks

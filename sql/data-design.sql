@@ -66,7 +66,7 @@ CREATE TABLE task(
 	taskUserId BINARY(16),
 	taskDescription VARCHAR(512),
 	taskDueDate DATETIME(6) NOT NULL,
-	taskIsCompleted TINYINT NOT NULL,
+	taskIsComplete TINYINT NOT NULL,
 	taskName VARCHAR(30) NOT NULL,
 
 	INDEX(taskEventId),
