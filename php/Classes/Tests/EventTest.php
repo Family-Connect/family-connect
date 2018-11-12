@@ -137,4 +137,26 @@ class EventTest extends FamilyConnectTest {
 		$this->assertEquals($pdoEvent->getEventStartDate()->getTimestamp(), $this->VALID_EVENTSTARTDATE->getTimestamp());
 	}
 
+	/**
+	 * test creating an Event and then deleting it
+	 **/
+	public function testDeleteValidEvent() : void {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("event");
+
+		// create a new Event and insert it into mySQL
+		$eventId = generateUuidV4();
+		$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId(), $this->VALID_EVENTCONTENT,
+			$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
+		$event->update($this->getPDO());
+
+		// delete the Event from mySQL
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("event"));
+		$event->delete($this->getPDO());
+
+		// grab the data from mySQL and enforce the Event does not exist
+		$pdoEvent = Event::getEventByEventId($this->getPDO(), $event->getEventId());
+		$this->assertNull($pdoEvent);
+		$this->assertEquals($numRows, $this->getConnection()->getRowCount("event"));
+	}
 }
