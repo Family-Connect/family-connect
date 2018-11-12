@@ -14,7 +14,7 @@ use FamConn\FamilyConnect\{Task, Event, User};
 require_once(dirname(__DIR__) . "/autoload.php");
 
 // grab uuid generator
-require_once(dirname(__DIR__, 2) . "../lib/uuid.php");
+require_once(dirname(__DIR__, 2) . "/lib/uuid.php");
 
 /**
  * Full PHPUnit test for Task class
@@ -107,6 +107,7 @@ class TaskTest extends FamilyConnectTest {
 
 	/**
 	 * create dependent objects before running each test
+	 * @throws \Exception
 	 */
 	public final function setUp() : void {
 		parent::setUp();
@@ -162,6 +163,7 @@ class TaskTest extends FamilyConnectTest {
 
 	/**
 	 * test inserting, editing, and updating a valid task
+	 * @throws \Exception
 	 */
 	public function testUpdateValidTask() : void {
 		// count the number of rows and save for later

@@ -100,7 +100,7 @@ abstract class FamilyConnectTest extends TestCase {
 
 			$secrets =  new Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect");
 			$pdo = $secrets->getPdoObject();
-			$this->connection = $this->createDefaultDBConnection($pdo, $secrets->getDatabase());
+			$this->connection = $this->createDefaultDBConnection($pdo, "familyconnect");
 		}
 		return($this->connection);
 	}
