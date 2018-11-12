@@ -156,7 +156,37 @@ class TaskTest extends FamilyConnectTest {
 		$this->assertEquals($pdoTask->getTaskDescription(), $this->VALID_TASKDESCRIPTION);
 		// format date to seconds since the beginning of time to avoid rounding error
 		$this->assertEquals($pdoTask->getTaskDueDate()->getTimestamp(), $this->VALID_TASKDUEDATE->getTimestamp());
-		$this->assertEquals($pdoTask->getTaskIsComplete(), $this->VALID_TASKISCOMPLETE2);
+		$this->assertEquals($pdoTask->getTaskIsComplete(), $this->VALID_TASKISCOMPLETE);
+		$this->assertEquals($pdoTask->getTaskName(), $this->VALID_TASKNAME);
+	}
+
+	/**
+	 * test inserting, editing, and updating a valid task
+	 */
+	public function testUpdateValidTask() : void {
+		// count the number of rows and save for later
+		$numRows = $this->getConnection()->getRowCount("task");
+
+		// create a new Task and insert into mySQL
+		$taskId = generateUuid4;
+		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
+		$task->insert($this->getPDO());
+
+		// edit the task and update it in mySQL -- let's see if both variables are changed
+		$task->setTaskName($this->VALID_TASKNAME2);
+		$task->setTaskIsComplete($this->VALID_TASKISCOMPLETE2);
+		$task->update($this->getPDO());
+
+		// grab data from mySQL and make sure the fields match expectations
+		$pdoTask = Task::getTaskByTaskId($this->getPDO(), $task->getTaskId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("task"));
+		$this->assertEquals($pdoTask->getTaskId(), $taskId);
+		$this->assertEquals($pdoTask->getTaskEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoTask->getTaskUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoTask->getTaskDescription(), $this->VALID_TASKDESCRIPTION);
+		// format date to seconds since the beginning of time to avoid rounding error
+		$this->assertEquals($pdoTask->getTaskDueDate()->getTimestamp(), $this->VALID_TASKDUEDATE->getTimestamp());
+		$this->assertEquals($pdoTask->getTaskIsComplete(), $this->VALID_TASKISCOMPLETE);
 		$this->assertEquals($pdoTask->getTaskName(), $this->VALID_TASKNAME);
 	}
 
