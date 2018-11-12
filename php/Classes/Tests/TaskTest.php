@@ -14,7 +14,7 @@ use FamConn\FamilyConnect\{Task, Event, User};
 require_once(dirname(__DIR__) . "/autoload.php");
 
 // grab uuid generator
-//require_once(dirname(__DIR__, 2) . "/");
+require_once(dirname(__DIR__, 2) . "/lib/uuid.php");
 
 /**
  * Full PHPUnit test for Task class
@@ -114,11 +114,11 @@ class TaskTest extends FamilyConnectTest {
 		$this->VALID_USERHASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
 
 		// create and insert event to be connected with the test Task
-		$this->event = new Event(generateUuidV4, generateUuidV4, generateUuidV4, null, $this->VALID_EVENTENDDATE, "event name", $this->VALID_EVENTSTARTDATE);
+		$this->event = new Event(generateUuidV4(), generateUuidV4(), generateUuidV4(), null, $this->VALID_EVENTENDDATE, "event name", $this->VALID_EVENTSTARTDATE);
 		$this->event->insert($this->getPDO());
 
 		// create and insert user to be connected with the test Task
-		$this->user = new User(generateUuidV4, generateUuidV4, null, null, "display name", "email@email.com", $this->VALID_USERHASH, null, "0");
+		$this->user = new User(generateUuidV4(), generateUuidV4(), null, null, "display name", "email@email.com", $this->VALID_USERHASH, null, "0");
 		$this->user->insert($this->getPDO());
 
 		// calculate dates (just use time of test)
@@ -143,7 +143,7 @@ class TaskTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("task");
 
 		// create a new Task and insert into mySQL
-		$taskId = generateUuid4;
+		$taskId = generateUuidV4();
 		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
 		$task->insert($this->getPDO());
 
@@ -168,7 +168,7 @@ class TaskTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("task");
 
 		// create a new Task and insert into mySQL
-		$taskId = generateUuid4;
+		$taskId = generateUuidV4();
 		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
 		$task->insert($this->getPDO());
 
@@ -198,7 +198,7 @@ class TaskTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("task");
 
 		// create a new Task and insert into mySQL
-		$taskId = generateUuid4;
+		$taskId = generateUuidV4();
 		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
 		$task->insert($this->getPDO());
 
@@ -220,7 +220,7 @@ class TaskTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("task");
 
 		// create a new Task and insert into mySQL
-		$taskId = generateUuid4;
+		$taskId = generateUuidV4();
 		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
 		$task->insert($this->getPDO());
 
@@ -251,7 +251,7 @@ class TaskTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("task");
 
 		// create a new Task and insert into mySQL
-		$taskId = generateUuid4;
+		$taskId = generateUuidV4();
 		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
 		$task->insert($this->getPDO());
 
@@ -282,7 +282,7 @@ class TaskTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("task");
 
 		// create a new Task and insert into mySQL
-		$taskId = generateUuid4;
+		$taskId = generateUuidV4();
 		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
 		$task->insert($this->getPDO());
 
@@ -313,7 +313,7 @@ class TaskTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("task");
 
 		// create a new Task and insert into mySQL
-		$taskId = generateUuid4;
+		$taskId = generateUuidV4();
 		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
 		$task->insert($this->getPDO());
 
