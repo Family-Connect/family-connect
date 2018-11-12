@@ -26,6 +26,7 @@ require_once(dirname(__DIR__) . "/autoload.php");
  */
 
 class FamilyTest extends FamilyConnectTest {
+
 	/**
 	 * name of Family
 	 * @var string $VALID_FAMILYNAME
@@ -50,7 +51,7 @@ class FamilyTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("family");
 
 		// create a new Family and insert to mySQL
-		$familyId =  "eac7aad3-28f7-4293-847b-87fd7a2ad225";
+		$familyId = generateUuidV4;
 		$family = new Family($familyId, $this->VALID_FAMILYNAME);
 		$family->insert($this->getPDO());
 
@@ -69,7 +70,7 @@ class FamilyTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("family");
 
 		//create a new family and insert to mySQL
-		$familyId =  "3772ebb6-abcb-48d5-a549-ab0640f2fd67";
+		$familyId = generateUuidV4;
 		$family = new Family($familyId, $this->VALID_FAMILYNAME);
 		$family->insert($this->getPDO());
 
@@ -92,7 +93,7 @@ class FamilyTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("family");
 
 		//create a new family and insert to mySQL
-		$familyId =  "bc289be5-8f77-4972-8d7b-9192a9d07232";
+		$familyId = generateUuidV4;
 		$family = new Family($familyId, $this->VALID_FAMILYNAME);
 		$family->insert($this->getPDO());
 
@@ -114,7 +115,7 @@ class FamilyTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("family");
 
 		// create a new family and insert to mySQL
-		$familyId = "829039af-2f23-440f-b540-7c1e3761379";
+		$familyId = generateUuidV4;
 		$family = new Family($familyId, $this->VALID_FAMILYNAME);
 		$family->insert($this->getPDO());
 
@@ -122,12 +123,11 @@ class FamilyTest extends FamilyConnectTest {
 		$results = Family::getFamilyByFamilyName($this->getPDO(), $family->getFamilyName());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("family"));
 		$this->assertCount(1, $results);
-
-		// make sure no other objects are bleeding into the test
 		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Family", $results);
 
 		// grab the result from the array and validate it
 		$pdoFamily = $results[0];
+
 		$this->assertEquals($pdoFamily->getFamilyId(), $familyId);
 		$this->assertEquals($pdoFamily->getFamilyName(), $this->VALID_FAMILYNAME);
 

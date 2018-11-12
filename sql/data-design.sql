@@ -1,4 +1,4 @@
-ALTER DATABASE family_connect_table_CHANGE_ME CHARACTER SET uft8 COLLATE utf8_unicode_ci;
+ALTER DATABASE familyconnect CHARACTER SET uft8 COLLATE utf8_unicode_ci;
 
 -- drop tables if they already exist
 DROP TABLE IF EXISTS comment;
