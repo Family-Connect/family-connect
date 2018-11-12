@@ -96,4 +96,33 @@ class UserTest extends FamilyConnectTest {
 	 * @var int $VALID_PRIVILEGE2
 	 */
 	protected $VALID_PRIVILEGE2 = "1";
+
+/**
+ * create dependent objects before running each test
+ */
+	public final function setUp() : void {
+		parent::setUp();
+		$password = "abc123";
+		$this->VALID_USERHASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
+
+
+		// create and insert a Family to own the test User
+		$this->family = new Family(generateUuidV4(), $this->VALID_FAMILYNAME);
+		$this->family->insert($this->getPDO());
+	}
+
+	/**
+	 * test inserting a valid User and verify that the actual mySQL data matches
+	 */
+	/**
+	 * @return Connection
+	 */
+	public function testInsertValidUser() : void {
+		$numRows = $this->getConnection()->getRowCount("user");
+
+		// create a new Task and insert into mySQL
+		$userId = generateUuidV4();
+		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user->insert($this->getPDO());
+	}
 }
