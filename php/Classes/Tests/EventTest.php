@@ -61,25 +61,37 @@ class EventTest extends FamilyConnectTest {
 	 **/
 	protected $VALID_EVENTSTARTDATE = null;
 
-}
+	/**
+	 * Create dependent objects before running each test
+	 **/
+	public final function setUp(): void {
+		// run the default setup method first
+		parent::setUp();
 
-/**
- * Create dependent objects before running each test
- **/
-public final function setUp() : void {
-	// run the default setup method first
-	parent::setUp();
+		// calculate the date (use the time the unit test was set up)
+		$this->VALID_EVENTDATE = new \DateTime();
 
-	// calculate the date (use the time the unit test was set up)
-	$this->VALID_EVENTDATE = new \DateTime();
+		// format the event start date to use for testing
+		$this->VALID_EVENTSTARTDATE = new \DateTime();
+		$this->VALID_EVENTSTARTDATE->sub(new \DateInterval("P10D"));
 
-	// format the event start date to use for testing
-	$this->VALID_EVENTSTARTDATE = new \DateTime();
-	$this->VALID_EVENTSTARTDATE->sub(new \DateInterval("P10D"));
+		// format the event end date to use for testing
+		$this->VALID_EVENTENDDATE = new \DateTime();
+		$this->VALID_EVENTENDDATE->add(new \DateInterval("P10D"));
+	}
 
-	// format the event end date to use for testing
-	$this->VALID_EVENTENDDATE = new \DateTime();
-	$this->VALID_EVENTENDDATE->add(new \DateInterval("P10D"));
+	/**
+	 * test inserting valid Event and verify that the actual mySQL data matches
+	 **/
+	public function testInsertValidEvent() : void {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("event");
 
+		// create a new Event and insert it into mySQL
+		$eventId = generateUuidv4();
+		$event = new Event($eventId, $this->user->getUserId(), $this->VALID_EVENTCONTENT, $this->VALID_EVENTDATE);
+		$event->insert($this->getPDO());
+
+	}
 
 }
