@@ -485,12 +485,12 @@ class Task implements \JsonSerializable {
 		}
 
 		// create template for new query
-		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskDueDate <= :taskStartInterval";
+		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskDueDate = :taskDueDate AND :taskDueDate <= :taskStartInterval";
 		$statement = $pdo->prepare($query);
 
 		// wire up variables to query
 
-		$parameters = ["taskDueDate" => $taskDueDate, "taskStart" => $taskStartInterval];
+		$parameters = ["taskDueDate" => $taskDueDate, "taskStartInterval" => $taskStartInterval];
 		$statement->execute($parameters);
 
 		// build array of tasks
