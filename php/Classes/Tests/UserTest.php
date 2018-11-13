@@ -182,4 +182,30 @@ class UserTest extends FamilyConnectTest {
 		$this->assertNull($pdoUser);
 		$this->assertEquals($numRows, $this->getConnection()->getRowCount("user"));
 	}
+
+	/**
+	 * test inserting a User and regrabbing it from mySQL
+	 **/
+	public function testGetValidUserByUserFamilyId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("user");
+
+		// create a new User and insert to into mySQL
+		$userId = generateUuidV4();
+		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$results = User::getUserByUserFamilyId($this->getPDO(), $user->getUserFamilyId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("FamCon\\FamilyConnect\\User;", $results);
+
+		// grab the result from the array and validate it
+		$pdoUser = $results[0];
+
+		$this->assertEquals($pdoUser->getUserId(), $userId);
+		$this->assertEquals($pdoUser->getUserFamilyId(), $this->family->getFamilyId());
+		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
+	}
 }
