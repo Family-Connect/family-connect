@@ -1,7 +1,9 @@
 <?php
 namespace FamConn\FamilyConnect\Test;
 
-use FamConn\FamilyConnect\{Family};
+use FamConn\FamilyConnect\{Family, User};
+
+require_once ("FamilyConnectTest.php");
 
 //grab class that is going to be tested
 require_once (dirname(__DIR__) . "/autoload.php");
@@ -110,6 +112,7 @@ class UserTest extends FamilyConnectTest {
 		parent::setUp();
 		$password = "abc123";
 		$this->VALID_USERHASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
+		$this->VALID_ACTIVATION_TOKEN = "0CB1A0E520F194FF2226441E21CEC775";
 
 
 		// create and insert a Family to own the test User
@@ -126,7 +129,7 @@ class UserTest extends FamilyConnectTest {
 
 		// create a new User and insert into mySQL
 		$userId = generateUuidV4();
-		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user = new User(generateUuidV4(), $this->family->getFamilyId(), $this->VALID_ACTIVATION_TOKEN, $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
 		$user->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
