@@ -75,7 +75,7 @@ trait ValidateDate {
 			$time = self::validateTime($time);
 			list($hour, $minute, $second) = explode(":", $time);
 			list($second, $microseconds) = explode(".", $second);
-			$date->setTIme($hour, $minute, $second, $microseconds);
+			$date->setTime($hour, $minute, $second, $microseconds);
 			return ($date);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);

@@ -8,7 +8,7 @@
 
 namespace FamConn\FamilyConnect\Test;
 
-use FamConn\FamilyConnect\{Task, Event, User};
+use FamConn\FamilyConnect\{Family, Task, Event, User};
 
 require_once("FamilyConnectTest.php");
 
@@ -40,6 +40,13 @@ class TaskTest extends FamilyConnectTest {
 	 * @var User user
 	 */
 	protected $user = null;
+
+	/**
+	 * valid content for task
+	 * @var $VALID_EVENTCONTENT
+	 */
+	protected $VALID_EVENTCONTENT = "PHPUnit test is still going on";
+
 
 	/**
 	 * timestamp to use as eventEndDate; starts as null, value assigned later
@@ -102,6 +109,12 @@ class TaskTest extends FamilyConnectTest {
 	protected $VALID_SUNSETDATE = null;
 
 	/**
+	 * valid activation token for user linked with task
+	 * @var $VALID_USERACTIVATIONTOKEN
+	 */
+	protected $VALID_USERACTIVATIONTOKEN;
+
+	/**
 	 * valid userHash to create user object to own the test
 	 * @var $VALID_USERHASH
 	 */
@@ -116,13 +129,7 @@ class TaskTest extends FamilyConnectTest {
 		$password = "abc123";
 		$this->VALID_USERHASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
 
-		// create and insert event to be connected with the test Task
-		$this->event = new Event(generateUuidV4(), generateUuidV4(), generateUuidV4(), null, $this->VALID_EVENTENDDATE, "event name", $this->VALID_EVENTSTARTDATE);
-		$this->event->insert($this->getPDO());
-
-		// create and insert user to be connected with the test Task
-		$this->user = new User(generateUuidV4(), generateUuidV4(), null, null, "display name", "email@email.com", $this->VALID_USERHASH, null, "0");
-		$this->user->insert($this->getPDO());
+		$this->VALID_USERACTIVATIONTOKEN = "0CB1A0E520F194FF2226441E21CEC775";
 
 		// calculate dates (just use time of test)
 		$this->VALID_TASKDUEDATE = new \DateTime();
@@ -136,6 +143,25 @@ class TaskTest extends FamilyConnectTest {
 		// format sunset date to use for testing
 		$this->VALID_SUNSETDATE = new \DateTime();
 		$this->VALID_SUNSETDATE->add(new \DateInterval("P10D"));
+
+		//create and insert family to be connected with event
+		$familyId = generateUuidV4();
+		$this->family = new Family($familyId, "family name");
+		$this->family->insert($this->getPDO());
+
+		// create and insert user to be connected with the test Task and event
+		$userId = generateUuidV4();
+		$this->user = new User($userId, generateUuidV4(), $this->VALID_USERACTIVATIONTOKEN, "hello", "display name", "email@email.com", $this->VALID_USERHASH, null, "0");
+		$this->user->insert($this->getPDO());
+
+		// create and insert event to be connected with the test Task
+		$eventId = generateUuidV4();
+		$this->event = new Event($eventId, $familyId, $userId, $this->VALID_EVENTCONTENT, $this->VALID_EVENTENDDATE, "event name", $this->VALID_EVENTSTARTDATE);
+		$this->event->insert($this->getPDO());
+
+
+
+
 	}
 
 	/**
