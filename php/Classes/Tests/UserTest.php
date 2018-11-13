@@ -132,7 +132,7 @@ class UserTest extends FamilyConnectTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
-		$this->assertEquals($pdoUser->getUserId(), $UserId);
+		$this->assertEquals($pdoUser->getUserId(), $userId);
 		$this->assertEquals($pdoUser->getUserFamilyId(), $this->user->getUserId());
 		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
 	}
@@ -204,6 +204,31 @@ class UserTest extends FamilyConnectTest {
 		// grab the result from the array and validate it
 		$pdoUser = $results[0];
 
+		$this->assertEquals($pdoUser->getUserId(), $userId);
+		$this->assertEquals($pdoUser->getUserFamilyId(), $this->family->getFamilyId());
+		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
+	}
+
+	/**
+	 * test grabbing all Users
+	 **/
+	public function testGetAllValidUsers() : void {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("user");
+
+		// create a new Tweet and insert to into mySQL
+		$userId = generateUuidV4();
+		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$results = User::getAllUsers($this->getPDO());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\User", $results);
+
+		// grab the result from the array and validate it
+		$pdoUser = $results[0];
 		$this->assertEquals($pdoUser->getUserId(), $userId);
 		$this->assertEquals($pdoUser->getUserFamilyId(), $this->family->getFamilyId());
 		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
