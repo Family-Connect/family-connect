@@ -138,7 +138,11 @@ class UserTest extends FamilyConnectTest {
 		$this->assertEquals($pdoUser->getUserId(), $userId);
 		$this->assertEquals($pdoUser->getUserFamilyId(), $this->family->getFamilyId());
 		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
-
+		$this->assertEquals($pdoUser->getUserDisplayName(), $this->VALID_DISPLAY_NAME);
+		$this->assertEquals($pdoUser->getUserEmail(), $this->VALID_EMAIL);
+		$this->assertEquals($pdoUser->getUserHash(), $this->VALID_HASH);
+		$this->assertEquals($pdoUser->getUserPhoneNumber(), $this->VALID_PHONE_NUMBER);
+		$this->assertEquals($pdoUser->getUserPrivilege(), $this->VALID_PRIVILEGE);
 	}
 
 	/**
@@ -163,7 +167,7 @@ class UserTest extends FamilyConnectTest {
 		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
 		$this->assertEquals($pdoUser->getUserId(), $userId);
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
-		$this->assertEquals($pdoUser->getUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoUser->getUserId(), $userId);
 		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR2);
 	}
 

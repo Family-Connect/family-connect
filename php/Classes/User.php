@@ -416,7 +416,7 @@ public function getUserEmail() {
 		$statement = $pdo->prepare($query);
 
 
-		$parameters = ["userId" => $this->userId->getBytes(), "userFmailyId" => $this->userFamilyId->getBytes(), "userActivationToken" => $this->userActivationToken, "userAvatar" => $this->userAvatar, "userDisplayName" => $this->userDisplayName, "userEmail" => $this->userEmail, "userHash" => $this->userHash, "userPhoneNumber" => $this->userPhoneNumber, "userPrivilege" => $this->userPrivilege];
+		$parameters = ["userId" => $this->userId->getBytes(), "userFamilyId" => $this->userFamilyId->getBytes(), "userActivationToken" => $this->userActivationToken, "userAvatar" => $this->userAvatar, "userDisplayName" => $this->userDisplayName, "userEmail" => $this->userEmail, "userHash" => $this->userHash, "userPhoneNumber" => $this->userPhoneNumber, "userPrivilege" => $this->userPrivilege];
 		$statement->execute($parameters);
 	}
 
