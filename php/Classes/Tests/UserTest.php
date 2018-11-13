@@ -119,14 +119,12 @@ class UserTest extends FamilyConnectTest {
 
 	/**
 	 * test inserting a valid User and verify that the actual mySQL data matches
-	 */
-	/**
-	 * @return Connection
+	 *
 	 */
 	public function testInsertValidUser() : void {
 		$numRows = $this->getConnection()->getRowCount("user");
 
-		// create a new Task and insert into mySQL
+		// create a new User and insert into mySQL
 		$userId = generateUuidV4();
 		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
 		$user->insert($this->getPDO());
@@ -148,7 +146,7 @@ class UserTest extends FamilyConnectTest {
 
 			// create a new User and insert to into mySQL
 			$userId = generateUuidV4();
-			$user = new User($userId, $this->user->getUserId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+			$user = new User($userId, $this->family->getUserId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
 			$user->insert($this->getPDO());
 
 			// edit the User and update it in mySQL
@@ -161,5 +159,27 @@ class UserTest extends FamilyConnectTest {
 			$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
 			$this->assertEquals($pdoUser->getUserAvatarId(), $this->user->getUserId());
 			$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR2);
+		}
+
+	/**
+	 * test creating a User and then deleting it
+	 **/
+	public function testDeleteValidUser() : void {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("user");
+
+		// create a new User and insert to into mySQL
+		$userId = generateUuidV4();
+		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user->insert($this->getPDO());
+
+		// delete the User from mySQL
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
+		$user->delete($this->getPDO());
+
+		// grab the data from mySQL and enforce the User does not exist
+		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
+		$this->assertNull($pdoUser);
+		$this->assertEquals($numRows, $this->getConnection()->getRowCount("user"));
 	}
 }
