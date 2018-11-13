@@ -78,8 +78,8 @@ class EventTest extends FamilyConnectTest {
 
 		// create and insert a Family to own the test User
 		$this->user = new User(generateUuidV4(), $this->family->getFamilyId(), $VALID_ACTIVATION_TOKEN,
-			"https://ubisafe.org/images/mini-clip-avatar-1.png", "joe3", "johnson@gmail.com",
-			$VALID_USERHASH, "505-255-3253", 0);
+			"https://ubisafe.org/images/mini-clip-avatar-1.png", "joe3", 			"johnson@gmail.com",
+			$VALID_USERHASH, "5052553253", 0);
 		$this->user->insert($this->getPDO());
 
 
