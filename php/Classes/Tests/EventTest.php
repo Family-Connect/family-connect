@@ -65,7 +65,7 @@ class EventTest extends FamilyConnectTest {
 	/**
 	 * Create dependent objects before running each test
 	 **/
-	public final function setUp(): void {
+	public final function setUp() : void {
 		// run the default setup method first
 		parent::setUp();
 
