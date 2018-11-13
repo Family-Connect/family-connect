@@ -510,10 +510,15 @@ public function getUserEmail() {
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
 	//Todo return single item
+	/**
+	 * @param \PDO $pdo
+	 * @param string $userEmail
+	 * @return User
+	 */
 	public static function getUserByUserEmail(\PDO $pdo, $userEmail) : User {
 
 		try {
-			$userEmail = self::validateUuid($userEmail);
+			$userEmail = filter_var($userEmail, FILTER_VALIDATE_EMAIL);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
@@ -522,7 +527,7 @@ public function getUserEmail() {
 		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userFamilyId = :userFamilyId";
 		$statement = $pdo->prepare($query);
 		// bind the user family id to the place holder in the template
-		$parameters = ["userEmail" => $userEmail->getBytes()];
+		$parameters = ["userEmail" => $userEmail];
 		$statement->execute($parameters);
 
 
