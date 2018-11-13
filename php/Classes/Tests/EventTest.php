@@ -201,5 +201,28 @@ class EventTest extends FamilyConnectTest {
 		$this->assertEquals($pdoEvent->getEventStartDate()->getTimestamp(), $this->VALID_EVENTSTARTDATE->getTimestamp());
 	}
 
+	/**
+	 * test grabbing an Event that does not exist
+	 **/
+	public function testGetInvalidEventByFamilyId() : void {
+		// grab a family id that exceeds the maximum allowable family id
+		$event = Event::getEventByEventFamilyId($this->getPDO(), generateUuidV4());
+		$this->assertCount(0, $event);
+	}
+
+	/**
+	 * test grabbing an Event by event content
+	 **/
+
+	public function testGetValidTweetByTweetContent() : void {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("event");
+
+		// create a new Event and insert it into mySQL
+		$eventId = generateUuidV4();
+		$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId(), $this->VALID_EVENTCONTENT,
+		$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
+		$event->insert($this->getPDO());
+	}
 
 }
