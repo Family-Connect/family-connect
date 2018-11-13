@@ -162,7 +162,7 @@ class EventTest extends FamilyConnectTest {
 		$eventId = generateUuidV4();
 		$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId(), $this->VALID_EVENTCONTENT,
 			$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
-		$event->update($this->getPDO());
+		$event->insert($this->getPDO());
 
 		// delete the Event from mySQL
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("event"));
