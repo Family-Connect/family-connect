@@ -76,13 +76,13 @@ class TaskTest extends FamilyConnectTest {
 	 * valid value indicating whether or not task has been completed
 	 * @var $VALID_TASKISCOMPLETE
 	 */
-	protected $VALID_TASKISCOMPLETE = "0";
+	protected $VALID_TASKISCOMPLETE;
 
 	/**
 	 * valid value indicating whether or not task has been completed
 	 * @var $VALID_TASKISCOMPLETE2
 	 */
-	protected $VALID_TASKISCOMPLETE2 = "1";
+	protected $VALID_TASKISCOMPLETE2;
 
 	/**
 	 * valid name for task
@@ -109,6 +109,12 @@ class TaskTest extends FamilyConnectTest {
 	protected $VALID_SUNSETDATE = null;
 
 	/**
+	 * valid user privilege for user linked with task
+	 * @var $VALID_USERPRIVILEGE
+	 */
+	protected $VALID_USERPRIVILEGE;
+
+	/**
 	 * valid activation token for user linked with task
 	 * @var $VALID_USERACTIVATIONTOKEN
 	 */
@@ -128,8 +134,10 @@ class TaskTest extends FamilyConnectTest {
 		parent::setUp();
 		$password = "abc123";
 		$this->VALID_USERHASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
-
 		$this->VALID_USERACTIVATIONTOKEN = "0CB1A0E520F194FF2226441E21CEC775";
+		$this->VALID_USERPRIVILEGE = intval(1);
+		$this->VALID_TASKISCOMPLETE = intval(1);
+		$this->VALID_TASKISCOMPLETE2 = intval(1);
 
 		// calculate dates (just use time of test)
 		$this->VALID_TASKDUEDATE = new \DateTime();
@@ -151,7 +159,7 @@ class TaskTest extends FamilyConnectTest {
 
 		// create and insert user to be connected with the test Task and event
 		$userId = generateUuidV4();
-		$this->user = new User($userId, generateUuidV4(), $this->VALID_USERACTIVATIONTOKEN, "hello", "display name", "email@email.com", $this->VALID_USERHASH, null, "0");
+		$this->user = new User($userId, $familyId, $this->VALID_USERACTIVATIONTOKEN, "hello", "display name", "email@email.com", $this->VALID_USERHASH, "5055055005", $this->VALID_USERPRIVILEGE);
 		$this->user->insert($this->getPDO());
 
 		// create and insert event to be connected with the test Task

@@ -246,16 +246,15 @@ class Task implements \JsonSerializable {
 	 * @throws \RangeException if task is complete value is not equal to 0 or 1
 	 * @throws \TypeError if task is complete is no an int
 	 */
-	public function setTaskIsComplete(int $newTaskIsComplete) {
+	public function setTaskIsComplete($newTaskIsComplete) {
 		// sanitize value
 		$newTaskIsComplete = intval($newTaskIsComplete);
-		$newTaskIsComplete = filter_var($newTaskIsComplete, FILTER_SANITIZE_NUMBER_INT);
 		// verify that the value is an int
 		if($newTaskIsComplete === false) {
 			throw(new \InvalidArgumentException("new task is complete is not an int or is insecure"));
 		}
 		// verify that the value is a 0 or a 1
-		if(intval($newTaskIsComplete !== 0 || $newTaskIsComplete !== 1)) {
+		if($newTaskIsComplete !== 1) {
 			throw(new \RangeException("value does not fit set parameters"));
 		}
 		// store the new task is complete value
