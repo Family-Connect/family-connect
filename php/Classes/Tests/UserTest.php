@@ -216,7 +216,7 @@ class UserTest extends FamilyConnectTest {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("user");
 
-		// create a new Tweet and insert to into mySQL
+		// create a new User and insert to into mySQL
 		$userId = generateUuidV4();
 		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
 		$user->insert($this->getPDO());
