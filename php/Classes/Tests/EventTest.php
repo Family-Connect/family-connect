@@ -187,6 +187,18 @@ class EventTest extends FamilyConnectTest {
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("event"));
 		$this->assertCount(1, $results);
 		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Event", $results);
+
+		// grab the result from the array and validate it
+		$pdoEvent = $results[0];
+
+		$this->assertEquals($pdoEvent->getEventId(), $eventId);
+		$this->assertEquals($pdoEvent->getEventFamilyId(), $this->family->getFamilyId());
+		$this->assertEquals($pdoEvent->getEventUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoEvent->getEventContent(), $this->VALID_EVENTCONTENT);
+		$this->assertEquals($pdoEvent->getEventName(), $this->VALID_EVENTNAME);
+		// format the date to seconds since the beginning of time to avoid round off error
+		$this->assertEquals($pdoEvent->getEventEndDate()->getTimestamp(), $this->VALID_EVENTENDDATE->getTimestamp());
+		$this->assertEquals($pdoEvent->getEventStartDate()->getTimestamp(), $this->VALID_EVENTSTARTDATE->getTimestamp());
 	}
 
 
