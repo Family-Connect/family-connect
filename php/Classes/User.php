@@ -200,7 +200,7 @@ class User implements \JsonSerializable{
 }
 
 /**
- * mutator method for user avatar
+ * mutator method for user Display Name
  *
  * @param string $newUserDisplayName new value of user display name
  * @throws \InvalidArgumentException if $newUserDisplayName is not a string or insecure
@@ -317,12 +317,12 @@ class User implements \JsonSerializable{
 	 * @param int $newUserPrivilege user privilege range is from 0-120
 	 * @throws \RangeException when input is out of range
 	 **/
-	public function setNewUserPrivilege(int $newUserPrivilege): void {
-		if($newUserPrivilege !== 0 || $newUserPrivilege !== 1) {
+	public function setUserPrivilege(int $userPrivilege): void {
+		if($userPrivilege !== 0 || $userPrivilege !== 1) {
 			throw(new \RangeException("user privilege is out of range"));
 		}
 		//convert and store user privilege
-		$this-> userPrivilege = $newUserPrivilege;
+		$this-> userPrivilege = $userPrivilege;
 	}
 
 	/**

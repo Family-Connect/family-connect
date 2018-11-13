@@ -35,26 +35,26 @@ class UserTest extends FamilyConnectTest {
 
 	/**
 	 * valid user activation token for user object to own test
-	 * @var $VALID_ACTIVATION_TOKEN;
+	 * @var $VALID_ACTIVATION_TOKEN ;
 	 */
 	protected $VALID_ACTIVATION_TOKEN;
 
-	 /**
-	  *avatar of the user
-	  * @var string $VALID_AVATAR
-	  */
-	 protected $VALID_AVATAR = "PHPUnit test passing";
-
-	 /**
-	  * updated avatar of the user
-	  * @var string $VALID_AVATAR2
-	  */
-	 protected $VALID_AVATAR2 = "PHPUnit test still passing";
+	/**
+	 *avatar of the user
+	 * @var string $VALID_AVATAR
+	 */
+	protected $VALID_AVATAR = "PHPUnit test passing";
 
 	/**
- 	* Display name that identifies who the user is
- 	* @var string $VALID_DISPLAY_NAME
- 	*/
+	 * updated avatar of the user
+	 * @var string $VALID_AVATAR2
+	 */
+	protected $VALID_AVATAR2 = "PHPUnit test still passing";
+
+	/**
+	 * Display name that identifies who the user is
+	 * @var string $VALID_DISPLAY_NAME
+	 */
 	protected $VALID_DISPLAY_NAME = "Good news, the test is passing";
 
 	/**
@@ -105,10 +105,10 @@ class UserTest extends FamilyConnectTest {
 	 */
 	protected $VALID_PRIVILEGE2 = "1";
 
-/**
- * create dependent objects before running each test
- */
-	public final function setUp() : void {
+	/**
+	 * create dependent objects before running each test
+	 */
+	public final function setUp(): void {
 		parent::setUp();
 		$password = "abc123";
 		$this->VALID_USERHASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
@@ -124,7 +124,7 @@ class UserTest extends FamilyConnectTest {
 	 * test inserting a valid User and verify that the actual mySQL data matches
 	 *
 	 */
-	public function testInsertValidUser() : void {
+	public function testInsertValidUser(): void {
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert into mySQL
@@ -140,40 +140,40 @@ class UserTest extends FamilyConnectTest {
 		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
 	}
 
-		/**
-		 * test inserting a User, editing it, and then updating it
-		 **/
-		public function testUpdateValidUser() : void {
-			// count the number of rows and save it for later
-			$numRows = $this->getConnection()->getRowCount("user");
-
-			// create a new User and insert to into mySQL
-			$userId = generateUuidV4();
-			$user = new User($userId, $this->family->getUserId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
-			$user->insert($this->getPDO());
-
-			// edit the User and update it in mySQL
-			$user->setUserAvatar($this->VALID_AVATAR2);
-			$user->update($this->getPDO());
-
-			// grab the data from mySQL and enforce the fields match our expectations
-			$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
-			$this->assertEquals($pdoUser->getUserId(), $userId);
-			$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
-			$this->assertEquals($pdoUser->getUserAvatarId(), $this->user->getUserId());
-			$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR2);
-		}
-
 	/**
-	 * test creating a User and then deleting it
+	 * test inserting a User, editing it, and then updating it
 	 **/
-	public function testDeleteValidUser() : void {
+	public function testUpdateValidUser(): void {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert to into mySQL
 		$userId = generateUuidV4();
-		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user = new User($userId, $this->family->getUserId(), $this->VALID_ACTIVATION_TOKEN, $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user->insert($this->getPDO());
+
+		// edit the User and update it in mySQL
+		$user->setUserAvatar($this->VALID_AVATAR2);
+		$user->update($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
+		$this->assertEquals($pdoUser->getUserId(), $userId);
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
+		$this->assertEquals($pdoUser->getUserAvatarId(), $this->user->getUserId());
+		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR2);
+	}
+
+	/**
+	 * test creating a User and then deleting it
+	 **/
+	public function testDeleteValidUser(): void {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("user");
+
+		// create a new User and insert to into mySQL
+		$userId = generateUuidV4();
+		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_ACTIVATION_TOKEN, $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
 		$user->insert($this->getPDO());
 
 		// delete the User from mySQL
@@ -187,7 +187,7 @@ class UserTest extends FamilyConnectTest {
 	}
 
 	/**
-	 * test inserting a User and regrabbing it from mySQL
+	 * test inserting a User and grabbing it from mySQL
 	 **/
 	public function testGetValidUserByUserFamilyId() {
 		// count the number of rows and save it for later
@@ -195,45 +195,48 @@ class UserTest extends FamilyConnectTest {
 
 		// create a new User and insert to into mySQL
 		$userId = generateUuidV4();
-		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_ACTIVATION_TOKEN, $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
 		$user->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$results = User::getUserByUserFamilyId($this->getPDO(), $user->getUserFamilyId());
+		$pdoUser = User::getUserByUserFamilyId($this->getPDO(), $user->getUserFamilyId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
-		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("FamCon\\FamilyConnect\\User;", $results);
-
-		// grab the result from the array and validate it
-		$pdoUser = $results[0];
 
 		$this->assertEquals($pdoUser->getUserId(), $userId);
 		$this->assertEquals($pdoUser->getUserFamilyId(), $this->family->getFamilyId());
+		$this->assertEquals($pdoUser->getUserActivationToken(), $this->VALID_ACTIVATION_TOKEN);
 		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
+		$this->assertEquals($pdoUser->getUserDisplayName(), $this->VALID_DISPLAY_NAME);
+		$this->assertEquals($pdoUser->getUserEmail(), $this->VALID_EMAIL);
+		$this->assertEquals($pdoUser->getUserHash(), $this->VALID_HASH);
+		$this->assertEquals($pdoUser->getUserPhoneNumber(), $this->VALID_PHONE_NUMBER);
+		$this->assertEquals($pdoUser->getUserPrivilege(), $this->VALID_PRIVILEGE);
 	}
 
 	/**
-	 * test grabbing all Users
+	 * test inserting a User and grabbing it from mySQL
 	 **/
-	public function testGetAllValidUsers() : void {
+	public function testGetValidUserByUserEmail() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert to into mySQL
 		$userId = generateUuidV4();
-		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_ACTIVATION_TOKEN, $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
 		$user->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$results = User::getAllUsers($this->getPDO());
+		$pdoUser = User::getUserByUserEmail($this->getPDO(), $user->getUserEmail());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
-		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\User", $results);
 
-		// grab the result from the array and validate it
-		$pdoUser = $results[0];
 		$this->assertEquals($pdoUser->getUserId(), $userId);
 		$this->assertEquals($pdoUser->getUserFamilyId(), $this->family->getFamilyId());
+		$this->assertEquals($pdoUser->getUserActivationToken(), $this->VALID_ACTIVATION_TOKEN);
 		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
+		$this->assertEquals($pdoUser->getUserDisplayName(), $this->VALID_DISPLAY_NAME);
+		$this->assertEquals($pdoUser->getUserEmail(), $this->VALID_EMAIL);
+		$this->assertEquals($pdoUser->getUserHash(), $this->VALID_HASH);
+		$this->assertEquals($pdoUser->getUserPhoneNumber(), $this->VALID_PHONE_NUMBER);
+		$this->assertEquals($pdoUser->getUserPrivilege(), $this->VALID_PRIVILEGE);
 	}
 }
