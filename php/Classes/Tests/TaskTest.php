@@ -103,15 +103,15 @@ class TaskTest extends FamilyConnectTest {
 
 	/**
 	 * valid timestamp to use as sunriseTaskDueDate
-	 * @var $VALID_SUNRISEDATE
+	 * @var $VALID_STARTINTERVAL
 	 */
-	protected $VALID_SUNRISEDATE = null;
+	protected $VALID_STARTINTERVAL = null;
 
 	/**
 	 * valid timestampt to use as sunsetTaskDueDate
-	 * @var $VALID_SUNSETDATE
+	 * @var $VALID_ENDINTERVAL
 	 */
-	protected $VALID_SUNSETDATE = null;
+	protected $VALID_ENDINTERVAL = null;
 
 	/**
 	 * valid user privilege for user linked with task
@@ -151,12 +151,12 @@ class TaskTest extends FamilyConnectTest {
 		$this->VALID_EVENTSTARTDATE = new \DateTime();
 
 		// format sunrise date to use for testing
-		$this->VALID_SUNRISEDATE = new \DateTime();
-		$this->VALID_SUNRISEDATE->sub(new \DateInterval("P10D"));
+		$this->VALID_STARTINTERVAL = new \DateTime();
+		$this->VALID_STARTINTERVAL->sub(new \DateInterval("P10D"));
 
 		// format sunset date to use for testing
-		$this->VALID_SUNSETDATE = new \DateTime();
-		$this->VALID_SUNSETDATE->add(new \DateInterval("P10D"));
+		$this->VALID_ENDINTERVAL = new \DateTime();
+		$this->VALID_ENDINTERVAL->add(new \DateInterval("P10D"));
 
 		//create and insert family to be connected with event
 		$familyId = generateUuidV4();
@@ -176,6 +176,7 @@ class TaskTest extends FamilyConnectTest {
 
 	/**
 	 * test inserting a valid Task and see if the mySQL data matches expectations
+	 * @throws \Exception
 	 */
 	public function testInsertValidTask() : void {
 		// count the number of rows and save for later
@@ -232,6 +233,7 @@ class TaskTest extends FamilyConnectTest {
 
 	/**
 	 * test creating a task and then deleting it
+	 * @throws \Exception
 	 */
 	public function testDeleteValidTask() : void {
 		// count the number of rows and save for later
@@ -289,6 +291,7 @@ class TaskTest extends FamilyConnectTest {
 
 	/**
 	 * test creating a Task and retreiving it by task user id
+	 * @throws \Exception
 	 */
 	public function testGetValidTaskByTaskUserId() {
 		// count the number of rows and save for later
@@ -319,6 +322,7 @@ class TaskTest extends FamilyConnectTest {
 
 	/**
 	 * test creating a Task and grabbing it by its task due date value
+	 * @throws \Exception
 	 */
 	public function testGetValidTaskByTaskDueDate() : void {
 		// count the number of rows and save for later
@@ -330,25 +334,26 @@ class TaskTest extends FamilyConnectTest {
 		$task->insert($this->getPDO());
 
 		// grab the data from mySQL and make sure the fields match expectations
-		$results = Task::getTaskByTaskDueDate($this->getPDO(),$task->getTaskDueDate(),$this->VALID_EVENTSTARTDATE);
+		$results = Task::getTaskByTaskDueDate($this->getPDO(),$this->VALID_STARTINTERVAL, $this->VALID_ENDINTERVAL);
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("task"));
 		$this->assertCount(1, $results);
 
 		// grab the result from an array and validate it
 		$pdoTask = $results[0];
 
-		$this->assertEquals($pdoTask->task->getTaskId(), $taskId);
-		$this->assertEquals($pdoTask->task->getTaskEventId(), $this->event->getEventId());
-		$this->assertEquals($pdoTask->task->getTaskUserId(), $this->user->getUserId());
-		$this->assertEquals($pdoTask->task->getTaskDescription(), $this->VALID_TASKDESCRIPTION);
+		$this->assertEquals($pdoTask->getTaskId(), $taskId);
+		$this->assertEquals($pdoTask->getTaskEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoTask->getTaskUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoTask->getTaskDescription(), $this->VALID_TASKDESCRIPTION);
 		// format date to seconds since the beginning of time to avoid rounding error
-		$this->assertEquals($pdoTask->task->getTaskDueDate()->getTimestamp(), $this->VALID_TASKDUEDATE->getTimestamp());
-		$this->assertEquals($pdoTask->task->getTaskIsComplete(), $this->VALID_TASKISCOMPLETE);
-		$this->assertEquals($pdoTask->task->getTaskName(), $this->VALID_TASKNAME);
+		$this->assertEquals($pdoTask->getTaskDueDate()->getTimestamp(), $this->VALID_TASKDUEDATE->getTimestamp());
+		$this->assertEquals($pdoTask->getTaskIsComplete(), $this->VALID_TASKISCOMPLETE);
+		$this->assertEquals($pdoTask->getTaskName(), $this->VALID_TASKNAME);
 	}
 
 	/**
 	 * test creating a Task and grabbing it by its task is complete value
+	 * @throws \Exception
 	 */
 	public function testGetValidTaskByTaskIsComplete() : void {
 		// count the number of rows and save for later

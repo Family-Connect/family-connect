@@ -470,27 +470,28 @@ class Task implements \JsonSerializable {
 	 * get task by task due date
 	 *
 	 * @param \PDO $pdo PDO connection object
-	 * @param \DateTime|string $taskDueDate task due date used in query
+	 * @param \DateTime|string $taskStartInterval task start interval used in query
+	 * @param \DateTime|string $taskEndInterval task end interval used in query
 	 * @return \SplFixedArray SplFixedArray of Tasks found
 	 * @throws \PDOException when mySQL errors occur
 	 * @throws \TypeError when the variables are not the correct data type
 	 */
-	public static function getTaskByTaskDueDate(\PDO $pdo, $taskDueDate, $taskStartInterval) : \SplFixedArray {
+	public static function getTaskByTaskDueDate(\PDO $pdo, $taskStartInterval, $taskEndInterval) : \SplFixedArray {
 		// sanitize string / DateTime
 		try {
-			$taskDueDate = self::validateDateTime($taskDueDate);
 			$taskStartInterval = self::validateDateTime($taskStartInterval);
+			$taskEndInterval = self::validateDateTime($taskEndInterval);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 
 		// create template for new query
-		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskDueDate = :taskDueDate AND :taskDueDate <= :taskStartInterval";
+		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskDueDate BETWEEN :taskStartInterval AND :taskEndInterval";
 		$statement = $pdo->prepare($query);
 
 		// wire up variables to query
 
-		$parameters = ["taskDueDate" => $taskDueDate, "taskStartInterval" => $taskStartInterval];
+		$parameters = ["taskEndInterval" => $taskEndInterval->format("Y-m-d H:i:s.u"), "taskStartInterval" => $taskStartInterval->format("Y-m-d H:i:s.u")];
 		$statement->execute($parameters);
 
 		// build array of tasks
