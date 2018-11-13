@@ -143,7 +143,9 @@ class UserTest extends FamilyConnectTest {
 
 	/**
 	 * test inserting a User, editing it, and then updating it
-	 **/
+	 *
+	 * @throws \Exception
+	 */
 	public function testUpdateValidUser(): void {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("user");
@@ -161,7 +163,7 @@ class UserTest extends FamilyConnectTest {
 		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
 		$this->assertEquals($pdoUser->getUserId(), $userId);
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
-		$this->assertEquals($pdoUser->getUserAvatarId(), $this->user->getUserId());
+		$this->assertEquals($pdoUser->getUserId(), $this->user->getUserId());
 		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR2);
 	}
 

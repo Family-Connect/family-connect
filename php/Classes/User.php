@@ -429,7 +429,7 @@ public function getUserEmail() {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when a variable are not the correct data type
 	 **/
-	public static function getUserByUserId(\PDO $pdo, $userId) : User {
+	public static function getUserByUserId(\PDO $pdo, $userId) : ?User {
 		// sanitize the userId before searching
 		try {
 			$userId = self::validateUuid($userId);
