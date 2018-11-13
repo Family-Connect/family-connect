@@ -7,7 +7,7 @@
  */
 namespace FamConn\FamilyConnect;
 
-use FamConn\FamilyConnect{Comment};
+use FamConn\FamilyConnect\{Event, Task, User};
 
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/autoload.php");
@@ -30,7 +30,7 @@ class CommentTest extends DataDesignTest {
 	 * Id that belongs to the comment; this a primary key
 	 * @var STRING $VALID_COMMENTID
 	 **/
-	protected $id = $VALIDCOMMENTID = ;
+	protected $VALID_COMMENTID;
 
 	/**
 	 * eventid of the Comment; this starts as null and is assigned later
@@ -303,7 +303,7 @@ class CommentTest extends DataDesignTest {
 		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
 
 		//enforce no other objects are bleeding into the test
-		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\family-connect\\Comment")
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\family-connect\\Comment");
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
