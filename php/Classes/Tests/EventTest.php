@@ -190,7 +190,6 @@ class EventTest extends FamilyConnectTest {
 
 		// grab the result from the array and validate it
 		$pdoEvent = $results[0];
-
 		$this->assertEquals($pdoEvent->getEventId(), $eventId);
 		$this->assertEquals($pdoEvent->getEventFamilyId(), $this->family->getFamilyId());
 		$this->assertEquals($pdoEvent->getEventUserId(), $this->user->getUserId());
@@ -213,7 +212,6 @@ class EventTest extends FamilyConnectTest {
 	/**
 	 * test grabbing an Event by event content
 	 **/
-
 	public function testGetValidTweetByTweetContent() : void {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("event");
@@ -223,6 +221,34 @@ class EventTest extends FamilyConnectTest {
 		$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId(), $this->VALID_EVENTCONTENT,
 		$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
 		$event->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$results = Event::getEventByEventContent($this->getPDO(), $event->getEventContent());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("event"));
+		$this->assertCount(1, $results);
+
+		// enforce no other objects are bleeding into the test
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Event", $results);
+
+		// grab the result from the array and validate it
+		$pdoEvent = $results[0];
+		$this->assertEquals($pdoEvent->getEventId(), $eventId);
+		$this->assertEquals($pdoEvent->getEventFamilyId(), $this->family->getFamilyId());
+		$this->assertEquals($pdoEvent->getEventUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoEvent->getEventContent(), $this->VALID_EVENTCONTENT);
+		$this->assertEquals($pdoEvent->getEventName(), $this->VALID_EVENTNAME);
+		// format the date to seconds since the beginning of time to avoid round off error
+		$this->assertEquals($pdoEvent->getEventEndDate()->getTimestamp(), $this->VALID_EVENTENDDATE->getTimestamp());
+		$this->assertEquals($pdoEvent->getEventStartDate()->getTimestamp(), $this->VALID_EVENTSTARTDATE->getTimestamp());
+	}
+
+	/**
+	 * test grabbing an Event by content that does not exist
+	 **/
+	public function testGetInvalidTweetByTweetContent() : void {
+		// grab an event by content that does not exist
+		$event = Event::getEventByEventContent($this->getPDO(), "Comcast has the best service EVER #comcastLove");
+		$this->assertCount(0, $event);
 	}
 
 }
