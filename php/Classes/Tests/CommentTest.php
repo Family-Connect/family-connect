@@ -63,10 +63,21 @@ class CommentTest extends FamilyConnectTest {
 	public final function setUp()  : void {
 		// run the default setUp() method first
 		parent::setUp();
-		$this->comment = new Comment(generateUuidV4());
+		$eventId=generateUuidV4();
+		$taskId=generateUuidV4();
+		$userId=generateUuidV4();
+		$commentDate=new \DateTime();
+		$this->comment = new Comment(generateUuidV4(), $eventId, $taskId, $userId, "Family get together on Thursday.", $commentDate);
 
-		//create and insert Event Id to use for testing
-		$this->VALID_COMMENTID = new \commentId();
+		$familyId=generateUuidV4();
+		$userActivationToken="";
+		$password = "abc123";
+		$this->VALID_PROFILE_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
+		//create and insert a User to own the test Comment
+		$this->user = new User($userId, $familyId, $userActivationToken, "this is the url for avatar goes", "fmunoz11", "fmunoz11@hotmail.com", $this->VALID_PROFILE_HASH, "555-505-5555", "0 or 1");
+		$this->user->insert($this->getPDO());
+
+
 
 	}
 
