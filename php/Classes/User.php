@@ -524,7 +524,7 @@ public function getUserEmail() {
 		}
 
 		// create query template
-		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userFamilyId = :userFamilyId";
+		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM `user` WHERE userEmail = :userEmail";
 		$statement = $pdo->prepare($query);
 		// bind the user family id to the place holder in the template
 		$parameters = ["userEmail" => $userEmail];
