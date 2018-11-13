@@ -138,6 +138,7 @@ class UserTest extends FamilyConnectTest {
 		$this->assertEquals($pdoUser->getUserId(), $userId);
 		$this->assertEquals($pdoUser->getUserFamilyId(), $this->family->getFamilyId());
 		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
+
 	}
 
 	/**
