@@ -4,6 +4,7 @@ namespace FamConn\FamilyConnect\Test;
 use FamConn\FamilyConnect\{Family, User, Event};
 
 //grab the class under scrutiny
+require_once("FamilyConnectTest.php");
 require_once(dirname(__DIR__) . "/autoload.php");
 
 //grab the uuid generator
