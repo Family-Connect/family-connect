@@ -229,7 +229,7 @@ class TaskTest extends FamilyConnectTest {
 
 		// create a new Task and insert into mySQL
 		$taskId = generateUuidV4();
-		$task = new Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
+		$task = new  Task($taskId, $this->event->getEventId(), $this->user->getUserId(), $this->VALID_TASKDESCRIPTION, $this->VALID_TASKDUEDATE, $this->VALID_TASKISCOMPLETE, $this->VALID_TASKNAME);
 		$task->insert($this->getPDO());
 
 		// delete the task from mySQL

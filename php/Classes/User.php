@@ -260,21 +260,26 @@ class User implements \JsonSerializable{
 	 * @throws \Exception if user hash is not hexadecimal
 	 */
 	public function setUserHash(string $newUserHash): void {
-		// verify if the user hash is not empty
+		//enforce that the hash is properly formatted
 		if(empty($newUserHash) === true) {
-			throw (new \InvalidArgumentException("user hash is empty"));
+			throw(new \InvalidArgumentException("profile password hash empty or insecure"));
 		}
-		// verify the hash is not too long
+
+		//enforce the hash is really an Argon hash
+		$userHashInfo = password_get_info($newUserHash);
+		if($userHashInfo["algoName"] !== "argon2i") {
+			throw(new \InvalidArgumentException("profile hash is not a valid hash"));
+		}
+
+		//enforce that the hash is exactly 97 characters.
 		if(strlen($newUserHash) !== 97) {
-			throw (new \RangeException("hash is too long"));
+			throw(new \RangeException("profile hash must be 97 characters"));
 		}
-		// verify that hash is hexadecimal
-		if(ctype_xdigit($newUserHash) === false) {
-			throw (new \Exception("hash is not hexadecimal"));
-		}
-		// store the string
+
+		//store the hash
 		$this->userHash = $newUserHash;
 	}
+
 
 	/**
 	 * mutator method for user phone number
@@ -367,7 +372,7 @@ class User implements \JsonSerializable{
 	public function update(\PDO $pdo) : void {
 
 		// create query template
-		$query = "UPDATE user SET userFamilyId = :userFamilyId, userActivationToken = :userActivationToken, userAvatar = :userAvatar, userDisplayName = ;userDisplayName, userEmail = :userEmail, userHash = :userHash, userPhoneNumber = :userPhoneNumber, userPrivilege = :userPrivilege WHERE userId = :userId";
+		$query = "UPDATE user SET userFamilyId = :userFamilyId, userActivationToken = :userActivationToken, userAvatar = :userAvatar, userDisplayName = :userDisplayName, userEmail = :userEmail, userHash = :userHash, userPhoneNumber = :userPhoneNumber, userPrivilege = :userPrivilege WHERE userId = :userId";
 		$statement = $pdo->prepare($query);
 
 
