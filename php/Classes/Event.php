@@ -348,7 +348,7 @@ class Event implements \JsonSerializable {
 		$statement = $pdo->prepare($query);
 
 		$formattedDate = $this->eventStartDate->format("Y-m-d H:i:s.u");
-		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" => $this->eventUserId->getBytes(), "eventContent" => $this->eventContent, "eventName" => $this->eventName, "eventStartDate" => $formattedDate];
+		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" => $this->eventUserId->getBytes(), "eventContent" => $this->eventContent, "eventEndDate" => $formattedDate,"eventName" => $this->eventName, "eventStartDate" => $formattedDate];
 		$statement->execute($parameters);
 	}
 
