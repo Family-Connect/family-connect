@@ -43,7 +43,7 @@ trait ValidateDate {
 		$year = intval($matches[1]);
 		$month = intval($matches[2]);
 		$day = intval($matches[3]);
-		if(checkdate($year, $month, $day) === false) {
+		if(checkdate($month, $day, $year) === false) {
 			throw(new \RangeException("date is not a valid Gregorian date"));
 		}
 		// at this point in method, the date is clean

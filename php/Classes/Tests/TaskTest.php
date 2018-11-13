@@ -30,6 +30,11 @@ require_once(dirname(__DIR__, 2) . "/lib/uuid.php");
 class TaskTest extends FamilyConnectTest {
 
 	/**
+	 * Family linked to the Task; this is for foreign key relations
+	 * @var Event event
+	 */
+	protected $family = null;
+	/**
 	 * Event linked to the Task; this is for foreign key relations
 	 * @var Event event
 	 */
@@ -224,8 +229,8 @@ class TaskTest extends FamilyConnectTest {
 		$this->assertEquals($pdoTask->getTaskDescription(), $this->VALID_TASKDESCRIPTION);
 		// format date to seconds since the beginning of time to avoid rounding error
 		$this->assertEquals($pdoTask->getTaskDueDate()->getTimestamp(), $this->VALID_TASKDUEDATE->getTimestamp());
-		$this->assertEquals($pdoTask->getTaskIsComplete(), $this->VALID_TASKISCOMPLETE);
-		$this->assertEquals($pdoTask->getTaskName(), $this->VALID_TASKNAME);
+		$this->assertEquals($pdoTask->getTaskIsComplete(), $this->VALID_TASKISCOMPLETE2);
+		$this->assertEquals($pdoTask->getTaskName(), $this->VALID_TASKNAME2);
 	}
 
 	/**
@@ -325,7 +330,7 @@ class TaskTest extends FamilyConnectTest {
 		$task->insert($this->getPDO());
 
 		// grab the data from mySQL and make sure the fields match expectations
-		$results = Task::getTaskByTaskDueDate($this->getPDO(),$task->getTaskDueDate());
+		$results = Task::getTaskByTaskDueDate($this->getPDO(),$task->getTaskDueDate(),$this->VALID_EVENTSTARTDATE);
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("task"));
 		$this->assertCount(1, $results);
 		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Task", $results);

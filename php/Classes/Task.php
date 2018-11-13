@@ -254,7 +254,7 @@ class Task implements \JsonSerializable {
 			throw(new \InvalidArgumentException("new task is complete is not an int or is insecure"));
 		}
 		// verify that the value is a 0 or a 1
-		if($newTaskIsComplete !== 1) {
+		if(($newTaskIsComplete !== 0) && ($newTaskIsComplete !== 1)) {
 			throw(new \RangeException("value does not fit set parameters"));
 		}
 		// store the new task is complete value
@@ -485,7 +485,7 @@ class Task implements \JsonSerializable {
 		}
 
 		// create template for new query
-		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskDueDate BETWEEN :taskStartInterval AND :taskDueDate";
+		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskDueDate <= :taskStartInterval";
 		$statement = $pdo->prepare($query);
 
 		// wire up variables to query
