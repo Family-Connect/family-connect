@@ -7,7 +7,7 @@
  */
 namespace FamConn\FamilyConnect;
 
-use FamConn\FamilyConnect{Id, EventId, TaskId, UserId, Content, Comment};
+use FamConn\FamilyConnect{Comment};
 
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/autoload.php");
@@ -34,19 +34,19 @@ class CommentTest extends DataDesignTest {
 
 	/**
 	 * eventid of the Comment; this starts as null and is assigned later
-	 * @var \Binary $VALID_COMMENTEVENTID
+	 * @var string $VALID_COMMENTEVENTID
 	 **/
 	protected $VALID_COMMENTEVENTID = null;
 
 	/**
 	 * taskid of the Comment; this starts as null and is assigned later
-	 * @var \Binary $VALID_COMMENTTASKID
+	 * @var string $VALID_COMMENTTASKID
 	 **/
 	protected $VALID_COMMENTTASKID = null;
 
 	/**
 	 * userid of the Comment
-	 * @var \Binary $VALID_COMMENTUSERID
+	 * @var string $VALID_COMMENTUSERID
 	 **/
 	protected $VALID_COMMENTUSERID = "PHPUnit test passing";
 
@@ -54,11 +54,15 @@ class CommentTest extends DataDesignTest {
 	 * content of the Comment
 	 * @var string $VALID_COMMENTCONTENT
 	 **/
-	protected $VALID_COMMENTCONTENT = "PHPUnit test passing";
+	protected $VALID_COMMENTCONTENT = null;
+
+	/**
+	 * create dependent objects before running each test
+	 **/
 	public final function setUp()  : void {
 		// run the default setUp() method first
 		parent::setUp();
-		$this->VALID_COMMENTID = new CommentId(generateUuidV4();
+		$this->VALID_COMMENTID = new CommentId(generateUuidV4());
 		$this->id->inset($this->getPDO());
 	}
 
@@ -164,7 +168,7 @@ class CommentTest extends DataDesignTest {
 
 		$this->assertEquals($pdoComment->getCommentId(), $commentId);
 		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getCommentEventId());
-		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getCommentTaskId());
+		$this->assertEquals($pdoComment->getCommentTaskId(), $this->task->getCommentTaskId());
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
 	}
@@ -185,7 +189,7 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getCommentByCommentEventId($this->getPDO(), $comment->getCommentEventId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInsancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
@@ -222,7 +226,7 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getCommentByCommentTaskId($this->getPDO(), $comment->getCommentTaskId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInsancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
@@ -259,7 +263,7 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getCommentByCommentUserId($this->getPDO(), $comment->getCommentUserId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInsancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
@@ -283,7 +287,7 @@ class CommentTest extends DataDesignTest {
 	/**
 	 * test grabbing a Comment by comment content
 	 **/
-	public function testGetValidTweetByCommentContent() : void {
+	public function testGetValidCommentByCommentContent() : void {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("comment");
 
@@ -296,15 +300,15 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getCommentByCommentContent($this->getPDO(), $comment->getCommentContent());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInsancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
 
 		//enforce no other objects are bleeding into the test
-		$this->assertContainsOnlyInstnacesOf("Edu\\Cnm\\family-connect\\Comment")
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\family-connect\\Comment")
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
 
-		$this->assertEquals($pdoComment->getCommentId(), $commentId);
+		$this->assertEquals($pdoComment->getCommentId(), $pdoComment); //<-check this
 		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getCommentEventId());
 		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getCommentTaskId());
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
@@ -336,7 +340,7 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getAllComments($this->getPDO(),
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment")));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInsancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
