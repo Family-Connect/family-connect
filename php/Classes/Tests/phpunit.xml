@@ -2,7 +2,7 @@
 	<testsuites>
 		<testsuite name="Family Test">
 
-		<file>EventTest.php</file>
+		<file>UserTest.php</file>
 		</testsuite>
 	</testsuites>
 	<filter>

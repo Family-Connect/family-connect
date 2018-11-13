@@ -83,7 +83,7 @@ class User implements \JsonSerializable{
  * @throws \Exception if user hash is not hexadecimal
  */
 
-	public function __construct($newUserId, $newUserFamilyId, string $newUserActivationToken, $newUserAvatar, $newUserDisplayName, $newUserEmail, $newUserHash, $newUserPhoneNumber, int $userUserPrivilege) {
+	public function __construct($newUserId, $newUserFamilyId, string $newUserActivationToken, string $newUserAvatar, string $newUserDisplayName, string $newUserEmail, $newUserHash, string $newUserPhoneNumber, int $newUserPrivilege) {
 		try {
 			$this->setUserId($newUserId);
 			$this->setUserFamilyId($newUserFamilyId);
@@ -93,7 +93,7 @@ class User implements \JsonSerializable{
 			$this->setUserEmail($newUserEmail);
 			$this->setUserHash($newUserHash);
 			$this->setUserPhoneNumber($newUserPhoneNumber);
-			$this->setUserPrivilege($userUserPrivilege);
+			$this->setUserPrivilege($newUserPrivilege);
 		}
 		catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
@@ -259,21 +259,21 @@ class User implements \JsonSerializable{
 	 * @throws \RangeException if user hash is not 97 characters
 	 * @throws \Exception if user hash is not hexadecimal
 	 */
-	public function setUserHash(string $newUserHash): void {
+	public function setUserHash($newUserHash): void {
 		//enforce that the hash is properly formatted
 		if(empty($newUserHash) === true) {
-			throw(new \InvalidArgumentException("profile password hash empty or insecure"));
+			throw(new \InvalidArgumentException("hash is empty or insecure"));
 		}
 
 		//enforce the hash is really an Argon hash
 		$userHashInfo = password_get_info($newUserHash);
 		if($userHashInfo["algoName"] !== "argon2i") {
-			throw(new \InvalidArgumentException("profile hash is not a valid hash"));
+			throw(new \InvalidArgumentException("hash is not a valid hash"));
 		}
 
 		//enforce that the hash is exactly 97 characters.
 		if(strlen($newUserHash) !== 97) {
-			throw(new \RangeException("profile hash must be 97 characters"));
+			throw(new \RangeException("hash must be 97 characters"));
 		}
 
 		//store the hash
@@ -318,7 +318,7 @@ class User implements \JsonSerializable{
 	 * @throws \RangeException when input is out of range
 	 **/
 	public function setUserPrivilege(int $userPrivilege): void {
-		if($userPrivilege !== 0 || $userPrivilege !== 1) {
+		if($userPrivilege !== 0 && $userPrivilege !== 1) {
 			throw(new \RangeException("user privilege is out of range"));
 		}
 		//convert and store user privilege

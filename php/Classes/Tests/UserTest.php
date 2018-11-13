@@ -111,7 +111,7 @@ class UserTest extends FamilyConnectTest {
 	public final function setUp(): void {
 		parent::setUp();
 		$password = "abc123";
-		$this->VALID_USERHASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
+		$this->VALID_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
 		$this->VALID_ACTIVATION_TOKEN = "0CB1A0E520F194FF2226441E21CEC775";
 
 
@@ -129,14 +129,14 @@ class UserTest extends FamilyConnectTest {
 
 		// create a new User and insert into mySQL
 		$userId = generateUuidV4();
-		$user = new User(generateUuidV4(), $this->family->getFamilyId(), $this->VALID_ACTIVATION_TOKEN, $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_ACTIVATION_TOKEN, $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
 		$user->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("user"));
 		$this->assertEquals($pdoUser->getUserId(), $userId);
-		$this->assertEquals($pdoUser->getUserFamilyId(), $this->user->getUserId());
+		$this->assertEquals($pdoUser->getUserFamilyId(), $this->family->getFamilyId());
 		$this->assertEquals($pdoUser->getUserAvatar(), $this->VALID_AVATAR);
 	}
 
@@ -149,7 +149,7 @@ class UserTest extends FamilyConnectTest {
 
 		// create a new User and insert to into mySQL
 		$userId = generateUuidV4();
-		$user = new User($userId, $this->family->getUserId(), $this->VALID_ACTIVATION_TOKEN, $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
+		$user = new User($userId, $this->family->getFamilyId(), $this->VALID_ACTIVATION_TOKEN, $this->VALID_AVATAR, $this->VALID_DISPLAY_NAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_PHONE_NUMBER, $this->VALID_PRIVILEGE);
 		$user->insert($this->getPDO());
 
 		// edit the User and update it in mySQL

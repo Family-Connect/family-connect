@@ -16,6 +16,7 @@ use Ramsey\Uuid\Uuid;
  *
  * @author Michael Bovee <michael.j.bovee@gmail.com>
  * version 1.0.0
+ * @method getUserFamilyId()
  */
 
 class Family implements \JsonSerializable {
