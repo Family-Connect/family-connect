@@ -8,7 +8,9 @@
     "phpunit/phpunit": "@stable",
     "swiftmailer/swiftmailer": "@stable",
     "lcobucci/jwt": "3.2"
-  }, "scripts": {
+  },
+
+  "scripts": {
   "phpunit": "./vendor/bin/phpunit -c ./php/Classes/Tests/ --coverage-html coverage"
 }
 }

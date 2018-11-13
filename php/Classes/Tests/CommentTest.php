@@ -7,7 +7,7 @@
  */
 namespace FamConn\FamilyConnect;
 
-use FamConn\FamilyConnect\{Event, Task, User};
+use FamConn\FamilyConnect\{Event, Task, User, Comment};
 
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/autoload.php");
@@ -161,7 +161,7 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getCommentByCommentId($this->getPDO(), $comment->getCommentId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment", $results);
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
@@ -189,7 +189,7 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getCommentByCommentEventId($this->getPDO(), $comment->getCommentEventId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment", $results);
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
@@ -226,7 +226,7 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getCommentByCommentTaskId($this->getPDO(), $comment->getCommentTaskId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment", $results);
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
@@ -263,7 +263,7 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getCommentByCommentUserId($this->getPDO(), $comment->getCommentUserId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment", $results);
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
@@ -300,15 +300,15 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getCommentByCommentContent($this->getPDO(), $comment->getCommentContent());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment", $results);
 
 		//enforce no other objects are bleeding into the test
-		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\family-connect\\Comment");
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment");
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
 
-		$this->assertEquals($pdoComment->getCommentId(), $pdoComment); //<-check this
+		$this->assertEquals($pdoComment->getCommentId(), $pdoComment);
 		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getCommentEventId());
 		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getCommentTaskId());
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
@@ -340,12 +340,12 @@ class CommentTest extends DataDesignTest {
 		$results = Comment::getAllComments($this->getPDO(),
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment")));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment", $results);
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
 
-		$this->assertEquals($pdoComment->getCommentId(), $commentId);
+		$this->assertEquals($pdoComment->getCommentId(), $comment);
 		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getCommentEventId());
 		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getCommentTaskId());
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
