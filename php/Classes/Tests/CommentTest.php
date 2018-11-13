@@ -30,7 +30,7 @@ class CommentTest extends DataDesignTest {
 	 * Id that belongs to the comment; this a primary key
 	 * @var STRING $VALID_COMMENTID
 	 **/
-	protected $id = $VALID_COMMENTID = "PHPUnit test passing";
+	protected $id = $VALIDCOMMENTID = ;
 
 	/**
 	 * eventid of the Comment; this starts as null and is assigned later
@@ -71,7 +71,7 @@ class CommentTest extends DataDesignTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentId = generateUUidV4();
-		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTID, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
 		$comment->insert($this->getPDO());
 
 		//grab the data from mySQL and enforce the fields match our expectations
@@ -93,7 +93,7 @@ class CommentTest extends DataDesignTest {
 
 		//create a new Comment and insert to into mySQL
 		$commentId = generateUuidV4();
-		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTID, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
 		$comment->insert($this->getPDO());
 
 		//edit the Comment and update it in mySQL
@@ -119,7 +119,7 @@ class CommentTest extends DataDesignTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentId = generateUuidV4();
-		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTID, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
 		$comment->insert($this->getPDO());
 
 		// delete the Comment from mySQL
@@ -150,14 +150,14 @@ class CommentTest extends DataDesignTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentId = generateUuidV4();
-		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentId, $this ->comment->getCommentId(), $this->VALID_COMMENTID, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
 		$comment->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$results = Comment::getCommentbyCommentId($this->getPDO(), $comment->getCommentId());
+		$results = Comment::getCommentByCommentId($this->getPDO(), $comment->getCommentId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInsancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\CNM\\family-connect\\Comment", $results);
 
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
@@ -169,7 +169,115 @@ class CommentTest extends DataDesignTest {
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
 	}
 
+	/**
+	 * test inserting a Comment and regrabbing it from mySQL
+	 **/
+	public function testGetValidCommentByCommentEventId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("comment");
 
+		// create a new Comment and insert to into mySQL
+		$commentEventId = generateUuidV4();
+		$comment = new Comment($commentEventId, $this->comment->getCommentEventId(), $this->VALID_COMMENTID, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment->insert($this->getPDO());
 
+		// grab the data from mySQL and enforce the fields match our expectations
+		$results = Comment::getCommentByCommentEventId($this->getPDO(), $comment->getCommentEventId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInsancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+
+		//grab the result form the array and validate it
+		$pdoComment = $results[0];
+
+		$this->assertEquals($pdoComment->getCommentId(), $commentEventId);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getCommentEventId());
+		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getCommentTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+	}
+
+	/**
+	 * test grabbing a Comment that does not exist
+	 **/
+	public function testGetInvalidCommentByCommentEventId() : void {
+		// grab a comment event id that exceeds the maximum allowable event id
+		$comment = Comment::getCommentByCommentEventId($this->getPDO(), generateUuidV4());
+		$this->assertCount(0, $comment);
+	}
+
+	/**
+	 * test inserting a Comment and regrabbing it from mySQL
+	 **/
+	public function testGetValidCommentByCommentTaskId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("comment");
+
+		// create a new Comment and insert to into mySQL
+		$commentTaskId = generateUuidV4();
+		$comment = new Comment($commentTaskId, $this->comment->getCommentTaskId(), $this->VALID_COMMENTID, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$results = Comment::getCommentByCommentTaskId($this->getPDO(), $comment->getCommentTaskId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInsancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+
+		//grab the result form the array and validate it
+		$pdoComment = $results[0];
+
+		$this->assertEquals($pdoComment->getCommentId(), $commentTaskId);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getCommentEventId());
+		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getCommentTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+	}
+
+	/**
+	 * test grabbing a Comment that does not exist
+	 **/
+	public function testGetInvalidCommentByCommentTaskId() : void {
+		// grab a comment task id that exceeds the maximum allowable task id
+		$comment = Comment::getCommentByCommentTaskId($this->getPDO(), generateUuidV4());
+		$this->assertCount(0, $comment);
+	}
+
+	/**
+	 * test inserting a Comment and regrabbing it from mySQL
+	 **/
+	public function testGetValidCommentByCommentUserId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("comment");
+
+		// create a new Comment and insert to into mySQL
+		$commentUserId = generateUuidV4();
+		$comment = new Comment($commentUserId, $this->comment->getCommentUserId(), $this->VALID_COMMENTID, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$results = Comment::getCommentByCommentUserId($this->getPDO(), $comment->getCommentUserId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInsancesOf("Edu\\CNM\\family-connect\\Comment", $results);
+
+		//grab the result form the array and validate it
+		$pdoComment = $results[0];
+
+		$this->assertEquals($pdoComment->getCommentId(), $commentUserId);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getCommentEventId());
+		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getCommentTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+	}
+
+	/**
+	 * test grabbing a Comment that does not exist
+	 **/
+	public function testGetInvalidCommentByCommentUserId() : void {
+		// grab a comment task id that exceeds the maximum allowable task id
+		$comment = Comment::getCommentByCommentUserId($this->getPDO(), generateUuidV4());
+		$this->assertCount(0, $comment);
+	}
 
 	}
