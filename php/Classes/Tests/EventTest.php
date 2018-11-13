@@ -287,7 +287,7 @@ class EventTest extends FamilyConnectTest {
 	 **/
 	public function testGetInvalidEventByEventContent() : void {
 		// grab an event by content that does not exist
-		$event = Event::getEventByEventContent($this->getPDO(), "Comcast has the best service EVER #comcastLove");
+		$event = Event::getEventByEventContent($this->getPDO(), "Comcast has the best service EVER");
 		$this->assertCount(0, $event);
 	}
 
