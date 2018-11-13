@@ -132,7 +132,7 @@ class EventTest extends FamilyConnectTest {
 		$eventId = generateUuidV4();
 		$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId(), $this->VALID_EVENTCONTENT,
 			$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
-		$event->update($this->getPDO());
+		$event->insert($this->getPDO());
 
 		// edit the Event and update it in mySQL
 		$event->setEventContent($this->VALID_EVENTCONTENT2);
