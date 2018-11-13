@@ -68,6 +68,20 @@ class EventTest extends FamilyConnectTest {
 	public final function setUp() : void {
 		// run the default setup method first
 		parent::setUp();
+		$password = "abc123";
+		$VALID_USERHASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
+		$VALID_ACTIVATION_TOKEN = "0CB1A0E520F194FF2226441E21CEC775";
+
+		// create and insert a Family to own the test User
+		$this->family = new Family(generateUuidV4(), "Johnson");
+		$this->family->insert($this->getPDO());
+
+		// create and insert a Family to own the test User
+		$this->user = new User(generateUuidV4(), $this->family->getFamilyId(), $VALID_ACTIVATION_TOKEN,
+			"https://ubisafe.org/images/mini-clip-avatar-1.png", "joe3", "johnson@gmail.com",
+			$VALID_USERHASH, "505-255-3253", "1");
+		$this->user->insert($this->getPDO());
+
 
 		// calculate the date (use the time the unit test was set up)
 		$this->VALID_EVENTDATE = new \DateTime();
@@ -105,7 +119,6 @@ class EventTest extends FamilyConnectTest {
 		//format the date to seconds since the beginning of time to avoid round off error
 		$this->assertEquals($pdoEvent->getEventEndDate()->getTimestamp(), $this->VALID_EVENTENDDATE->getTimestamp());
 		$this->assertEquals($pdoEvent->getEventStartDate()->getTimestamp(), $this->VALID_EVENTSTARTDATE->getTimestamp());
-
 	}
 
 	/**
