@@ -1,7 +1,7 @@
 <?php
 namespace FamConn\FamilyConnect\Test;
 
-use FamConn\FamilyConnect\{Event, Family, User};
+use FamConn\FamilyConnect\{Family, User, Event};
 
 //grab the class under scrutiny
 require_once(dirname(__DIR__) . "/autoload.php");
@@ -333,5 +333,35 @@ class EventTest extends FamilyConnectTest {
 		$this->assertCount(0, $event);
 	}
 
+	/**
+ 	 * test grabbing all Events
+ 	 **/
+	public function testGetAllValidEvents() : void {
+	// count the number of rows and save it for later
+	$numRows = $this->getConnection()->getRowCount("event");
+
+	// create a new Event and insert it into mySQL
+	$eventId = generateUuidV4();
+	$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId(), $this->VALID_EVENTCONTENT,
+	$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
+	$event->insert($this->getPDO());
+
+	// grab the data from mySQL and enforce the fields match our expectations
+	$results = Event::getAllEvents($this->getPDO());
+	$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("event"));
+	$this->assertCount(1, $results);
+	$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Event", $results);
+
+	// grab the result from the array and validate it
+	$pdoEvent = $results[0];
+	$this->assertEquals($pdoEvent->getEventId(), $eventId);
+	$this->assertEquals($pdoEvent->getEventFamilyId(), $this->family->getFamilyId());
+	$this->assertEquals($pdoEvent->getEventUserId(), $this->user->getUserId());
+	$this->assertEquals($pdoEvent->getEventContent(), $this->VALID_EVENTCONTENT);
+	$this->assertEquals($pdoEvent->getEventName(), $this->VALID_EVENTNAME);
+	//format the date to seconds since the beginning of time to avoid round off error
+	$this->assertEquals($pdoEvent->getEventEndDate()->getTimestamp(), $this->VALID_EVENTENDDATE->getTimestamp());
+	$this->assertEquals($pdoEvent->getEventStartDate()->getTimestamp(), $this->VALID_EVENTSTARTDATE->getTimestamp());
+	}
 
 }
