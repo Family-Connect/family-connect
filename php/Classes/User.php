@@ -157,26 +157,43 @@ class User implements \JsonSerializable{
 	$this->userFamilyId = $uuid;
 }
 
-	/**
-	 * mutator method for user activation token
-	 *
-	 * @param string $newUserActivationToken new value of the user activation hash
-	 * @throws \InvalidArgumentException if $newUserActivationToken is not a valid data type
-	 * @throws \RangeException if $newUserActivationToken is longer than 32 characters
-	 */
-	public function setUserActivationToken(string $newUserActivationToken): void {
-		// verify the string is 32 characters
-		if(strlen($newUserActivationToken) !== 32) {
-			throw (new \RangeException("string is not 32 characters"));
-		}
-		// verify the string is hexadecimal
-		if(ctype_xdigit($newUserActivationToken) === false) {
-			throw (new \InvalidArgumentException("String is not hexadecimal"));
-		}
+/**
+ * accessor method for user activation token
+ *
+ * @return string value of $userActivationToken
+ */
+public function getUserActivationToken() : string {
+	return $this->userActivationToken;
+}
 
-		// store the string
-		$this->userActivationToken = $newUserActivationToken;
+/**
+ * mutator method for user activation token
+ *
+ * @param string $newUserActivationToken new value of the user activation hash
+ * @throws \InvalidArgumentException if $newUserActivationToken is not a valid data type
+ * @throws \RangeException if $newUserActivationToken is longer than 32 characters
+ */
+public function setUserActivationToken(string $newUserActivationToken): void {
+	// verify the string is 32 characters
+	if(strlen($newUserActivationToken) !== 32) {
+		throw (new \RangeException("string is not 32 characters"));
 	}
+	// verify the string is hexadecimal
+	if(ctype_xdigit($newUserActivationToken) === false) {
+		throw (new \InvalidArgumentException("String is not hexadecimal"));
+	}
+
+	// store the string
+	$this->userActivationToken = $newUserActivationToken;
+}
+/**
+ * accessor method for user avatar
+ *
+ * @return string value of user avatar
+ */
+public function getUserAvatar() : string {
+	return $this->userAvatar;
+}
 /**
  * mutator method for user avatar
  *
@@ -200,6 +217,14 @@ class User implements \JsonSerializable{
 }
 
 /**
+ * accessor method for user display name
+ *
+ * @return string value of $userDisplayName
+ */
+	public function getUserDisplayName(): string {
+		return $this->userDisplayName;
+	}
+/**
  * mutator method for user Display Name
  *
  * @param string $newUserDisplayName new value of user display name
@@ -221,6 +246,14 @@ class User implements \JsonSerializable{
 	$this->userDisplayName = $newUserDisplayName;
 }
 
+/**
+ * accessor method for user email
+ *
+ * @return string value of $userEmail
+ */
+public function getUserEmail() {
+	return $this->userEmail;
+}
 /**
  * mutator method for user email
  *
@@ -279,7 +312,14 @@ class User implements \JsonSerializable{
 		//store the hash
 		$this->userHash = $newUserHash;
 	}
-
+	/**
+	 * accessor method for user phone number
+	 *
+	 * @return string value of $userPhoneNumber
+	 */
+	public function getUserPhoneNumber() {
+		return $this->userPhoneNumber;
+	}
 
 	/**
 	 * mutator method for user phone number
@@ -311,12 +351,12 @@ class User implements \JsonSerializable{
 	public function getUserPrivilege(): int {
 		return $this->userPrivilege;
 	}
+
 	/**
 	 * mutator method for user privilege
 	 *
-	 * @param int $newUserPrivilege user privilege range is from 0-120
-	 * @throws \RangeException when input is out of range
-	 **/
+	 * @param int $userPrivilege
+	 */
 	public function setUserPrivilege(int $userPrivilege): void {
 		if($userPrivilege !== 0 && $userPrivilege !== 1) {
 			throw(new \RangeException("user privilege is out of range"));
@@ -432,7 +472,7 @@ class User implements \JsonSerializable{
 	public static function getUserByUserFamilyId(\PDO $pdo, $userFamilyId) : User {
 
 		try {
-			$userFamilyIdId = self::validateUuid($userFamilyId);
+			$userFamilyId = self::validateUuid($userFamilyId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
