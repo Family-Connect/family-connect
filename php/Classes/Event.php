@@ -438,40 +438,40 @@ class Event implements \JsonSerializable {
 	 * get the Event by event family id
 	 *
 	 * @param \PDO $pdo PDO connection object
-	 * @param Uuid|string $eventFamilyId event id to search by
+	 * @param string $eventFamilyId event id to search by
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	public static function getEventByEventFamilyId(\PDO $pdo, $eventFamilyId): ?Event {
-		// sanitize the eventId before searching
-		try {
+
+	public static function getEventByEventFamilyId(\PDO $pdo, $eventFamilyId) : \SplFixedArray {
+	try {
 			$eventFamilyId = self::validateUuid($eventFamilyId);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
-		}
+	}
 
-		// create query template
-		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM 					event WHERE eventFamilyId = :eventFamilyId";
-		$statement = $pdo->prepare($query);
-		// bind the eventFamilyId to the place holder in the template
-		$parameters = ["eventFamilyId" => $eventFamilyId->getBytes()];
-		$statement->execute($parameters);
+	// create query template
+	$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM 					event WHERE eventFamilyId = :eventFamilyId";
+	$statement = $pdo->prepare($query);
+	// bind the eventFamilyId to the place holder in the template
+	$parameters = ["eventFamilyId" => $eventFamilyId->getBytes()];
+	$statement->execute($parameters);
 
-		// grab the event from mySQL
-		try {
-			$eventFamilyId = null;
-			$statement->setFetchMode(\PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false) {
-				$eventFamilyId = new EventFamilyId($row["eventId"], $row["eventFamilyId"], $row["eventUserId"],
-					$row["eventContent"], $row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
-			}
-		} catch(\Exception $exception) {
-			//if the row couldn't be converted, rethrow it
-			throw(new \PDOException($exception->getMessage(), 0, $exception));
-		}
-
-		return ($eventFamilyId);
+	// build an array of events
+		$events = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+				try {
+					$event = new Event($row["eventId"], $row["eventFamilyId"], $row["eventUserId"],
+						$row["eventContent"], $row["eventEndDate"], $row["eventName"], $row["eventEndDate"]);
+					$events[$events->key()] = $event;
+					$events->next();
+				} catch(\Exception $exception) {
+					// if row couldn't be converted, rethrow it
+					throw(new \PDOException($exception->getMessage(), 0, $exception));
+				}
+				}
+	return ($events);
 	}
 
 	/**
