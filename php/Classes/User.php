@@ -514,7 +514,7 @@ public function getUserEmail() {
 	 * @param string $userEmail
 	 * @return User
 	 */
-	public static function getUserByUserEmail(\PDO $pdo, $userEmail) : User {
+	public static function getUserByUserEmail(\PDO $pdo, $userEmail) : ?User {
 
 		try {
 			$userEmail = filter_var($userEmail, FILTER_VALIDATE_EMAIL);
@@ -545,6 +545,53 @@ public function getUserEmail() {
 		return ($user);
 	}
 
+		/**
+		 * gets the User by Activation Token
+		 *
+		 * @param \PDO $pdo PDO connection object
+		 * @param Uuid|string $userActivationToken Activation Token to search by
+		 * @return User|null user found or null if not found
+		 * @throws \PDOException when mySQL related errors occur
+		 * @throws \TypeError when variables are not the correct data type
+		 **/
+		//Todo return single item
+		/**
+		 * @param \PDO $pdo
+		 * @param string $userActivationToken
+		 * @return User
+		 */
+		public static function getUserByActivationToken(\PDO $pdo, $userActivationToken) : ?User {
+
+			$userActivationToken = trim($userActivationToken);
+			if(ctype_xdigit($userActivationToken) === false) {
+				throw(new \InvalidArgumentException("user activation token is empty or in the wrong format"));
+			}
+
+			// create query template
+			$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM `user` WHERE userActivationToken = :userActivationToken";
+			$statement = $pdo->prepare($query);
+			// bind the user Activation Token to the place holder in the template
+			$parameters = ["userActivationToken" => $userActivationToken];
+			$statement->execute($parameters);
+
+
+			try {
+				$user = null;
+				$statement->setFetchMode(\PDO::FETCH_ASSOC);
+				$row = $statement->fetch();
+				if($row !== false) {
+					$user = new User($row["userId"], $row["userFamilyId"], $row["userActivationToken"], $row["userAvatar"], $row["userDisplayName"], $row["userEmail"], $row["userHash"], $row["userPhoneNumber"], $row["userPrivilege"]);
+				}
+
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+			return ($user);
+		}
+
+
+
 	/**
 	 * formats the state variables for JSON serialization
 	 *
@@ -560,5 +607,6 @@ public function getUserEmail() {
 
 		return ($fields);
 	}
+
 
 }
