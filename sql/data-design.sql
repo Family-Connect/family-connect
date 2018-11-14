@@ -85,7 +85,7 @@ CREATE TABLE comment (
 	commentTaskId BINARY(16),
 	commentUserId BINARY(16) NOT NULL,
 	commentContent VARCHAR(855),
-	commentDate DATETIME (6), NOT NULL
+	commentDate DATETIME (6) NOT NULL,
 
 	INDEX(commentEventId),
 	INDEX(commentTaskId),

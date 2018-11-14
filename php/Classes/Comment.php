@@ -24,7 +24,7 @@ class Comment {
 	use ValidateDate;
 	/**
 	 * id for comment; this is the primary key
-	 * @varUuid $commentId
+	 * @var Uuid $commentId
 	 **/
 	private $commentId;
 	/**
@@ -49,7 +49,7 @@ class Comment {
 	private $commentContent;
 	/**
 	 * actual time that the comment was posted
-	 * @var Datetime $commentDate
+	 * @var \DateTime $commentDate
 	 **/
 	private $commentDate;
 
@@ -239,7 +239,7 @@ public function setCommentContent(string $newCommentContent) : void {
  *
  * @return \DateTime value of comment date
  */
-public function getCommentDate(): DateTime {
+public function getCommentDate(): \DateTime {
 	return($this->commentDate);
     }
 /**
@@ -271,6 +271,10 @@ public function insert(\PDO $pdo) : void {
 	// create query template
 	$query = "INSERT INTO comment(commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate) VALUES(:commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate)";
 	$statement = $pdo->prepare($query);
+
+	$formattedDate = $this->commentDate->format("Y-m-d H:i:s.u");
+	$parameters = ["commentId" =>$this->commentId, "commentEventId" => $this->commentEventId, "commentTaskId" => $this->commentTaskId, "commentUserId" => $this->commentUserId, "commentContent" => $this->commentContent, "commentDate" => $formattedDate];
+	$statement->execute($parameters);
 }
 
 /**
@@ -299,9 +303,13 @@ public function delete(\PDO $pdo) : void {
  **/
 public function update(\PDO $pdo) : void {
 	// create query template
-	$query = "UPDATE comment SET commentId = :commentId, commentEventId = :commentEventId, commentTaskId = :commentTaskId, commentUserId = :commentUserId, commentContent = :commentContent, commentDate = :commentDate WHERE patientId = :patientId";
+	$query = "UPDATE comment SET commentId = :commentId, commentEventId = :commentEventId, commentTaskId = :commentTaskId, commentUserId = :commentUserId, commentContent = :commentContent, commentDate = :commentDate WHERE commentId = :commentId";
 	//TODO create parameters for date and format date to mysql specifications
 	$statement = $pdo->prepare($query);
+
+	$formattedDate = $this->commentDate->format("Y-m-d H:i:s.u");
+	$parameters = ["commentId" =>$this->commentId, "commentEventId" => $this->commentEventId, "commentTaskId" => $this->commentTaskId, "commentUserId" => $this->commentUserId, "commentContent" => $this->commentContent, "commentDate" => $formattedDate];
+	$statement->execute($parameters);
 }
 
 /**
@@ -370,19 +378,19 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
 		$statement->execute($parameters);
 
 		// build an array of comments
-		$comment = new \SplFixedArray($statement->rowCount());
+		$comments = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
-				$comment [$comment->key()] = $comment;
-				$comment->next();
+				$comments[$comments->key()] = $comment;
+				$comments->next();
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($comment);
+		return($comments);
 	}
 
 /**
@@ -412,19 +420,19 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
 		$statement->execute($parameters);
 
 		// build an array of comments
-		$comment = new \SplFixedArray($statement->rowCount());
+		$comments = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
-				$comment [$comment->key()] = $comment;
-				$comment->next();
+				$comments [$comments->key()] = $comment;
+				$comments->next();
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($comment);
+		return($comments);
 	}
 
 /**
@@ -454,19 +462,19 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
 		$statement->execute($parameters);
 
 		// build an array of comments
-		$comment = new \SplFixedArray($statement->rowCount());
+		$comments = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
-				$comment [$comment->key()] = (object) ["comment"=>$comment, "userDisplayName"=>$row["userDisplayName"]];
-				$comment->next();
+				$comments [$comments->key()] = (object) ["comment"=>$comment, "userDisplayName"=>$row["userDisplayName"]];
+				$comments->next();
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($comment);
+		return($comments);
 	}
 
 /**
@@ -487,7 +495,7 @@ public static function getCommentByCommentContent(\PDO $pdo, $commentContent) : 
 	}
 
 	// create query template
-	$query = "SELECT commentId, commentTaskId, commentEventId, commentUserId, commentContent, commentDate FROM comment WHERE commentContent = :commentContent";
+	$query = "SELECT commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentContent = :commentContent";
 	$statement = $pdo->prepare($query);
 
 	// bind the comment content to the place holder in the template
@@ -499,9 +507,9 @@ public static function getCommentByCommentContent(\PDO $pdo, $commentContent) : 
 	$statement->setFetchMode(\PDO::FETCH_ASSOC);
 	while(($row = $statement->fetch()) !== false) {
 		try {
-			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentEventId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
-			$comment[$comment->key()] = $comment;
-			$comment->next();
+			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
+			$comments[$comments->key()] = $comment;
+			$comments->next();
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
@@ -518,7 +526,12 @@ public static function getCommentByCommentContent(\PDO $pdo, $commentContent) : 
 	public function jsonSerialize() : array {
 		$fields = get_object_vars($this);
 
-		$fields["commentContent"] = $this->commentContent->toString();
-		$fields["commentDate"] = $this->commentDate->toString();
+		$fields["commentId"] = $this->commentId->toString();
+		$fields["commentEventId"] = $this->commentEventId->toString();
+		$fields["commentTaskId"] = $this->commentTaskId->toString();
+		$fields["commentUserId"] = $this->commentUserId->toString();
+
+		$fields["commentDate"] = round(floatval($this->commentDate->format("U.u")) * 1000);
+		return($fields);
 	}
 }
