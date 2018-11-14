@@ -476,6 +476,32 @@ event WHERE eventUserId = :eventUserId";
 	return ($events);
 	}
 
+	/**gets the Event by content
+	 *
+	 * @param  \PDO $pdo PDO connection object
+	 * @param string $eventContent event content to search for
+	 * @return \SplFixedArray SplFixedArray of events found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	 public static function getEventByEventContent(\PDO $pdo, string  $eventContent) : \SplFixedArray {
+	 	// sanitize the description before searching
+		 $eventContent = trim($eventContent);
+		 $eventContent = filter_var($eventContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		 if(empty($eventContent) === true) {
+		 		throw(new \PDOException("event content is invalid"));
+		 }
+
+		 // escape any mySQL wild cards
+		 $eventContent = str_replace("_", "\\_", str_replace("%", "\\%", $eventContent));
+
+		 // create query template
+		 $query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate 						FROM event WHERE eventContent LIKE :eventContent";
+		 $statement = $pdo->prepare($query);
+
+	 }
+
+
 	/**
 	 * get current Events by family id
 	 *
