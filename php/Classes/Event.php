@@ -411,7 +411,7 @@ class Event implements \JsonSerializable {
 		}
 
 		// create query template
-		$query = "SELECT eventUserId, eventFamilyId, eventContent, eventEndDate, eventName, eventStartDate FROM event WHERE 					eventUserId = :eventUserId";
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM event WHERE eventUserId = :eventUserId";
 		$statement = $pdo->prepare($query);
 
 		// bind the eventUserId to the place holder in the template
@@ -451,7 +451,7 @@ class Event implements \JsonSerializable {
 		}
 
 		// create query template
-		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate WHERE 					eventFamilyId = :eventFamilyId";
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM 					event WHERE eventFamilyId = :eventFamilyId";
 		$statement = $pdo->prepare($query);
 		// bind the eventFamilyId to the place holder in the template
 		$parameters = ["eventFamilyId" => $eventFamilyId->getBytes()];
@@ -463,13 +463,14 @@ class Event implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$eventFamilyId = new EventFamilyId($row["eventId"], $row["eventFamilyId"], $row["eventUserId"], 					$row["eventContent"],
-					$row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
+				$eventFamilyId = new EventFamilyId($row["eventId"], $row["eventFamilyId"], $row["eventUserId"],
+					$row["eventContent"], $row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
 			}
 		} catch(\Exception $exception) {
 			//if the row couldn't be converted, rethrow it
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
+
 		return ($eventFamilyId);
 	}
 
@@ -490,7 +491,7 @@ class Event implements \JsonSerializable {
 		}
 
 		// create query template
-		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM event 					WHERE eventStartDate >= NOW() AND eventFamilyId = :eventFamilyId";
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM 					event WHERE eventStartDate >= NOW() AND eventFamilyId = :eventFamilyId";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
