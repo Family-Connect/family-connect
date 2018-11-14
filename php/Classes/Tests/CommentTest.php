@@ -7,7 +7,7 @@
  */
 namespace FamConn\FamilyConnect\Test;
 
-use FamConn\FamilyConnect\{User, Comment, Family};
+use FamConn\FamilyConnect\{User, Comment, Family, Event, Task};
 
 // grab the class under scrutiny
 require_once("FamilyConnectTest.php");
@@ -79,20 +79,37 @@ class CommentTest extends FamilyConnectTest {
 	public final function setUp()  : void {
 		// run the default setUp() method first
 		parent::setUp();
-		$eventId=generateUuidV4();
-		$taskId=generateUuidV4();
 		$userId=generateUuidV4();
+
 		$familyId=generateUuidV4();
-		$commentDate=new \DateTime();
 		$familyName = "Garcia";
+		//create and insert a Family to own the test Comment
 		$this->family = new Family($familyId, $familyName);
 		$this->family->insert($this->getPDO());
+		$this->VALID_EVENTCONTENT = "PHPunit is passing";
+		$this->VALID_EVENTENDDATE = new \DateTime();
+		$this->VALID_EVENSTARTDATE = new \DateTime();
+		// create and insert event to be connected with the test Connect
+		$eventId = generateUuidV4();
+		$this->event = new Event($eventId, $familyId, $userId, $this->VALID_EVENTCONTENT, $this->VALID_EVENTENDDATE, "event name", $this->VALID_EVENTSTARTDATE);
+		$this->event->insert($this->getPDO());
+
+		$taskEventId = generateUuidV4();
+		$taskUserId = generateUuidV4();
+		$taskDescription = "PHPunit is passing";
+		$taskDueDate = new \DateTime();
+		$taskIsComplete = "PHPunit is passing";
+		$taskName = "PHPunit is passing";
+		//create and insert task to be connected with the test Connect
+		$taskId = generateUuidV4();
+		$this->task = new Task($taskId, $taskEventId, $taskUserId, $taskDescription, $taskDueDate, $taskIsComplete, $taskName);
 
 		$userActivationToken="0CB1A0E520F194FF2226441E21CEC775";
 		$password = "abc123";
 		$VALID_PROFILE_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
 		//create and insert a User to own the test Comment
 		$this->user = new User($userId, $familyId, $userActivationToken, "this is the url where avatar goes", "fmunoz11", "fmunoz11@hotmail.com", $VALID_PROFILE_HASH, "5555055555", "0");
+
 		$this->VALID_COMMENTID = generateUuidV4();
 		$this->VALID_COMMENTEVENTID = generateUuidV4();
 		$this->VALID_COMMENTTASKID = generateUuidV4();
