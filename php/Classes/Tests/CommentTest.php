@@ -96,15 +96,15 @@ class CommentTest extends FamilyConnectTest {
 		$this->event = new Event($eventId, $familyId, $userId, $eventContent, $eventStartDate, "event name", $eventEndDate);
 		$this->event->insert($this->getPDO());
 
-		$taskEventId = generateUuidV4();
-		$taskUserId = generateUuidV4();
+
 		$taskDescription = "PHPunit is passing";
 		$taskDueDate = new DateTime();
 		$taskIsComplete = "PHPunit is passing";
 		$taskName = "PHPunit is passing";
 		//create and insert task to be connected with the test Connect
 		$taskId = generateUuidV4();
-		$this->task = new Task($taskId, $taskEventId, $taskUserId, $taskDescription, $taskDueDate, $taskIsComplete, $taskName);
+		$this->task = new Task($taskId, $eventId, $userId, $taskDescription, $taskDueDate, $taskIsComplete, $taskName);
+		$this->task->insert($this->getPDO());
 
 		$userActivationToken="0CB1A0E520F194FF2226441E21CEC775";
 		$password = "abc123";
