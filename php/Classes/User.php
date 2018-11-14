@@ -560,7 +560,7 @@ public function getUserEmail() {
 		 * @param string $userActivationToken
 		 * @return User
 		 */
-		public static function getUserByActivationToken(\PDO $pdo, $userActivationToken) : ?User {
+		public static function getUserByUserActivationToken(\PDO $pdo, $userActivationToken) : ?User {
 
 			$userActivationToken = trim($userActivationToken);
 			if(ctype_xdigit($userActivationToken) === false) {
