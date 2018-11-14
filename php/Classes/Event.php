@@ -484,12 +484,12 @@ event WHERE eventUserId = :eventUserId";
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	 public static function getEventByEventContent(\PDO $pdo, string  $eventContent) : \SplFixedArray {
-	 	// sanitize the description before searching
+	 public static function getEventByEventContent(\PDO $pdo, string $eventContent) : \SplFixedArray {
+		 // sanitize the description before searching
 		 $eventContent = trim($eventContent);
 		 $eventContent = filter_var($eventContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		 if(empty($eventContent) === true) {
-		 		throw(new \PDOException("event content is invalid"));
+			 throw(new \PDOException("event content is invalid"));
 		 }
 
 		 // escape any mySQL wild cards
@@ -499,7 +499,28 @@ event WHERE eventUserId = :eventUserId";
 		 $query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate 						FROM event WHERE eventContent LIKE :eventContent";
 		 $statement = $pdo->prepare($query);
 
+		 // bind the event content to the place holder in the template
+		 $eventContent = "%$eventContent%";
+		 $parameters = ["eventContent" => $eventContent];
+		 $statement->execute($parameters);
+
+		 //build an array of events
+		 $events = new \SplFixedArray($statement->rowCount());
+		 $statement->setFetchMode(\PDO::FETCH_ASSOC);
+		 while(($row = $statement->fetch()) !== false) {
+			 try {
+				 $event = new Event($row["eventId"], $row["eventFamilyId"], $row["eventUserId"], $row["eventContent"],
+					 $row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
+				 $events[$events->key()] = $event;
+				 $events->next();
+			 } catch(\Exception $exception) {
+				 // if the row couldn't be converted, rethrow it
+				 throw(new \PDOException($exception->getMessage(), 0, $exception));
+			 }
+		 }
+		 return($events);
 	 }
+
 
 
 	/**
