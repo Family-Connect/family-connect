@@ -7,6 +7,7 @@
  */
 namespace FamConn\FamilyConnect\Test;
 
+use DateTime;
 use FamConn\FamilyConnect\{User, Comment, Family, Event, Task};
 
 // grab the class under scrutiny
@@ -69,7 +70,7 @@ class CommentTest extends FamilyConnectTest {
 
 	/**
 	 * timestamp of the Comment; this starts as null and is assigned later
-	 * @var \DateTime $VALID_COMMENTDATE
+	 * @var DateTime $VALID_COMMENTDATE
 	 **/
 	protected $VALID_COMMENTDATE = null;
 
@@ -86,18 +87,19 @@ class CommentTest extends FamilyConnectTest {
 		//create and insert a Family to own the test Comment
 		$this->family = new Family($familyId, $familyName);
 		$this->family->insert($this->getPDO());
-		$this->VALID_EVENTCONTENT = "PHPunit is passing";
-		$this->VALID_EVENTENDDATE = new \DateTime();
-		$this->VALID_EVENSTARTDATE = new \DateTime();
+
+		$eventContent = "PHPunit is passing";
+		$eventEndDate = new DateTime();
+		$eventStartDate = new DateTime();
 		// create and insert event to be connected with the test Connect
 		$eventId = generateUuidV4();
-		$this->event = new Event($eventId, $familyId, $userId, $this->VALID_EVENTCONTENT, $this->VALID_EVENTENDDATE, "event name", $this->VALID_EVENTSTARTDATE);
+		$this->event = new Event($eventId, $familyId, $userId, $eventContent, $eventStartDate, "event name", $eventEndDate);
 		$this->event->insert($this->getPDO());
 
 		$taskEventId = generateUuidV4();
 		$taskUserId = generateUuidV4();
 		$taskDescription = "PHPunit is passing";
-		$taskDueDate = new \DateTime();
+		$taskDueDate = new DateTime();
 		$taskIsComplete = "PHPunit is passing";
 		$taskName = "PHPunit is passing";
 		//create and insert task to be connected with the test Connect
@@ -115,7 +117,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->VALID_COMMENTTASKID = generateUuidV4();
 		$this->VALID_COMMENTUSERID = generateUuidV4();
 		$this->VALID_COMMENTCONTENT = "PHPUnit is passing";
-		$this->VALID_COMMENTDATE = new \DateTime();
+		$this->VALID_COMMENTDATE = new DateTime();
 		$this->user->insert($this->getPDO());
 
 	}
