@@ -269,7 +269,7 @@ public function insert(\PDO $pdo) : void {
 
 	//TODO format commentDate to mySql specifications
 	// create query template
-	$query = "INSERT INTO comment(commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate) VALUES(:commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate)";
+	$query = "INSERT INTO comment(commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate) VALUES(:commentId, :commentEventId, :commentTaskId, :commentUserId, :commentContent, :commentDate)";
 	$statement = $pdo->prepare($query);
 
 	$formattedDate = $this->commentDate->format("Y-m-d H:i:s.u");

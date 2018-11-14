@@ -84,7 +84,6 @@ class CommentTest extends FamilyConnectTest {
 		$userId=generateUuidV4();
 		$familyId=generateUuidV4();
 		$commentDate=new \DateTime();
-		$this->comment = new Comment(generateUuidV4(), $eventId, $taskId, $userId, "Family get together on Thursday.", $commentDate);
 		$familyName = "Garcia";
 		$this->family = new Family($familyId, $familyName);
 		$this->family->insert($this->getPDO());
@@ -99,8 +98,8 @@ class CommentTest extends FamilyConnectTest {
 		$this->VALID_COMMENTEVENTID = generateUuidV4();
 		$this->VALID_COMMENTTASKID = generateUuidV4();
 		$this->VALID_COMMENTUSERID = generateUuidV4();
-		$this->VALID_COMMENTCONTENT = generateUuidV4();
-		$this->VALID_COMMENTDATE = generateUuidV4();
+		$this->VALID_COMMENTCONTENT = "PHPUnit is passing";
+		$this->VALID_COMMENTDATE = new \DateTime();
 	}
 
 	/**
@@ -367,35 +366,4 @@ class CommentTest extends FamilyConnectTest {
 		$comment = Comment::getCommentByCommentContent($this->getPDO(), "comment content here");
 		$this->assertCount(0, $comment);
 	}
-
-
-
-	/**
-	 * test grabbing all Comments
-	 **/
-	public function testGetAllValidComments() : void {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("comment");
-
-		// create a new Comment and insert to into mySQL
-		$commentId = generateUUidV4();
-		$comment = new Comment($commentId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
-		$comment->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$results = Comment::getAllComments($this->getPDO(),
-		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment")));
-		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment", $results);
-
-		//grab the result form the array and validate it
-		$pdoComment = $results[0];
-
-		$this->assertEquals($pdoComment->getCommentId(), $comment);
-		$this->assertEquals($pdoComment->getCommentEventId(), $this->VALID_COMMENTEVENTID);
-		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
-		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
-		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
-	}
-
 }
