@@ -566,7 +566,36 @@ event WHERE eventUserId = :eventUserId";
 		return($events);
 	}
 
+	/**
+	 * gets all Events
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SPLFixedArray of Events found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getAllEvents(\PDO $pdo) : \SplFixedArray {
+		// create query template
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM 						event";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
 
+		// build an array of events
+		$events = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$event = new Event($row["eventId"], $row["eventFamilyId"], $row["eventUserId"], $row["eventContent"],
+					$row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
+				$events[$events->key()] = $event;
+				$events->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($events);
+	}
 
 	/**
 	 * get current Events by family id
