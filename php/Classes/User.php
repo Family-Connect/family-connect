@@ -469,7 +469,7 @@ public function getUserEmail() {
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
 	//Todo return single item
-	public static function getUserByUserFamilyId(\PDO $pdo, $userFamilyId) : User {
+	public static function getUserByUserFamilyId(\PDO $pdo, $userFamilyId) : \SplFixedArray {
 
 		try {
 			$userFamilyId = self::validateUuid($userFamilyId);
@@ -478,26 +478,25 @@ public function getUserEmail() {
 		}
 
 		// create query template
-		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName, userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userFamilyId = :userFamilyId";
+		$query = "SELECT userId, userFamilyId, userActivationToken, userAvatar, userDisplayName,userEmail, userHash, userPhoneNumber, userPrivilege FROM user WHERE userFamilyId = :userFamilyId";
 		$statement = $pdo->prepare($query);
 		// bind the user family id to the place holder in the template
 		$parameters = ["userFamilyId" => $userFamilyId->getBytes()];
 		$statement->execute($parameters);
-
-
-		try {
-			$user = null;
-			$statement->setFetchMode(\PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false) {
+		// build an array of users
+		$users = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
 				$user = new User($row["userId"], $row["userFamilyId"], $row["userActivationToken"], $row["userAvatar"], $row["userDisplayName"], $row["userEmail"], $row["userHash"], $row["userPhoneNumber"], $row["userPrivilege"]);
+				$users[$users->key()] = $user;
+				$users->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
-
-		} catch(\Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-		return ($user);
+		return($users);
 	}
 
 	/**
