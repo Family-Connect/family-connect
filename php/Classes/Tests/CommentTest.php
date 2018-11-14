@@ -39,6 +39,16 @@ class CommentTest extends FamilyConnectTest {
 /	 */
 	protected $family = null;
 	/**
+	 * Event linked to the comment, this is for foreign key relations
+	 * @var Event event
+	 */
+	protected $event = null;
+	/**
+	 * Task linked to the comment, this is for foreign key relations
+	 * @var Task task
+	 */
+	protected $task = null;
+	/**
 	 * Id that belongs to the comment; this a primary key
 	 * @var STRING $VALID_COMMENTID
 	 **/
@@ -80,46 +90,40 @@ class CommentTest extends FamilyConnectTest {
 	public final function setUp()  : void {
 		// run the default setUp() method first
 		parent::setUp();
-		$userId=generateUuidV4();
+		$this->VALID_COMMENTCONTENT = "PHPUnit is passing";
+		$this->VALID_COMMENTDATE = new \DateTime();
 
+		//create and insert a Family to own the test Comment
 		$familyId=generateUuidV4();
 		$familyName = "Garcia";
-		//create and insert a Family to own the test Comment
 		$this->family = new Family($familyId, $familyName);
 		$this->family->insert($this->getPDO());
 
-		$eventContent = "PHPunit is passing";
-		$eventEndDate = new DateTime();
-		$eventStartDate = new DateTime();
-		// create and insert event to be connected with the test Connect
-		$eventId = generateUuidV4();
-		$this->event = new Event($eventId, $familyId, $userId, $eventContent, $eventStartDate, "event name", $eventEndDate);
-		$this->event->insert($this->getPDO());
 
-
-		$taskDescription = "PHPunit is passing";
-		$taskDueDate = new DateTime();
-		$taskIsComplete = "PHPunit is passing";
-		$taskName = "PHPunit is passing";
-		//create and insert task to be connected with the test Connect
-		$taskId = generateUuidV4();
-		$this->task = new Task($taskId, $eventId, $userId, $taskDescription, $taskDueDate, $taskIsComplete, $taskName);
-		$this->task->insert($this->getPDO());
-
+		//create and insert a User to own the test Comment
+		$userId=generateUuidV4();
 		$userActivationToken="0CB1A0E520F194FF2226441E21CEC775";
 		$password = "abc123";
 		$VALID_PROFILE_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
-		//create and insert a User to own the test Comment
 		$this->user = new User($userId, $familyId, $userActivationToken, "this is the url where avatar goes", "fmunoz11", "fmunoz11@hotmail.com", $VALID_PROFILE_HASH, "5555055555", "0");
-
-		$this->VALID_COMMENTID = generateUuidV4();
-		$this->VALID_COMMENTEVENTID = generateUuidV4();
-		$this->VALID_COMMENTTASKID = generateUuidV4();
-		$this->VALID_COMMENTUSERID = generateUuidV4();
-		$this->VALID_COMMENTCONTENT = "PHPUnit is passing";
-		$this->VALID_COMMENTDATE = new DateTime();
 		$this->user->insert($this->getPDO());
 
+		// create and insert event to be connected with the test Connect
+		$eventId = generateUuidV4();
+		$eventContent = "PHPunit is passing";
+		$eventEndDate = new DateTime();
+		$eventStartDate = new DateTime();
+		$this->event = new Event($eventId, $familyId, $userId, $eventContent, $eventStartDate, "event name", $eventEndDate);
+		$this->event->insert($this->getPDO());
+
+		//create and insert task to be connected with the test Connect
+		$taskId = generateUuidV4();
+		$taskDescription = "PHPunit is passing";
+		$taskDueDate = new \DateTime();
+		$taskIsComplete = 0;
+		$taskName = "PHPunit is passing";
+		$this->task = new Task($taskId, $eventId, $userId, $taskDescription, $taskDueDate, $taskIsComplete, $taskName);
+		$this->task->insert($this->getPDO());
 	}
 
 	/**
@@ -131,7 +135,7 @@ class CommentTest extends FamilyConnectTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentId = generateUuidV4();
-		$comment = new Comment($commentId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
+		$comment = new Comment($commentId, $this->event->getEventId(), $this->task->getTaskId(), $this->user->getUserId(), $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
 		//grab the data from mySQL and enforce the fields match our expectations
