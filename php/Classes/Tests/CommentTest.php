@@ -7,7 +7,7 @@
  */
 namespace FamConn\FamilyConnect\Test;
 
-use FamConn\FamilyConnect\{Event, Task, User, Comment};
+use FamConn\FamilyConnect\{User, Comment, Family};
 
 // grab the class under scrutiny
 require_once("FamilyConnectTest.php");
@@ -27,6 +27,16 @@ require_once(dirname(__DIR__, 2) . "/lib/uuid.php");
  **/
 
 class CommentTest extends FamilyConnectTest {
+	/**
+	 * User linked with the Comment; this is also for foreign key relations
+	 * @var User user
+	 */
+	protected $user = null;
+	/**
+	 * Family linked to the Comment; this is for foreign key relations
+	 * @var Family family
+/	 */
+	protected $family = null;
 	/**
 	 * Id that belongs to the comment; this a primary key
 	 * @var STRING $VALID_COMMENTID
@@ -58,6 +68,12 @@ class CommentTest extends FamilyConnectTest {
 	protected $VALID_COMMENTCONTENT = null;
 
 	/**
+	 * timestamp of the Comment; this starts as null and is assigned later
+	 * @var \DateTime $VALID_COMMENTDATE
+	 **/
+	protected $VALID_COMMENTDATE = null;
+
+	/**
 	 * create dependent objects before running each test
 	 **/
 	public final function setUp()  : void {
@@ -66,17 +82,25 @@ class CommentTest extends FamilyConnectTest {
 		$eventId=generateUuidV4();
 		$taskId=generateUuidV4();
 		$userId=generateUuidV4();
+		$familyId=generateUuidV4();
 		$commentDate=new \DateTime();
 		$this->comment = new Comment(generateUuidV4(), $eventId, $taskId, $userId, "Family get together on Thursday.", $commentDate);
+		$familyName = "Garcia";
+		$this->family = new Family($familyId, $familyName);
+		$this->family->insert($this->getPDO());
 
-		$familyId=generateUuidV4();
-		$userActivationToken="";
+		$userActivationToken="0CB1A0E520F194FF2226441E21CEC775";
 		$password = "abc123";
 		$this->VALID_PROFILE_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
 		//create and insert a User to own the test Comment
-		$this->user = new User($userId, $familyId, $userActivationToken, "this is the url for avatar goes", "fmunoz11", "fmunoz11@hotmail.com", $this->VALID_PROFILE_HASH, "555-505-5555", "0 or 1");
+		$this->user = new User($userId, $familyId, $userActivationToken, "this is the url where avatar goes", "fmunoz11", "fmunoz11@hotmail.com", $this->VALID_PROFILE_HASH, "5555055555", "0");
 		$this->user->insert($this->getPDO());
-
+		$this->VALID_COMMENTID = generateUuidV4();
+		$this->VALID_COMMENTEVENTID = generateUuidV4();
+		$this->VALID_COMMENTTASKID = generateUuidV4();
+		$this->VALID_COMMENTUSERID = generateUuidV4();
+		$this->VALID_COMMENTCONTENT = generateUuidV4();
+		$this->VALID_COMMENTDATE = generateUuidV4();
 	}
 
 	/**
@@ -88,7 +112,7 @@ class CommentTest extends FamilyConnectTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentId = generateUUidV4();
-		$comment = new Comment($commentId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
 		//grab the data from mySQL and enforce the fields match our expectations
@@ -99,6 +123,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
 
 	/**
@@ -110,7 +135,7 @@ class CommentTest extends FamilyConnectTest {
 
 		//create a new Comment and insert to into mySQL
 		$commentId = generateUUidV4();
-		$comment = new Comment($commentId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
 		//edit the Comment and update it in mySQL
@@ -125,6 +150,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
 
 	/**
@@ -136,7 +162,7 @@ class CommentTest extends FamilyConnectTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentId = generateUUidV4();
-		$comment = new Comment($commentId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
 		// delete the Comment from mySQL
@@ -167,7 +193,7 @@ class CommentTest extends FamilyConnectTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentId = generateUUidV4();
-		$comment = new Comment($commentId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -184,6 +210,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
 
 	/**
@@ -195,7 +222,7 @@ class CommentTest extends FamilyConnectTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentEventId = generateUUidV4();
-		$comment = new Comment($commentEventId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentEventId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -212,6 +239,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
 
 	/**
@@ -232,7 +260,7 @@ class CommentTest extends FamilyConnectTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentTaskId = generateUUidV4();
-		$comment = new Comment($commentTaskId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentTaskId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -249,6 +277,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
 
 	/**
@@ -269,7 +298,7 @@ class CommentTest extends FamilyConnectTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentUserId = generateUUidV4();
-		$comment = new Comment($commentUserId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentUserId, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -286,6 +315,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
 
 	/**
@@ -306,7 +336,7 @@ class CommentTest extends FamilyConnectTest {
 
 		// create a new Comment and insert to into mySQL
 		$commentContent = generateUUidV4();
-		$comment = new Comment($commentContent, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT);
+		$comment = new Comment($commentContent, $this->VALID_COMMENTEVENTID, $this->VALID_COMMENTTASKID, $this->VALID_COMMENTUSERID, $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -326,6 +356,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
 		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
 
 	/**
@@ -336,6 +367,8 @@ class CommentTest extends FamilyConnectTest {
 		$comment = Comment::getCommentByCommentContent($this->getPDO(), "comment content here");
 		$this->assertCount(0, $comment);
 	}
+
+
 
 	/**
 	 * test grabbing all Comments
