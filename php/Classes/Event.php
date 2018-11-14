@@ -451,9 +451,8 @@ class Event implements \JsonSerializable {
 		}
 
 		// create query template
-		$query = "SELECT eventUserId, eventFamilyId, eventContent, eventEndDate, eventName, eventStartDate WHERE eventFamilyId 					= :userId";
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate WHERE 					eventFamilyId = :eventFamilyId";
 		$statement = $pdo->prepare($query);
-
 		// bind the eventFamilyId to the place holder in the template
 		$parameters = ["eventFamilyId" => $eventFamilyId->getBytes()];
 		$statement->execute($parameters);
@@ -464,7 +463,7 @@ class Event implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$eventFamilyId = new EventFamilyId($row["eventId"], $row["eventFamilyId"], $row["eventUserId"], $row["eventContent"],
+				$eventFamilyId = new EventFamilyId($row["eventId"], $row["eventFamilyId"], $row["eventUserId"], 					$row["eventContent"],
 					$row["eventEndDate"], $row["eventName"], $row["eventStartDate"]);
 			}
 		} catch(\Exception $exception) {
