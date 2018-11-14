@@ -77,8 +77,6 @@ class CommentTest extends FamilyConnectTest {
 		$this->user = new User($userId, $familyId, $userActivationToken, "this is the url for avatar goes", "fmunoz11", "fmunoz11@hotmail.com", $this->VALID_PROFILE_HASH, "555-505-5555", "0 or 1");
 		$this->user->insert($this->getPDO());
 
-
-
 	}
 
 	/**
