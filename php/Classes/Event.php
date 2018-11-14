@@ -307,11 +307,11 @@ class Event implements \JsonSerializable {
 		$query = "INSERT INTO event(eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate) VALUES (:eventId, :eventFamilyId, :eventUserId, :eventContent, :eventEndDate, :eventName, :eventStartDate)";
 		$statement = $pdo->prepare($query);
 
-		//bind the member variables to the place holders in the template
+		//bind the member variables to the place holder in the template
 		$formattedStartDate = $this->eventStartDate->format("Y-m-d H:i:s.u");
 		$formattedEndDate = $this->eventEndDate->format("Y-m-d H:i:s.u");
 		//todo format end date time to mySQL specifications - completed
-		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" => $this->eventUserId->getBytes(), "eventEndDate" => $formattedEndDate, "eventContent" => $this->eventContent, "eventName" => $this->eventName, "eventStartDate" => $formattedStartDate];
+		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), 							"eventUserId" => $this->eventUserId->getBytes(), "eventEndDate" => $formattedEndDate, "eventContent" 							=> $this->eventContent, "eventName" => $this->eventName, "eventStartDate" => $formattedStartDate];
 		$statement->execute($parameters);
 	}
 
@@ -347,8 +347,10 @@ class Event implements \JsonSerializable {
 					eventEndDate = :eventEndDate, eventName = :eventName, eventStartDate = :eventStartDate WHERE eventId = :eventId";
 		$statement = $pdo->prepare($query);
 
-		$formattedDate = $this->eventStartDate->format("Y-m-d H:i:s.u");
-		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), "eventUserId" => $this->eventUserId->getBytes(), "eventContent" => $this->eventContent, "eventEndDate" => $formattedDate,"eventName" => $this->eventName, "eventStartDate" => $formattedDate];
+		//bind the member variables to the place holder in the template
+		$formattedStartDate = $this->eventStartDate->format("Y-m-d H:i:s.u");
+		$formattedEndDate = $this->eventEndDate->format("Y-m-d H:i:s.u");
+		$parameters = ["eventId" => $this->eventId->getBytes(), "eventFamilyId" => $this->eventFamilyId->getBytes(), 							"eventUserId" => $this->eventUserId->getBytes(), "eventEndDate" => $formattedEndDate, "eventContent" 							=> $this->eventContent, "eventName" => $this->eventName, "eventStartDate" => $formattedStartDate];
 		$statement->execute($parameters);
 	}
 

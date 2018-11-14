@@ -65,7 +65,7 @@ class EventTest extends FamilyConnectTest {
 	/**
 	 * Create dependent objects before running each test
 	 **/
-	public final function setUp() : void {
+	public final function setUp(): void {
 		// run the default setup method first
 		parent::setUp();
 		$password = "abc123";
@@ -78,7 +78,7 @@ class EventTest extends FamilyConnectTest {
 
 		// create and insert a Family to own the test User
 		$this->user = new User(generateUuidV4(), $this->family->getFamilyId(), $VALID_ACTIVATION_TOKEN,
-			"https://ubisafe.org/images/mini-clip-avatar-1.png", "joe3", 			"johnson@gmail.com",
+			"https://ubisafe.org/images/mini-clip-avatar-1.png", "joe3", "johnson@gmail.com",
 			$VALID_USERHASH, "5052553253", 0);
 		$this->user->insert($this->getPDO());
 
@@ -86,14 +86,14 @@ class EventTest extends FamilyConnectTest {
 		// calculate the date (use the time the unit test was set up)
 		$this->VALID_EVENTDATE = new \DateTime();
 
-		// format the event start date to use for testing
-		$this->VALID_EVENTSTARTDATE = new \DateTime();
-		$this->VALID_EVENTSTARTDATE->sub(new \DateInterval("P10D"));
-
 		// format the event end date to use for testing
 		$this->VALID_EVENTENDDATE = new \DateTime();
 		$this->VALID_EVENTENDDATE->add(new \DateInterval("P10D"));
-	}
+
+	// format the event start date to use for testing
+		$this->VALID_EVENTSTARTDATE = new \DateTime();
+		$this->VALID_EVENTSTARTDATE->sub(new \DateInterval("P10D"));
+}
 
 	/**
 	 * test inserting valid Event and verify that the actual mySQL data matches
@@ -147,7 +147,7 @@ class EventTest extends FamilyConnectTest {
 		$this->assertEquals($pdoEvent->getEventContent(), $this->VALID_EVENTCONTENT2);
 		$this->assertEquals($pdoEvent->getEventName(), $this->VALID_EVENTNAME);
 		//format the date to seconds since the beginning of time to avoid round off error
-		$this->assertEquals($pdoEvent->getEventEndDate()->getTimestamp(), $this->VALID_EVENTENDDATE->getTimestamp());
+		$this->assertEquals($pdoEvent->getEventEndDate(), $this->VALID_EVENTENDDATE);
 		$this->assertEquals($pdoEvent->getEventStartDate()->getTimestamp(), $this->VALID_EVENTSTARTDATE->getTimestamp());
 	}
 
@@ -298,12 +298,13 @@ class EventTest extends FamilyConnectTest {
 
 	/**
 	 * test grabbing an Event by content that does not exist
-	 **/
+
 	public function testGetInvalidEventByEventContent() : void {
 		// grab an event by content that does not exist
 		$event = Event::getEventByEventContent($this->getPDO(), "Comcast has the best service EVER");
 		$this->assertCount(0, $event);
 	}
+	 **/
 
 	/**
 	* test grabbing an Event by event name
@@ -340,12 +341,13 @@ class EventTest extends FamilyConnectTest {
 
 	/**
 	 * test grabbing an Event by a name that does not exist
-	 **/
+
 	public function testGetInvalidEventByEventName() : void {
 		// grab an event by a name that does not exist
 		$event = Event::getEventByEventName($this->getPDO(), "Xfinity has the best service EVER");
 		$this->assertCount(0, $event);
 	}
+	 **/
 
 	/**
  	 * test grabbing all Events
