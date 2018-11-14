@@ -104,14 +104,15 @@ public function getCommentId() : Uuid {
  **/
 public function setCommentId( $newCommentId) : void {
 	try {
-		$newCommentId = self ::ValidateUuid($newCommentId);
+		$uuid = self::ValidateUuid($newCommentId);
 	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 		$exceptionType = get_class($exception);
 		throw(new $exceptionType($exception->getMessage(), 0, $exception));
 	}
+	$this->commentId = $uuid;
 
 	// convert and store the comment id
-	$this->commentId = $newCommentId;
+	//$this->commentId = $newCommentId;
 }
 
 /**
@@ -273,7 +274,7 @@ public function insert(\PDO $pdo) : void {
 	$statement = $pdo->prepare($query);
 
 	$formattedDate = $this->commentDate->format("Y-m-d H:i:s.u");
-	$parameters = ["commentId" =>$this->commentId, "commentEventId" => $this->commentEventId, "commentTaskId" => $this->commentTaskId, "commentUserId" => $this->commentUserId, "commentContent" => $this->commentContent, "commentDate" => $formattedDate];
+	$parameters = ["commentId" =>$this->commentId->getBytes(), "commentEventId" => $this->commentEventId->getBytes(), "commentTaskId" => $this->commentTaskId->getBytes(), "commentUserId" => $this->commentUserId->getBytes(), "commentContent" => $this->commentContent, "commentDate" => $formattedDate];
 	$statement->execute($parameters);
 }
 
