@@ -9,6 +9,7 @@
 namespace FamConn\FamilyConnect;
 require_once("autoload.php");
 require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
+
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -48,7 +49,7 @@ class Comment {
 	 **/
 	private $commentContent;
 	/**
-	 * actual time that the comment was posted
+	 * actual time a comment is posted, in a PHP DateTime object
 	 * @var \DateTime $commentDate
 	 **/
 	private $commentDate;
@@ -68,7 +69,7 @@ class Comment {
 	 * @throws \Exception if some other exception occurs
 	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
 	 */
-	public function __construct($newCommentId, $newCommentEventId = null, $newCommentTaskId = null, $newCommentUserId, $newCommentContent, $newCommentDate = null) {
+	public function __construct($newCommentId, $newCommentEventId, $newCommentTaskId, $newCommentUserId,  string $newCommentContent, $newCommentDate = null) {
 		try {
 			$this->setCommentId($newCommentId);
 			$this->setCommentEventId($newCommentEventId);
@@ -76,11 +77,12 @@ class Comment {
 			$this->setCommentUserId($newCommentUserId);
 			$this->setCommentContent($newCommentContent);
 			$this->setCommentDate($newCommentDate);
-		} //determine what exception type was thrown
-		catch(\InvalidArgumentException | \RangeException | \TypeError $exception){
-		$exceptionType = get_class($exception);
-		throw(new $exceptionType($exception->getMessage(), 0, $exception));
-	}
+		}
+			//determine what exception type was thrown
+		catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception){
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
 }
 
 /**
@@ -89,7 +91,7 @@ class Comment {
  * @return Uuid value of comment id
  */
 public function getCommentId() : Uuid {
- return ($this->commentId);
+	return ($this->commentId);
 
 	//this outside of class
 	//$comment-getCommentId();
@@ -109,25 +111,24 @@ public function setCommentId( $newCommentId) : void {
 		$exceptionType = get_class($exception);
 		throw(new $exceptionType($exception->getMessage(), 0, $exception));
 	}
-	$this->commentId = $uuid;
 
 	// convert and store the comment id
-	//$this->commentId = $newCommentId;
+	$this->commentId = $uuid;
 }
 
 /**
  * accessor method for comment event id
  *
- * @return Uuid values of comment event id
+ * @return Uuid value of comment event id
  **/
-public function getCommentEventId() : ?Uuid{
+public function getCommentEventId() : Uuid{
 	return($this->commentEventId);
 }
 
 /**
  * mutator method for comment event id
  *
- * @param | Uuid $newCommentEventId new value of comment event id
+ * @param string | Uuid $newCommentEventId new value of comment event id
  * @throws \RangeException if $newCommentEventId is not positive
  * @throws \ TypeError if $newCommentEventId is not an integer
  **/
@@ -135,29 +136,29 @@ public function setCommentEventId( $newCommentEventId =null) : void {
 	if($newCommentEventId === null) {
 		$this->commentEventId=null;
 	}
-	try {
-		$uuid = self::validateUuid($newCommentEventId);
+		try {
+			$uuid = self::validateUuid($newCommentEventId);
 	}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-		$exceptionType = get_class($exception);
-		throw(new $exceptionType($exception->getMessage(), 0, $exception));
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 	}
 	// convert and store the comment event id
 	$this->commentEventId = $uuid;
 }
-//TODO make accessor/mutator for commentTaskId nullable commentEventId can be used for reference(done)
+
 	/**
 	 * accessor method for comment task id
 	 *
 	 * @return Uuid values of comment task id
 	 **/
-	public function getCommenTaskId() : ?Uuid{
+	public function getCommentTaskId() : Uuid{
 		return($this->commentTaskId);
 	}
 
 	/**
 	 * mutator method for comment task id
 	 *
-	 * @param | Uuid $newCommentTaskId new value of comment task id
+	 * @param string | Uuid $newCommentTaskId new value of comment task id
 	 * @throws \RangeException if $newCommentTaskId is not positive
 	 * @throws \ TypeError if $newCommentTaskId is not an integer
 	 **/
@@ -166,11 +167,12 @@ public function setCommentEventId( $newCommentEventId =null) : void {
 			$this->commentTaskId=null;
 		}
 		try {
-			$uuid = self::validateUuid($newCommentTaskId);
+				$uuid = self::validateUuid($newCommentTaskId);
 		}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+				$exceptionType = get_class($exception);
+				throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
+
 		// convert and store the comment task id
 		$this->commentTaskId = $uuid;
 	}
@@ -180,24 +182,25 @@ public function setCommentEventId( $newCommentEventId =null) : void {
  *
  * @return Uuid value of comment user id
  **/
-public function getCommentUserId() : Uuid {
+public function getCommentUserId() : Uuid{
 	return($this->commentUserId);
 }
 
 /**
  * mutator method for comment user id
  *
- * @param | Uuid $newCommentUserId new value of comment user id
+ * @param string | Uuid $newCommentUserId new value of comment user id
  * @throws \RangeException if $newCommentUserId is not positive
  * @throws \TypeError if $newCommentUserId is not an integer
  **/
 public function setCommentUserId( $newCommentUserId) : void {
 	try{
-		$uuid = self::validateUuid($newCommentUserId);
+			$uuid = self::validateUuid($newCommentUserId);
 	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-		$exceptionType = get_class($exception);
-		throw(new $exceptionType($exception->getMessage(), 0, $exception));
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 	}
+
 	// convert and store the comment user id
 	$this->commentUserId = $uuid;
 }
@@ -208,7 +211,7 @@ public function setCommentUserId( $newCommentUserId) : void {
  * @return string value of comment content
  **/
 public function getCommentContent() : string {
-	return($this->commentContent);
+			return($this->commentContent);
 }
 
 /**
@@ -216,8 +219,8 @@ public function getCommentContent() : string {
  *
  * @param string $newCommentContent new value of comment content
  * @throws \InvalidArgumentException if $newCommentContent is not a string or insecure
- * @throws \RangeException if $newComentContent is >855 characters
- * @throws \TypeError if $newcommentContent is not a string
+ * @throws \RangeException if $newCommentContent is >855 characters
+ * @throws \TypeError if $newCommentContent is not a string
  **/
 public function setCommentContent(string $newCommentContent) : void {
 	// verify the comment content is secure
@@ -226,6 +229,7 @@ public function setCommentContent(string $newCommentContent) : void {
 	if(empty($newCommentContent) === true) {
 		throw(new \InvalidArgumentException("comment content is empty or insecure"));
 	}
+
 	//verify the comment content will fit in the database
 	if(strlen($newCommentContent) >=855) {
 		throw(new \RangeException("comment content too large"));
@@ -252,27 +256,37 @@ public function getCommentDate(): \DateTime {
  * @throws \Exception
  **/
 public function setCommentDate($newCommentDate = null) : void {
+	//base case if the date is null, use the current date and time
 	if($newCommentDate === null) {
 		$this->commentDate = new \DateTime();
 		return;
 	}
 
+	// store the like date using the ValidateDate trait
 	try {
-		$newCommentDate = self::validateDate($newCommentDate);
+			$newCommentDate = self::validateDateTime($newCommentDate);
 	} catch(\InvalidArgumentException | \RangeException $exception) {
-		$exceptionType = get_class($exception);
-		throw(new $exceptionType($exception->getMessage(), 0, $exception));
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 	}
 	$this->commentDate = $newCommentDate;
-	}
+}
 
+	/**
+	 * inserts this Comment into mySQL
+	 *
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 */
 public function insert(\PDO $pdo) : void {
 
-	//TODO format commentDate to mySql specifications
 	// create query template
 	$query = "INSERT INTO comment(commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate) VALUES(:commentId, :commentEventId, :commentTaskId, :commentUserId, :commentContent, :commentDate)";
 	$statement = $pdo->prepare($query);
 
+	// bind the member variables to the place holders in the template
 	$formattedDate = $this->commentDate->format("Y-m-d H:i:s.u");
 	$parameters = ["commentId" =>$this->commentId->getBytes(), "commentEventId" => $this->commentEventId->getBytes(), "commentTaskId" => $this->commentTaskId->getBytes(), "commentUserId" => $this->commentUserId->getBytes(), "commentContent" => $this->commentContent, "commentDate" => $formattedDate];
 	$statement->execute($parameters);
@@ -286,6 +300,7 @@ public function insert(\PDO $pdo) : void {
  * @throws \TypeError if $pdo is not a PDO connection object
  **/
 public function delete(\PDO $pdo) : void {
+
 	// create query template
 	$query = "DELETE FROM comment WHERE commentId = :commentId";
 	$statement = $pdo->prepare($query);
@@ -303,9 +318,9 @@ public function delete(\PDO $pdo) : void {
  * @throws \TypeError if $pdo is not a PDO connection object
  **/
 public function update(\PDO $pdo) : void {
+
 	// create query template
 	$query = "UPDATE comment SET commentId = :commentId, commentEventId = :commentEventId, commentTaskId = :commentTaskId, commentUserId = :commentUserId, commentContent = :commentContent, commentDate = :commentDate WHERE commentId = :commentId";
-	//TODO create parameters for date and format date to mysql specifications
 	$statement = $pdo->prepare($query);
 
 	$formattedDate = $this->commentDate->format("Y-m-d H:i:s.u");
@@ -361,8 +376,7 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
-//TODO rewrite method to return spl fixed array(done)
-	public static function getCommentByCommentEventId(\PDO $pdo, $commentEventId) : \SplFixedArray {
+public static function getCommentByCommentEventId(\PDO $pdo, $commentEventId) : \SplFixedArray {
 
 		try {
 			$commentEventId = self::validateUuid($commentEventId);
@@ -403,8 +417,7 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
-//TODO rewrite method to return spl fixed array (done)
-	public static function getCommentByCommentTaskId(\PDO $pdo, $commentTaskId) : \SplFixedArray {
+public static function getCommentByCommentTaskId(\PDO $pdo, $commentTaskId) : \SplFixedArray {
 
 		try {
 			$commentTaskId = self::validateUuid($commentTaskId);
@@ -445,15 +458,14 @@ public static function getCommentByCommentId(\PDO $pdo, $commentId) : ?Comment {
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
-//TODO rewrite method to return spl fixed array(done)
-	public static function getCommentByCommentUserId(\PDO $pdo, $commentUserId) : \SplFixedArray {
+public static function getCommentByCommentUserId(\PDO $pdo, $commentUserId) : \SplFixedArray {
 
 		try {
 			$commentUserId = self::validateUuid($commentUserId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-//TODO inner join name, use userdisplayname (done)
+
 		// create query template
 		$query = "SELECT comment.commentId, comment.commentEventId,comment.commentTaskId, comment.commentUserId, comment.commentContent, comment.commentDate, `user`.userDisplayName FROM comment INNER JOIN `user` WHERE commentUserId = :commentUserId";
 		$statement = $pdo->prepare($query);
