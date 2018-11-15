@@ -69,7 +69,7 @@ class Comment {
 	 * @throws \Exception if some other exception occurs
 	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
 	 */
-	public function __construct($newCommentId, $newCommentEventId, $newCommentTaskId, $newCommentUserId,  string $newCommentContent, $newCommentDate = null) {
+	public function __construct($newCommentId, $newCommentEventId = null, $newCommentTaskId = null, $newCommentUserId = null,  string $newCommentContent, $newCommentDate = null) {
 		try {
 			$this->setCommentId($newCommentId);
 			$this->setCommentEventId($newCommentEventId);
@@ -121,7 +121,7 @@ public function setCommentId( $newCommentId) : void {
  *
  * @return Uuid value of comment event id
  **/
-public function getCommentEventId() : Uuid{
+public function getCommentEventId() : ?Uuid{
 	return($this->commentEventId);
 }
 
@@ -151,7 +151,7 @@ public function setCommentEventId( $newCommentEventId =null) : void {
 	 *
 	 * @return Uuid values of comment task id
 	 **/
-	public function getCommentTaskId() : Uuid{
+	public function getCommentTaskId() : ?Uuid{
 		return($this->commentTaskId);
 	}
 
@@ -182,7 +182,7 @@ public function setCommentEventId( $newCommentEventId =null) : void {
  *
  * @return Uuid value of comment user id
  **/
-public function getCommentUserId() : Uuid{
+public function getCommentUserId() : ?Uuid{
 	return($this->commentUserId);
 }
 
