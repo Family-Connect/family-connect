@@ -57,10 +57,10 @@ class Comment {
 	/**
 	 * constructor for Comment
 	 *
-	 * @param string|null|Uuid $newCommentId id of the comment or null if new Comment
-	 * @param string|null|Uuid $newCommentEventId of the event that the comment is associated with
-	 * @param string|null|Uuid $newCommentTaskId of the task that the comment is assiciated with
-	 * @param string|null|Uuid $newCommentUserId of the user that the comment s associated with
+	 * @param null|Uuid $newCommentId id of the comment or null if new Comment
+	 * @param null|Uuid $newCommentEventId of the event that the comment is associated with
+	 * @param null|Uuid $newCommentTaskId of the task that the comment is assiciated with
+	 * @param null|Uuid $newCommentUserId of the user that the comment s associated with
 	 * @param string $newCommentContent string containing actual comment content posted
 	 * @param string $newCommentDate string with actual date and time when comment is posted
 	 * @throws \InvalidArgumentException if data types are not valid
@@ -128,7 +128,7 @@ public function getCommentEventId() : Uuid{
 /**
  * mutator method for comment event id
  *
- * @param string | Uuid $newCommentEventId new value of comment event id
+ * @param Uuid $newCommentEventId new value of comment event id
  * @throws \RangeException if $newCommentEventId is not positive
  * @throws \ TypeError if $newCommentEventId is not an integer
  **/
@@ -158,7 +158,7 @@ public function setCommentEventId( $newCommentEventId =null) : void {
 	/**
 	 * mutator method for comment task id
 	 *
-	 * @param string | Uuid $newCommentTaskId new value of comment task id
+	 * @param Uuid $newCommentTaskId new value of comment task id
 	 * @throws \RangeException if $newCommentTaskId is not positive
 	 * @throws \ TypeError if $newCommentTaskId is not an integer
 	 **/
@@ -189,7 +189,7 @@ public function getCommentUserId() : Uuid{
 /**
  * mutator method for comment user id
  *
- * @param string | Uuid $newCommentUserId new value of comment user id
+ * @param Uuid $newCommentUserId new value of comment user id
  * @throws \RangeException if $newCommentUserId is not positive
  * @throws \TypeError if $newCommentUserId is not an integer
  **/
