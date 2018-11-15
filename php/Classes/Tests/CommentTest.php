@@ -170,9 +170,9 @@ class CommentTest extends FamilyConnectTest {
 		$pdoComment = Comment::getCommentByCommentId($this->getPDO(), $comment->getCommentId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("comment"));
 		$this->assertEquals($pdoComment->getCommentId(), $commentId);
-		$this->assertEquals($pdoComment->getCommentEventId(), $this->VALID_COMMENTEVENTID);
-		$this->assertEquals($pdoComment->getCommentTaskId(), $this->VALID_COMMENTTASKID);
-		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoComment->getCommentTaskId(), $this->task->getTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
 		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
@@ -259,9 +259,9 @@ class CommentTest extends FamilyConnectTest {
 		$pdoComment = $results[0];
 
 		$this->assertEquals($pdoComment->getCommentId(), $commentEventId);
-		$this->assertEquals($pdoComment->getCommentEventId(), $this->VALID_COMMENTEVENTID);
-		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
-		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
 		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
@@ -297,9 +297,9 @@ class CommentTest extends FamilyConnectTest {
 		$pdoComment = $results[0];
 
 		$this->assertEquals($pdoComment->getCommentId(), $commentTaskId);
-		$this->assertEquals($pdoComment->getCommentEventId(), $this->VALID_COMMENTEVENTID);
-		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
-		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
 		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
@@ -335,9 +335,9 @@ class CommentTest extends FamilyConnectTest {
 		$pdoComment = $results[0];
 
 		$this->assertEquals($pdoComment->getCommentId(), $commentUserId);
-		$this->assertEquals($pdoComment->getCommentEventId(), $this->VALID_COMMENTEVENTID);
-		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
-		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
 		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
@@ -376,9 +376,9 @@ class CommentTest extends FamilyConnectTest {
 		$pdoComment = $results[0];
 
 		$this->assertEquals($pdoComment->getCommentId(), $pdoComment);
-		$this->assertEquals($pdoComment->getCommentEventId(), $this->VALID_COMMENTEVENTID);
-		$this->assertEquals($pdoComment->getCommenTaskId(), $this->VALID_COMMENTTASKID);
-		$this->assertEquals($pdoComment->getCommentUserId(), $this->VALID_COMMENTUSERID);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
 		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
 		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
