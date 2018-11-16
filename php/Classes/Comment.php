@@ -20,7 +20,7 @@ use Ramsey\Uuid\Uuid;
  * @version 3.0.0
  */
 
-class Comment {
+class Comment implements \JsonSerializable {
 	use ValidateUuid;
 	use ValidateDate;
 	/**
@@ -59,7 +59,7 @@ class Comment {
 	 *
 	 * @param null|Uuid $newCommentId id of the comment or null if new Comment
 	 * @param null|Uuid $newCommentEventId of the event that the comment is associated with
-	 * @param null|Uuid $newCommentTaskId of the task that the comment is assiciated with
+	 * @param null|Uuid $newCommentTaskId of the task that the comment is associated with
 	 * @param null|Uuid $newCommentUserId of the user that the comment s associated with
 	 * @param string $newCommentContent string containing actual comment content posted
 	 * @param string $newCommentDate string with actual date and time when comment is posted
@@ -193,7 +193,10 @@ public function getCommentUserId() : ?Uuid{
  * @throws \RangeException if $newCommentUserId is not positive
  * @throws \TypeError if $newCommentUserId is not an integer
  **/
-public function setCommentUserId( $newCommentUserId) : void {
+public function setCommentUserId( $newCommentUserId =null) : void {
+	if($newCommentUserId === null) {
+		$this->commentUserId = null;
+	}
 	try{
 			$uuid = self::validateUuid($newCommentUserId);
 	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -489,47 +492,6 @@ public static function getCommentByCommentUserId(\PDO $pdo, $commentUserId) : \S
 		}
 		return($comments);
 	}
-
-/**
- * gets the Comment by comment content
- *
- * @param \PDO $pdo PDO connection object
- * @param Uuid|string $commentContent comment content to search by
- * @return \SplFixedArray SplFixedArray of Comments found
- * @throws \PDOException when mySQL related errors occur
- * @throws \TypeError when variables are not the correct data type
- **/
-public static function getCommentByCommentContent(\PDO $pdo, $commentContent) : \SplFixedArray {
-
-	try {
-		$commentContent = self::validateUuid($commentContent);
-	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
-	}
-
-	// create query template
-	$query = "SELECT commentId, commentEventId, commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentContent = :commentContent";
-	$statement = $pdo->prepare($query);
-
-	// bind the comment content to the place holder in the template
-	$parameters = ["commentContent" => $commentContent->getBytes()];
-	$statement->execute($parameters);
-
-	// build an array of comments
-	$comments = new \SplFixedArray($statement->rowCount());
-	$statement->setFetchMode(\PDO::FETCH_ASSOC);
-	while(($row = $statement->fetch()) !== false) {
-		try {
-			$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
-			$comments[$comments->key()] = $comment;
-			$comments->next();
-		} catch(\Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new \PDOException($exception->getMessage(), 0, $exception));
-		}
-	}
-	return($comments);
-}
 
 	/**
 	 * formats the state variables for JSON serialization
