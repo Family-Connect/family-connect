@@ -336,12 +336,12 @@ class CommentTest extends FamilyConnectTest {
 		//grab the result form the array and validate it
 		$pdoComment = $results[0];
 
-		$this->assertEquals($pdoComment->getCommentId(), $commentId);
-		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getEventId());
-		$this->assertEquals($pdoComment->getCommenTaskId(), $this->task->getTaskId());
-		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
-		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
-		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
+		$this->assertEquals($pdoComment->comment->getCommentId(), $commentId);
+		$this->assertEquals($pdoComment->comment->getCommentEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoComment->comment->getCommentTaskId(), $this->task->getTaskId());
+		$this->assertEquals($pdoComment->comment->getCommentUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoComment->comment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+		$this->assertEquals($pdoComment->comment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
 
 	/**
