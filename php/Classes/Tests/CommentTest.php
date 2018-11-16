@@ -250,7 +250,7 @@ class CommentTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("comment");
 
 		// create a new Comment and insert to into mySQL
-		$commentId = generateUUidV4();
+		$commentId = generateUuidV4();
 		$comment = new Comment($commentId, $this->event->getEventId(), $this->task->getTaskId(), $this->user->getUserId(), $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
@@ -263,12 +263,12 @@ class CommentTest extends FamilyConnectTest {
 		//grab the result from the array and validate it
 		$pdoComment = $results[0];
 
-		$this->assertEquals($pdoComment->comment->getCommentId(), $commentId);
-		$this->assertEquals($pdoComment->comment->getCommentEventId(), $this->event->getEventId());
-		$this->assertEquals($pdoComment->comment->getCommentTaskId(), $this->task->getTaskId());
-		$this->assertEquals($pdoComment->comment->getCommentUserId(), $this->user->getUserId());
-		$this->assertEquals($pdoComment->comment->getCommentContent(), $this->VALID_COMMENTCONTENT);
-		$this->assertEquals($pdoComment->comment->getCommentDate(), $this->VALID_COMMENTDATE);
+		$this->assertEquals($pdoComment->getCommentId(), $commentId);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoComment->getCommentTaskId(), $this->task->getTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
 
 	/**
@@ -289,7 +289,7 @@ class CommentTest extends FamilyConnectTest {
 		$numRows = $this->getConnection()->getRowCount("comment");
 
 		// create a new Comment and insert to into mySQL
-		$commentId = generateUUidV4();
+		$commentId = generateUuidV4();
 		$comment = new Comment($commentId, $this->event->getEventId(), $this->task->getTaskId(), $this->user->getUserId(), $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
 		$comment->insert($this->getPDO());
 
@@ -302,12 +302,12 @@ class CommentTest extends FamilyConnectTest {
 		//grab the result from the array and validate it
 		$pdoComment = $results[0];
 
-		$this->assertEquals($pdoComment->comment->getCommentId(), $commentId);
-		$this->assertEquals($pdoComment->comment->getCommentEventId(), $this->event->getEventId());
-		$this->assertEquals($pdoComment->comment->getCommentTaskId(), $this->task->getTaskId());
-		$this->assertEquals($pdoComment->comment->getCommentUserId(), $this->user->getUserId());
-		$this->assertEquals($pdoComment->comment->getCommentContent(), $this->VALID_COMMENTCONTENT);
-		$this->assertEquals($pdoComment->comment->getCommentDate(), $this->VALID_COMMENTDATE);
+		$this->assertEquals($pdoComment->getCommentId(), $commentId);
+		$this->assertEquals($pdoComment->getCommentEventId(), $this->event->getEventId());
+		$this->assertEquals($pdoComment->getCommentTaskId(), $this->task->getTaskId());
+		$this->assertEquals($pdoComment->getCommentUserId(), $this->user->getUserId());
+		$this->assertEquals($pdoComment->getCommentContent(), $this->VALID_COMMENTCONTENT);
+		$this->assertEquals($pdoComment->getCommentDate(), $this->VALID_COMMENTDATE);
 	}
 
 	/**
