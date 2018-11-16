@@ -129,6 +129,7 @@ class CommentTest extends FamilyConnectTest {
 
 	/**
 	 *test inserting a valid Comment and verify that the actual mySQL data matches
+	 * @throws \Exception
 	 **/
 	public function testInsertValidComment() : void {
 		// count the number of rows and save it for later
@@ -152,6 +153,7 @@ class CommentTest extends FamilyConnectTest {
 
 	/**
 	 * test inserting a Comment, editing it, and then updating it
+	 * @throws \Exception
 	 **/
 	public function testUpdateValidComment() : void {
 		// count the number of rows and save it for later
@@ -180,6 +182,7 @@ class CommentTest extends FamilyConnectTest {
 
 	/**
 	 * test creating a Comment and then deleting it
+	 * @throws \Exception
 	 **/
 	public function testDeleteValidComment() : void {
 		// count the number of rows and save it for later
@@ -240,6 +243,7 @@ class CommentTest extends FamilyConnectTest {
 
 	/**
 	 * test inserting a Comment and regrabbing it from mySQL
+	 * @throws \Exception
 	 **/
 	public function testGetValidCommentByCommentEventId() {
 		// count the number of rows and save it for later
@@ -278,6 +282,7 @@ class CommentTest extends FamilyConnectTest {
 
 	/**
 	 * test inserting a Comment and regrabbing it from mySQL
+	 * @throws \Exception
 	 **/
 	public function testGetValidCommentByCommentTaskId() {
 		// count the number of rows and save it for later
