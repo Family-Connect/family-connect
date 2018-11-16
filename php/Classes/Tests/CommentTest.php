@@ -260,7 +260,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->assertCount(1, $results);
 		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment", $results);
 
-		//grab the result form the array and validate it
+		//grab the result from the array and validate it
 		$pdoComment = $results[0];
 
 		$this->assertEquals($pdoComment->comment->getCommentId(), $commentId);
@@ -299,7 +299,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->assertCount(1, $results);
 		$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment", $results);
 
-		//grab the result form the array and validate it
+		//grab the result from the array and validate it
 		$pdoComment = $results[0];
 
 		$this->assertEquals($pdoComment->comment->getCommentId(), $commentId);
@@ -339,7 +339,7 @@ class CommentTest extends FamilyConnectTest {
 		$this->assertCount(1, $results);
 		//*$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Comment", $results);*//
 
-		//grab the result form the array and validate it
+		//grab the result from the array and validate it
 		$pdoComment = $results[0];
 
 		$this->assertEquals($pdoComment->comment->getCommentId(), $commentId);
