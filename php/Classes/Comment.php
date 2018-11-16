@@ -470,7 +470,7 @@ public static function getCommentByCommentUserId(\PDO $pdo, $commentUserId) : \S
 		}
 
 		// create query template
-		$query = "SELECT comment.commentId, comment.commentEventId,comment.commentTaskId, comment.commentUserId, comment.commentContent, comment.commentDate, `user`.userDisplayName FROM comment INNER JOIN `user` WHERE commentUserId = :commentUserId";
+		$query = "SELECT comment.commentId, comment.commentEventId,comment.commentTaskId, comment.commentUserId, comment.commentContent, comment.commentDate, `user`.userDisplayName FROM comment INNER JOIN `user` ON comment.commentUserId = user.userId WHERE commentUserId = :commentUserId";
 		$statement = $pdo->prepare($query);
 
 		// bind the comment user id to the place holder in the template
