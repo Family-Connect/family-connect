@@ -388,7 +388,7 @@ public static function getCommentByCommentEventId(\PDO $pdo, $commentEventId) : 
 		}
 
 		// create query template
-		$query = "SELECT commentId, commentEventId,commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentEventId = :commentEventId";
+	$query = "SELECT comment.commentId, comment.commentEventId,comment.commentTaskId, comment.commentUserId, comment.commentContent, comment.commentDate, `event`.eventDisplayName FROM comment INNER JOIN `event` ON comment.commenEventId = event.eventId WHERE commentEventId = :commentEventId";
 		$statement = $pdo->prepare($query);
 
 		// bind the comment event id to the place holder in the template
@@ -429,7 +429,7 @@ public static function getCommentByCommentTaskId(\PDO $pdo, $commentTaskId) : \S
 		}
 
 		// create query template
-		$query = "SELECT commentId, commentEventId,commentTaskId, commentUserId, commentContent, commentDate FROM comment WHERE commentTaskId = :commentTaskId";
+	$query = "SELECT comment.commentId, comment.commentEventId,comment.commentTaskId, comment.commentUserId, comment.commentContent, comment.commentDate, `task`.taskDisplayName FROM comment INNER JOIN `task` ON comment.commentTaskId = task.taskId WHERE commentTaskId = :commentTaskId";
 		$statement = $pdo->prepare($query);
 
 		// bind the comment task id to the place holder in the template
