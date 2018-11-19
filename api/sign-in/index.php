@@ -48,6 +48,19 @@ try {
 			} else {
 						$userPassword = $requestObject->userPassword;
 			}
+
+			//grab the profile from the database by the email provided
+			$user = User::getUserByUserEmail($pdo, $userEmail);
+			if(empty($profile) === true) {
+						throw(new \InvalidArgumentException("Invalid Email", 401));
+			}
+			$user->setUserActivationToken(null);
+			$user->update($pdo);
+
+			//if the user activation token is not null throw an error
+			if($user->getUserActivationToken() !== null){
+					throw (new \InvalidArgumentException ("you are not allowed to sign in unless you have activated 					your account", 403));
+			}
 	}
 
 }
