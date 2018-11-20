@@ -84,8 +84,43 @@ try {
 
 		// update reply
 		$reply->message = "Family information updated";
+
+	} elseif($method === "DELETE") {
+
+		// verify XSRF token
+		verifyXsrf();
+
+		// verify user has JWT token
+		validateJwtHeader();
+
+		$family = Family::getFamilyByFamilyId($pdo, $id);
+		if($family === null) {
+			throw(new RuntimeException("Family does not exist"));
+		}
+
+		// verify that the usesr is signed in and only attempting to edit their own family
+		if(empty($_SESSION["family"]) === true || $_SESSION["family"]->getFamilyId()->toString() !== $family->getFamilyId()->toString()) {
+			throw(new \InvalidArgumentException("You are not allowed to access this family", 403));
+		}
+
+		// delete family from database
+		$family->delete($pdo);
+		$reply->message = "Family deleted";
+
+	} else {
+		throw(new \InvalidArgumentException("Invalid HTTP request", 400));
 	}
 
-
+} catch (\Exception | \TypeError $exception) {
+	$reply->status = $exception->getCode();
+	$reply->message = $exception->getMessage();
 }
+
+header("Content-type: application/json");
+if($reply->data === null) {
+	unset($reply->data);
+}
+
+// encode and return to front end
+echo json_encode($reply);
 
