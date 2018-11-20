@@ -35,5 +35,35 @@ try {
 		//determine which HTTP method was used
 		$method = $_SERVER["HTTP_X_HTTP_METHOD"] ?? $_SERVER["REQUEST_METHOD"];
 
+		//sanitize input
+		$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		$eventUserId = filter_input(INPUT_GET, "eventUserId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		$eventContent = filter_input(INPUT_GET, "eventContent", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+		//make sure the id is valid for methods that require it
+		if(($method === "DELETE" || $method === "PUT") && (empty($id) === true)) {
+				throw(new InvalidArgumentException("id cannot be empty or negative", 402));
+	}
+
+	// handle GET request - if id is present, that event is returned, otherwise all events are returned
+	if($method === "GET") {
+			//set XSRF cookie
+			setXsrfCookie();
+
+			//get a specific event or all events and update reply
+			if(empty($id) === false) {
+					$reply->data = Event::getEventByEventId($pdo, $id);
+			} else if(empty($eventUserId) === false) {
+					//if the user is logged in grab all the events by that user based on who is logged in
+					$reply->data = Event::getEventByEventUserId($pdo, $_SESSION["profile"]->getUserId())->toArray();
+			} else if(empty($eventContent) === false) {
+					$reply->data = Event::getEventByEventContent($pdo, $eventContent)->toArray();
+			} else {
+					$reply->data = Event::getAllEvents($pdo)->toArray();
+			}
+	} else if($method === "PUT" || $method === "POST") {
+			//enforce the user has an XSRF token
+			verifyXSRF();
+	}
 
 }
