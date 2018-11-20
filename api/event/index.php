@@ -64,6 +64,22 @@ try {
 	} else if($method === "PUT" || $method === "POST") {
 			//enforce the user has an XSRF token
 			verifyXSRF();
-	}
 
-}
+			//enforce the user is signed in
+			if(empty($_SESSION["user"]) === true) {
+						throw(new \InvalidArgumentException("you must be logged in to add an event", 401));
+			}
+
+			$requestContent = file_get-contents("php://input");
+			//Retrieves the JSON package that the front end sent and stores it in $requestContent. Here we are using
+			// file_get_contents("php://input") to get the request from the front end. file_get_contents() is a PHP
+			// function that reads a file into a string. The argument for the function, here, is "php://input". This is a
+			// read only stream that allows raw data to be read from the front end request which is, in this case, a JSON
+			// package.
+			$requestObject = json_decode($requestContent);
+			//This line then decodes the JSON package and stores that result in $requestObject
+			//make sure event content is available (required field)
+			if(empty($requestObject->requestContent) === true) {
+						throw(new \InvalidArgumentException ("No content for Event.", 405));
+			}
+
