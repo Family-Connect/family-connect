@@ -110,6 +110,22 @@ try {
 			// update reply
 			$reply->message = "Task updated successfully";
 
+		} else if($method === "POST") {
+
+			// verify the user is signed in
+			if(empty($_SESSION["user"]) === true) {
+				throw(new \InvalidArgumentException("You must be logged in to post tasks", 403));
+			}
+
+			// verify the user has a JWT token
+			validateJwtHeader();
+
+			// create new task and insert into the database
+			$task = new Task(generateUuidV4(), $requestObject->taskUserId, $requestObject->taskEventId, $requestObject->taskDescription, $requestObject->taskDueDate, $requestObject->taskIsComplete, $requestObject->taskName);
+			$task->insert($pdo);
+
+			// update reply
+			$reply->message = "Task created successfully";
 		}
 	}
 }
