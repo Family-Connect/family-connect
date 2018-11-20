@@ -127,5 +127,39 @@ try {
 			// update reply
 			$reply->message = "Task created successfully";
 		}
+	} else if($method === "DELETE") {
+
+		// verify the user has XSRF togen
+		verifyXsrf();
+
+		// retrieve task to be deleted
+		$task = Task::getTaskByTaskId($pdo, $id);
+		if($task === null) {
+			throw(new RuntimeException("Task does not exist", 404));
+		}
+
+		// verify the user is signed in and only trying to edit their own task
+		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserId()->toString() !== $task->getTaskUserId()->toString()) {
+			throw(new \InvalidArgumentException("You are not allowed to delete this task", 403));
+		}
+
+		// verify the user has a JWT token
+		validateJwtHeader();
+
+		// delete task
+		$task->delete($pdo);
+
+		// update reply
+		$reply->message = "Task deleted successfully";
+	} else {
+		throw(new \InvalidArgumentException("Invalid HTTP method request", 418));
 	}
+// update the $reply->status $reply->message
+} catch(\Exception | \TypeError $exception) {
+	$reply->status = $exception->getCode();
+	$reply->message = $exception->getMessage();
 }
+
+// encode and return to front end
+header("Content-type: application/json");
+echo json_encode($reply);
