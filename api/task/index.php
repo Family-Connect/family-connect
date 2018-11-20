@@ -36,7 +36,7 @@ try {
 	// sanitize input
 	$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$taskEventId = filter_input(INPUT_GET, "taskEventId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	$taskUserId = filter_input(INPUT_GET, "taskUserId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES)
+	$taskUserId = filter_input(INPUT_GET, "taskUserId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$taskStartInterval = filter_input(INPUT_GET, "taskStartInterval", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$taskEndInterval = filter_input(INPUT_GET, "taskEndInterval", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$taskIsComplete = filter_input(INPUT_GET, "taskIsComplete", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -79,6 +79,37 @@ try {
 		// verify the date is accurate
 		if(empty($requestObject->taskEndInterval) === true) {
 			$requestObject->taskEndInterval = null;
+		}
+
+		// perform the actual put or post
+		if($method === "PUT") {
+
+			// retrieve task to update
+			$task = Task::getTaskByTaskId($pdo, $id);
+			if($task === null) {
+				throw(new RuntimeException("Task does not exist", 404));
+			}
+
+			// verify the user is signed in and only trying to edit their own task
+			if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserId()->toString() !== $task->getTaskUserId()->toString()) {
+				throw(new \InvalidArgumentException("You are not allowed to edit this task", 403));
+			}
+
+			// verify the user has a JWT token
+			validateJwtHeader();
+
+			// update all attributes
+			$task->setTaskEventId($requestObject->taskEventId);
+			$task->setTaskUserId($requestObject->taskUserId);
+			$task->setTaskDescription($requestObject->taskDescription);
+			$task->setTaskDueDate($requestObject->taskDueDate);
+			$task->setTaskIsComplete($requestObject->taskIsComplete);
+			$task->setTaskName($requestObject->taskName);
+			$task->update($pdo);
+
+			// update reply
+			$reply->message = "Task updated successfully";
+
 		}
 	}
 }
