@@ -605,7 +605,7 @@ event WHERE eventUserId = :eventUserId";
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	public static function getCurrentEventByFamilyId(\PDO $pdo, $eventFamilyId): \SplFixedArray {
+	public static function getCurrentEventsByEventFamilyId(\PDO $pdo, $eventFamilyId): \SplFixedArray {
 		// sanitize the eventFamilyId before searching
 		try {
 			$eventFamilyId = self::validateUuid($eventFamilyId);
@@ -614,9 +614,8 @@ event WHERE eventUserId = :eventUserId";
 		}
 
 		// create query template
-		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM 					event WHERE eventStartDate >= NOW() AND eventFamilyId = :eventFamilyId";
+		$query = "SELECT eventId, eventFamilyId, eventUserId, eventContent, eventEndDate, eventName, eventStartDate FROM 					event WHERE eventStartDate > NOW() AND eventFamilyId = :eventFamilyId";
 		$statement = $pdo->prepare($query);
-		$statement->execute();
 
 		// bind the eventFamilyId to the place holder in the template
 		$parameters = ["eventFamilyId" => $eventFamilyId->getBytes()];

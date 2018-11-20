@@ -99,10 +99,6 @@ try {
 
 			//enforce the end user has a JWT Token
 
-			//enforce the user is signed in and only trying to edit their own event
-			if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserId()->toString() !==
-				$event->getEventUserId()->toString()) {
-				throw(new \InvalidArgumentException("You are not allowed to edit this event", 403));
 			}
 		}
 	}

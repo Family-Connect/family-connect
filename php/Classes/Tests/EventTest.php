@@ -352,18 +352,19 @@ class EventTest extends FamilyConnectTest {
 	/**
  	 * test grabbing all Events
  	 **/
-	public function testGetAllValidEvents() : void {
+	public function testGetValidCurrentEventsByEventFamilyId() : void {
 	// count the number of rows and save it for later
 	$numRows = $this->getConnection()->getRowCount("event");
 
 	// create a new Event and insert it into mySQL
 	$eventId = generateUuidV4();
 	$event = new Event($eventId, $this->family->getFamilyId(), $this->user->getUserId(), $this->VALID_EVENTCONTENT,
-	$this->VALID_EVENTENDDATE, $this->VALID_EVENTNAME, $this->VALID_EVENTSTARTDATE);
+	$this->VALID_EVENTENDDATE->add(new \DateInterval("P10D")), $this->VALID_EVENTNAME,
+		$this->VALID_EVENTSTARTDATE->add(new \DateInterval("P10D")));
 	$event->insert($this->getPDO());
 
 	// grab the data from mySQL and enforce the fields match our expectations
-	$results = Event::getAllEvents($this->getPDO());
+	$results = Event::getCurrentEventsByEventFamilyId($this->getPDO(), $event->getEventFamilyId());
 	$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("event"));
 	$this->assertCount(1, $results);
 	$this->assertContainsOnlyInstancesOf("FamConn\\FamilyConnect\\Event", $results);
