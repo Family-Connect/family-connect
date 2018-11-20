@@ -1,8 +1,19 @@
 <phpunit>
 	<testsuites>
 		<testsuite name="Family Test">
-
-		<file>CommentTest.php</file>
+			<file>FamilyTest.php</file>
+		</testsuite>
+		<testsuite name="User Test">
+			<file>UserTest.php</file>
+		</testsuite>
+		<testsuite name="Event Test">
+			<file>EventTest.php</file>
+		</testsuite>
+		<testsuite name="Task Test">
+			<file>TaskTest.php</file>
+		</testsuite>
+		<testsuite name="Comment Test">
+			<file>CommentTest.php</file>
 		</testsuite>
 	</testsuites>
 	<filter>
