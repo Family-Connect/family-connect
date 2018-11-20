@@ -83,3 +83,28 @@ try {
 						throw(new \InvalidArgumentException ("No content for Event.", 405));
 			}
 
+			//make sure event date is accurate (optional field)
+			if(empty($requestObject->eventDate) === true) {
+						$requestObject->eventDate = null;
+			}
+
+			//perform the actual put or post
+		if($method === "PUT") {
+
+				//retrieve the event to update
+			$event = Event::getEventByEventId($pdo, $id);
+			if($event === null) {
+						throw(new RuntimeException("Event does not exist", 404));
+			}
+
+			//enforce the end user has a JWT Token
+
+			//enforce the user is signed in and only trying to edit their own event
+			if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserId()->toString() !==
+				$event->getEventUserId()->toString()) {
+				throw(new \InvalidArgumentException("You are not allowed to edit this event", 403));
+			}
+		}
+	}
+	}
+
