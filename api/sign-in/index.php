@@ -75,7 +75,7 @@ try {
 				//create the Auth payload
 				$authObject = (object)[
 						"userId" => $user->getUserId(),
-						"userAtHandle" => $user->getUserAtHandle()
+						"userDisplayName" => $user->getUserDisplayName()
 				];
 
 				//create and set the JWT TOKEN
