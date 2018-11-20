@@ -60,7 +60,7 @@ try {
 		validateJwtHeader();
 
 		// verify that the usesr is signed in and only attempting to edit their own family
-		if(empty($_SESSION["family"]) === true || $_SESSION["family"]->getFamilyId()->toString() !== $id) {
+		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserFamilyId()->toString() !== $id) {
 			throw(new \InvalidArgumentException("You are not allowed to access this family", 403));
 		}
 
@@ -99,7 +99,7 @@ try {
 		}
 
 		// verify that the usesr is signed in and only attempting to edit their own family
-		if(empty($_SESSION["family"]) === true || $_SESSION["family"]->getFamilyId()->toString() !== $family->getFamilyId()->toString()) {
+		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserFamilyId()->toString() !== $family->getFamilyId()->toString()) {
 			throw(new \InvalidArgumentException("You are not allowed to access this family", 403));
 		}
 
