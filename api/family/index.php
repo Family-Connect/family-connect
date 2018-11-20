@@ -39,7 +39,7 @@ try {
 
 	// verify id is valid for methods requiring it
 	if(($method === "DELETE" || $method === "PUT") && (empty($id) === true)) {
-		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
+		throw(new \InvalidArgumentException("id cannot be empty or negative", 405));
 	}
 
 	if($method === "GET") {
@@ -53,7 +53,37 @@ try {
 			$reply->data = Family::getFamilyByFamilyName($pdo, $familyName);
 		}
 	} elseif($method === "PUT") {
+		// verify that XSRF token is present
+		verifyXsrf();
 
+		// verify that the end user has a JWT token
+		validateJwtHeader();
+
+		// verify that the usesr is signed in and only attempting to edit their own family
+		if(empty($_SESSION["family"]) === true || $_SESSION["family"]->getFamilyId()->toString() !== $id) {
+			throw(new \InvalidArgumentException("You are not allowed to access this family", 403));
+		}
+
+		// decode response from front end
+		$requestContent = file_get_contents("php://input");
+		$requestObject = json_decode($requestContent);
+
+		// retrieve family to be updated
+		$family = Family::getFamilyByFamilyId($pdo, $id);
+		if($family === null) {
+			throw(new RuntimeException("Family does not exist", 404));
+		}
+
+		// require family name
+		if(empty($requestObject->familyName) === true) {
+			throw(new \InvalidArgumentException("No family name", 405));
+		}
+
+		$family->setFamilyName($requestObject->familyName);
+		$profile->update($pdo);
+
+		// update reply
+		$reply->message = "Family information updated";
 	}
 
 
