@@ -33,9 +33,6 @@ try {
 	//grab the mySQL connection
 	$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/ddctwitter.ini");
 
-	//grab the mySQL connection
-	$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/ddctwitter.ini");
-
 	//determine which HTTP method was used
 	$method = $_SERVER["HTTP_X_HTTP_METHOD"] ?? $_SERVER["REQUEST_METHOD"];
 
@@ -45,8 +42,6 @@ try {
 	$commentEventId = filter_input(INPUT_GET, "commentEventId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$commentTaskId = filter_input(INPUT_GET, "commentTaskId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$commentUserId = filter_input(INPUT_GET, "commentUserId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	$commentContent = filter_input(INPUT_GET, "commentContent", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	$commentDate = filter_input(INPUT_GET, "commentDate", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
 	//make sure the id is valid for methods that require it
 	if(($method === "DELETE" || $method === "PUT") && (empty($id) === true)) {
@@ -73,6 +68,12 @@ else if($method === "PUT" || $method === "POST") {
 	// enforce the user has a XSRF token
 	verifyXsrf();
 
+	//  Retrieves the JSON package that the front end sent, and stores it in $requestContent. Here we are using file_get_contents("php://input") to get the request from the front end. file_get_contents() is a PHP function that reads a file into a string. The argument for the function, here, is "php://input". This is a read only stream that allows raw data to be read from the front end request which is, in this case, a JSON package.
+	$requestContent = file_get_contents("php://input");
+
+	// This Line Then decodes the JSON package and stores that result in $requestObject
+	$requestObject = json_decode($requestContent);
+
 	//  make sure commentId is available
 	if(empty($requestObject->commentId) === true) {
 		throw(new \InvalidArgumentException ("No comment ID.", 405));
@@ -93,6 +94,23 @@ else if($method === "PUT" || $method === "POST") {
 		throw(new \InvalidArgumentException ("No comment User ID.", 405));
 	}
 
+	//make sure comment content is available (required field)
+	if(empty($requestObject->commentContent) === true) {
+		throw(new \InvalidArgumentException ("No content for Comment.", 405));
+	}
+
+	// make sure comment date is accurate (optional field)
+	if(empty($requestObject->commentDate) === true) {
+		$requestObject->commentDate = null;
+	} else {
+		// if the date exists, Angular's milliseconds since the beginning of time MUST be converted
+		$commentDate = DateTime::createFromFormat("U.u", $requestObject->commentDate / 1000);
+		if($commentDate === false) {
+			throw(new RuntimeException("invalid comment date", 400));
+		}
+		$requestObject->commentDate = $commentDate;
+	}
+
 	//perform the actual put or post
 	if($method === "PUT") {
 
@@ -103,7 +121,7 @@ else if($method === "PUT" || $method === "POST") {
 		}
 
 		//enforce the user is signed in and only trying to edit their own comment
-		if(empty($_SESSION["comment"]) === true || $_SESSION["comment"]->getcommentId()->toString() !== $comment->getCommentId()->toString()) {
+		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId()->toString() !== $comment->getCommentProfileId()->toString()) {
 			throw(new \InvalidArgumentException("You are not allowed to edit this comment", 403));
 		}
 
@@ -111,19 +129,24 @@ else if($method === "PUT" || $method === "POST") {
 		$comment->setCommentEventId($requestObject->commentEventId);
 		$comment->setCommentTaskId($requestObject->commentTaskId);
 		$comment->setCommentUserId($requestObject->commentUserId);
+		$comment->setCommentContent($requestObject->commentContent);
+		$comment->setCommentDate($requestObject->commentDate);
 		$comment->update($pdo);
 
 		// update reply
 		$reply->message = "Comment updated OK";
+
 	} else if($method === "POST") {
+
 		// enforce the user is signed in
 		if(empty($_SESSION["comment"]) === true) {
 			throw(new \InvalidArgumentException("you must be logged in to post comments", 403));
 		}
 
 		// create new comment and insert into the database
-		$comment = new Comment(generateUuidV4(), $_SESSION["comment"]->getCommentId, $requestObject->commentId, null);
-		$comment->insert($pdo);
+		$commentId = generateUuidV4();
+		$comment = new Comment($commentId, $this->event->getEventId(), $this->task->getTaskId(), $_SESSION ["user"]->getUserId(), $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
+		$comment->insert($this->getPDO());
 
 		// update reply
 		$reply->message = "Comment created OK";
