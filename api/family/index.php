@@ -80,7 +80,7 @@ try {
 		}
 
 		$family->setFamilyName($requestObject->familyName);
-		$profile->update($pdo);
+		$family->update($pdo);
 
 		// update reply
 		$reply->message = "Family information updated";

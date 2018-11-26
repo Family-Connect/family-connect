@@ -91,9 +91,9 @@ try {
 			}
 
 			// verify the user is signed in and only trying to edit their own task
-			if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserId()->toString() !== $task->getTaskUserId()->toString()) {
-				throw(new \InvalidArgumentException("You are not allowed to edit this task", 403));
-			}
+			//if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserId()->toString() !== $task->getTaskUserId()->toString()) {
+			//	throw(new \InvalidArgumentException("You are not allowed to edit this task", 403));
+			//}
 
 			// verify the user has a JWT token
 			validateJwtHeader();
@@ -139,9 +139,9 @@ try {
 		}
 
 		// verify the user is signed in and only trying to edit their own task
-		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserId()->toString() !== $task->getTaskUserId()->toString()) {
-			throw(new \InvalidArgumentException("You are not allowed to delete this task", 403));
-		}
+		//if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserId()->toString() !== $task->getTaskUserId()->toString()) {
+		//	throw(new \InvalidArgumentException("You are not allowed to delete this task", 403));
+		//}
 
 		// verify the user has a JWT token
 		validateJwtHeader();
