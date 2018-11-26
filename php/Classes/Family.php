@@ -156,7 +156,7 @@ class Family implements \JsonSerializable {
 	 */
 	public function update(\PDO $pdo) : void {
 		// create template for query
-		$query = "UPDATE family SET familyId = :familyId, familyName = :familyName";
+		$query = "UPDATE family SET familyId = :familyId, familyName = :familyName WHERE familyId = :familyId";
 		$statement = $pdo->prepare($query);
 
 		// wire up variables to place holders in query

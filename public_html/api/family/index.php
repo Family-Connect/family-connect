@@ -50,7 +50,7 @@ try {
 		//gets family by content
 		if(empty($id) === false) {
 			$reply->data = Family::getFamilyByFamilyId($pdo, $id);
-		} else if(empty($familyName) === false) {
+		} else {
 			$reply->data = Family::getFamilyByFamilyName($pdo, $familyName);
 		}
 	} elseif($method === "PUT" || $method = "POST") {
@@ -96,7 +96,7 @@ try {
 			$reply->message = "Family information updated";
 		} else if ($method = "POST") {
 			// make sure user has a JWT token
-			validateJwtHeader();
+			//validateJwtHeader();
 
 			//create a new family and insert it into the database
 			$family = new Family(generateUuidV4(), $requestObject->familyName);
@@ -112,17 +112,20 @@ try {
 		verifyXsrf();
 
 		// verify user has JWT token
-		validateJwtHeader();
+		//validateJwtHeader();
 
 		$family = Family::getFamilyByFamilyId($pdo, $id);
 		if($family === null) {
 			throw(new RuntimeException("Family does not exist"));
 		}
 
+		/*
+
 		// verify that the usesr is signed in and only attempting to edit their own family
 		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserFamilyId()->toString() !== $family->getFamilyId()->toString()) {
 			throw(new \InvalidArgumentException("You are not allowed to access this family", 403));
 		}
+		*/
 
 		// delete family from database
 		$family->delete($pdo);

@@ -131,14 +131,16 @@ class Task implements \JsonSerializable {
 	public function setTaskEventId($newTaskEventId = null) : void {
 		if ($newTaskEventId === null) {
 			$this->taskEventId = null;
+		} else {
+			try {
+				$uuid = self::validateUuid($newTaskEventId);
+			} catch(\RangeException | \InvalidArgumentException | \Exception | \TypeError $exception) {
+				$exceptionType = get_class($exception);
+				throw(new $exceptionType($exception->getMessage(), 0, $exception));
+			}
+			$this->taskEventId = $uuid;
 		}
-		try {
-			$uuid = self::validateUuid($newTaskEventId);
-		} catch(\RangeException | \InvalidArgumentException | \Exception | \TypeError $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
-		}
-		$this->taskEventId = $uuid;
+
 	}
 
 	/**
@@ -159,14 +161,15 @@ class Task implements \JsonSerializable {
 	public function setTaskUserId($newTaskUserId = null) : void {
 		if ($newTaskUserId === null) {
 			$this->taskUserId = null;
+		} else {
+			try {
+				$uuid = self::validateUuid($newTaskUserId);
+			} catch(\RangeException | \InvalidArgumentException | \Exception | \TypeError $exception) {
+				$exceptionType = get_class($exception);
+				throw(new $exceptionType($exception->getMessage(), 0, $exception));
+			}
+			$this->taskUserId = $uuid;
 		}
-		try {
-			$uuid = self::validateUuid($newTaskUserId);
-		} catch(\RangeException | \InvalidArgumentException | \Exception | \TypeError $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
-		}
-		$this->taskUserId = $uuid;
 	}
 
 
@@ -307,7 +310,20 @@ class Task implements \JsonSerializable {
 		// wire variables up to their template place holders
 
 		$formattedDate = $this->taskDueDate->format("Y-m-d H:i:s.u");
-		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $formattedDate, "taskIsComplete" => $this->taskIsComplete, "taskName" => $this->taskName];
+
+		if($this->taskEventId === null) {
+			$formattedTaskEventId = null;
+		} else {
+			$formattedTaskEventId = $this->taskEventId->getBytes();
+		}
+
+		if($this->taskUserId === null) {
+			$formattedTaskUserId = null;
+		} else {
+			$formattedTaskUserId = $this->taskUserId->getBytes();
+		}
+
+		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $formattedTaskEventId, "taskUserId" => $formattedTaskUserId, "taskDescription" => $this->taskDescription, "taskDueDate" => $formattedDate, "taskIsComplete" => $this->taskIsComplete, "taskName" => $this->taskName];
 		$statement->execute($parameters);
 	}
 

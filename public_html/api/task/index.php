@@ -28,7 +28,7 @@ $reply->data = null;
 
 try {
 	// grab mySQL connection
-	$secrets = new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect.ini");
+	$secrets = new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect");
 	$pdo = $secrets->getPdoObject();
 
 	// determine which HTTP method was used
@@ -38,9 +38,13 @@ try {
 	$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$taskEventId = filter_input(INPUT_GET, "taskEventId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$taskUserId = filter_input(INPUT_GET, "taskUserId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$taskDescription = filter_input(INPUT_GET, "taskDescription", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$taskDueDate = filter_input(INPUT_GET, "taskDueDate", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$taskStartInterval = filter_input(INPUT_GET, "taskStartInterval", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$taskEndInterval = filter_input(INPUT_GET, "taskEndInterval", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$taskIsComplete = filter_input(INPUT_GET, "taskIsComplete", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$taskName = filter_input(INPUT_GET, "taskName", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
 
 
 	// verify id is valid for methods requiring it
@@ -69,17 +73,20 @@ try {
 		// verify user has XSRF token
 		verifyXsrf();
 
+		/*
 		// verify that the user is signed in
 		if(empty($_SESSION["user"]) === true) {
 			throw(new \InvalidArgumentException("You must be logged in to make and edit tasks", 405));
 		}
+		*/
 
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
+
 		// verify the date is accurate
-		if(empty($requestObject->taskEndInterval) === true) {
-			$requestObject->taskEndInterval = null;
+		if(empty($requestObject->taskDueDate) === true) {
+			$requestObject->taskDueDate = null;
 		}
 
 		// perform the actual put or post
@@ -112,17 +119,20 @@ try {
 			$reply->message = "Task updated successfully";
 
 		} else if($method === "POST") {
-
+			/*
 			// verify the user is signed in
 			if(empty($_SESSION["user"]) === true) {
 				throw(new \InvalidArgumentException("You must be logged in to post tasks", 403));
 			}
+			*/
 
 			// verify the user has a JWT token
-			validateJwtHeader();
+			//validateJwtHeader();
 
 			// create new task and insert into the database
-			$task = new Task(generateUuidV4(), $requestObject->taskUserId, $requestObject->taskEventId, $requestObject->taskDescription, $requestObject->taskDueDate, $requestObject->taskIsComplete, $requestObject->taskName);
+			var_dump($requestObject);
+
+			$task = new Task(generateUuidV4(), $requestObject->taskEventId, $requestObject->taskUserId, $requestObject->taskDescription, $requestObject->taskDueDate, $requestObject->taskIsComplete, $requestObject->taskName);
 			$task->insert($pdo);
 
 			// update reply
