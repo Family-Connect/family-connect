@@ -57,9 +57,7 @@ try {
 			$reply->data = Comment::getCommentByCommentTaskId($pdo, $commentTaskId)->toArray();
 		} else if(empty($commentUserId) === false) {
 			$reply->data = Comment::getCommentByCommentUserId($pdo, $commentUserId)->toArray();
-		}
-
-		else if($method === "PUT" || $method === "POST") {
+		} else if($method === "PUT" || $method === "POST") {
 
 			// enforce the user has a XSRF token
 			verifyXsrf();
@@ -120,9 +118,47 @@ try {
 
 				// update reply
 				$reply->message = "Comment created OK";
+			} else if($method === "DELETE") {
+
+				//enforce that the end user has a XSRF token.
+				verifyXsrf();
+
+				// retrieve the Comment to be deleted
+				$comment = Comment::getCommentByCommentId($pdo, $id);
+				if($comment === null) {
+					throw(new RuntimeException("Comment does not exist", 404));
+				}
+
+				//enforce the user is signed in and only trying to edit their own comment
+				if(empty($_SESSION["comment"]) === true || $_SESSION["comment"]->getCommentId() !== $comment->getCommentId()) {
+					throw(new \InvalidArgumentException("You are not allowed to delete this comment", 403));
+				}
+
+				// delete comment
+				$comment->delete($pdo);
+				// update reply
+				$reply->message = "Comment deleted OK";
 			}
 
+			// update the $reply->status $reply->message
 		}
+	catch
+		(\Exception | \TypeError $exception) {
+			$reply->status = $exception->getCode();
+			$reply->message = $exception->getMessage();
+		}
+
+		// encode and return reply to front end caller
+header("Content-type: application/json");
+echo json_encode($reply)
+
+// finally - JSON encodes the $reply object and sends it back to the front end
+}
+
+
+
+
+
 
 
 
