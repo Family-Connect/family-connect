@@ -64,11 +64,69 @@ try {
 			// enforce the user has a XSRF token
 			verifyXsrf();
 
-			//  Retrieves the JSON package that the front end sent, and stores it in $requestContent. Here we are using file_get_contents("php://input") to get the request from the front end. file_get_contents() is a PHP function that reads a file into a string. The argument for the function, here, is "php://input". This is a read only stream that allows raw data to be read from the front end request which is, in this case, a JSON package.
-			$requestContent = file_get_contents("php://input");
+			//  make sure commentId is available
+			if(empty($requestObject->commentId) === true) {
+				throw(new \InvalidArgumentException ("No comment ID.", 405));
+			}
 
-			// This Line Then decodes the JSON package and stores that result in $requestObject
-			$requestObject = json_decode($requestContent);
+			//  make sure commentEventId is available
+			if(empty($requestObject->commentEventId) === true) {
+				throw(new \InvalidArgumentException ("No comment Event ID.", 405));
+			}
+
+			//  make sure commentTaskId is available
+			if(empty($requestObject->commentTaskId) === true) {
+				throw(new \InvalidArgumentException ("No comment Task ID.", 405));
+			}
+
+			//  make sure commentUserId is available
+			if(empty($requestObject->commentUserId) === true) {
+				throw(new \InvalidArgumentException ("No comment User ID.", 405));
+			}
+
+			//perform the actual put or post
+			if($method === "PUT") {
+
+				// retrieve the comment to update
+				$comment = Comment::getCommentByCommentId($pdo, $id);
+				if($comment === null) {
+					throw(new RuntimeException("Comment does not exist", 404));
+				}
+
+				//enforce the user is signed in and only trying to edit their own comment
+				if(empty($_SESSION["comment"]) === true || $_SESSION["comment"]->getcommentId()->toString() !== $comment->getCommentId()->toString()) {
+					throw(new \InvalidArgumentException("You are not allowed to edit this comment", 403));
+				}
+
+				// update all attributes
+				$comment->setCommentEventId($requestObject->commentEventId);
+				$comment->setCommentTaskId($requestObject->commentTaskId);
+				$comment->setCommentUserId($requestObject->commentUserId);
+				$comment->update($pdo);
+
+				// update comment
+				$reply->message = "Comment updated OK";
+
+			} else if($method === "POST") {
+
+				// enforce the user is signed in
+				if(empty($_SESSION["comment"]) === true) {
+					throw(new \InvalidArgumentException("you must be logged in to post comments", 403));
+				}
+
+				// create new comment and insert into the database
+				$comment = new Comment(generateUuidV4(), $_SESSION["comment"]->getCommentId, $requestObject->commentId, null);
+				$comment->insert($pdo);
+
+				// update reply
+				$reply->message = "Comment created OK";
+			}
+
+		}
+
+
+
+
 
 
 
