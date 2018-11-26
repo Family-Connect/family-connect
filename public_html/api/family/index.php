@@ -1,7 +1,7 @@
 <?php
 
-require_once(dirname(__DIR__, 2). "/vendor/autoload.php");
-require_once(dirname(__DIR__, 3). "/php/classes/autoload.php");
+require_once(dirname(__DIR__, 3). "/vendor/autoload.php");
+require_once(dirname(__DIR__, 3). "/php/Classes/autoload.php");
 require_once(dirname(__DIR__, 3). "/php/lib/jwt.php");
 require_once(dirname(__DIR__, 3). "/php/lib/xsrf.php");
 require_once(dirname(__DIR__, 3). "/php/lib/uuid.php");
@@ -28,7 +28,7 @@ $reply->data = null;
 
 try {
 	// grab mySQL connection
-	$secrets = new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect.ini");
+	$secrets =  new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect");
 	$pdo = $secrets->getPdoObject();
 
 	// determine which HTTP method was used
@@ -53,10 +53,11 @@ try {
 		} else if(empty($familyName) === false) {
 			$reply->data = Family::getFamilyByFamilyName($pdo, $familyName);
 		}
-	} elseif($method === "PUT") {
+	} elseif($method === "PUT" || $method = "POST") {
 		// verify that XSRF token is present
 		verifyXsrf();
 
+		/*
 		// verify that the end user has a JWT token
 		validateJwtHeader();
 
@@ -64,27 +65,46 @@ try {
 		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserFamilyId()->toString() !== $id) {
 			throw(new \InvalidArgumentException("You are not allowed to access this family", 403));
 		}
+		*/
 
 		// decode response from front end
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		// retrieve family to be updated
-		$family = Family::getFamilyByFamilyId($pdo, $id);
-		if($family === null) {
-			throw(new RuntimeException("Family does not exist", 404));
-		}
-
-		// require family name
 		if(empty($requestObject->familyName) === true) {
-			throw(new \InvalidArgumentException("No family name", 405));
+			throw(new \InvalidArgumentException("No name for family.", 405));
 		}
 
-		$family->setFamilyName($requestObject->familyName);
-		$family->update($pdo);
+		// perform actual put or post
 
-		// update reply
-		$reply->message = "Family information updated";
+		if($method === "PUT") {
+			// retrieve family to be updated
+			$family = Family::getFamilyByFamilyId($pdo, $id);
+			if($family === null) {
+				throw(new RuntimeException("Family does not exist", 404));
+			}
+
+			// require family name
+			if(empty($requestObject->familyName) === true) {
+				throw(new \InvalidArgumentException("No family name", 405));
+			}
+
+			$family->setFamilyName($requestObject->familyName);
+			$family->update($pdo);
+
+			// update reply
+			$reply->message = "Family information updated";
+		} else if ($method = "POST") {
+			// make sure user has a JWT token
+			validateJwtHeader();
+
+			//create a new family and insert it into the database
+			$family = new Family(generateUuidV4(), $requestObject->familyName);
+			$family->insert($pdo);
+
+			// update reply
+			$reply->message = "Family created successfully";
+		}
 
 	} elseif($method === "DELETE") {
 
