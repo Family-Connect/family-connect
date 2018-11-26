@@ -7,7 +7,7 @@ require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
 
 use FamConn\FamilyConnect\{
 	User,
-	// we only use the profile class for testing purposes
+	//using family for testing purposes
 	Family
 };
 
@@ -69,9 +69,9 @@ try {
 			$requestContent = file_get_contents("php://input");
 
 			// This Line Then decodes the JSON package and stores that result in $requestObject
-			$requestObject = json_decode($requestEmail);
+			$requestObject = json_decode($requestContent);
 
-			//make sure user email is available (required field)
+			//make sure user email is available
 			if(empty($requestObject->userEmail) === true) {
 				throw(new \InvalidArgumentException ("No email for user.", 405));
 			}
@@ -79,6 +79,20 @@ try {
 			//  make sure familyId is available
 			if(empty($requestObject->userFamilyId) === true) {
 				throw(new \InvalidArgumentException ("No family id.", 405));
+			}
+
+			//make sure user display name is available
+			if(empty($requestObject->userUserDisplayName) === true) {
+				throw(new \InvalidArgumentException ("No display name.", 405));
+			}
+
+			//  make sure user avatar is available
+			if(empty($requestObject->userFamilyId) === true) {
+				throw(new \InvalidArgumentException ("No user avatar.", 405));
+			}
+			//make sure user phone number is available
+			if(empty($requestObject->userPhoneNumber) === true) {
+				throw(new \InvalidArgumentException ("No phone number for user.", 405));
 			}
 
 			//perform the actual put
