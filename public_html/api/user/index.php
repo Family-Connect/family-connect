@@ -37,8 +37,10 @@ try {
 
 	//sanitize input
 	$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	$tweetProfileId = filter_input(INPUT_GET, "tweetProfileId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	$tweetContent = filter_input(INPUT_GET, "tweetContent", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$userFamilyId = filter_input(INPUT_GET, "userFamilyId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$userAvatar = filter_input(INPUT_GET, "userAvatar", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$userDisplayName = filter_input(INPUT_GET, "userDisplayName", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$userEmail = filter_input(INPUT_GET, "userEmail", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
 	//make sure the id is valid for methods that require it
 	if(($method === "DELETE" || $method === "PUT") && (empty($id) === true)) {
@@ -69,7 +71,7 @@ try {
 			// This Line Then decodes the JSON package and stores that result in $requestObject
 			$requestObject = json_decode($requestEmail);
 
-			//make sure tweet content is available (required field)
+			//make sure user email is available (required field)
 			if(empty($requestObject->userEmail) === true) {
 				throw(new \InvalidArgumentException ("No email for user.", 405));
 			}
@@ -82,16 +84,17 @@ try {
 			//perform the actual put
 			if($method === "PUT") {
 
-				// retrieve the tweet to update
+				// retrieve the user to update
 				$user = User::getUserByUserId($pdo, $id);
 				if($user === null) {
 					throw(new RuntimeException("User does not exist", 404));
 				}
 
-				//enforce the user is signed in and only trying to edit their own tweet
+				//enforce the user is signed in and only trying to edit their own user
 				if(empty($_SESSION["family"]) === true || $_SESSION["family"]->getFamilyId()->toString() !== $user->getUserFamilyId()->toString()) {
 					throw(new \InvalidArgumentException("You are not allowed to edit this family", 403));
 				}
+			}
 
 				// update all attributes
 				$user->setUserAvatar($requestObject->userAvatar);
@@ -103,6 +106,7 @@ try {
 
 				// update reply
 				$reply->message = "user updated OK";
+			}
 
 			else
 				if($method === "DELETE") {
@@ -110,14 +114,14 @@ try {
 					//enforce that the end user has a XSRF token.
 					verifyXsrf();
 
-					// retrieve the Tweet to be deleted
+					// retrieve the User to be deleted
 					$user = User::getUserByUserId($pdo, $id);
 					if($user === null) {
 						throw(new RuntimeException("User does not exist", 404));
 					}
 
-					//enforce the user is signed in and only trying to edit their own tweet
-					if(empty($_SESSION["family"]) === true || $_SESSION["family"]->getFamilyId() !== $user->getUserFamilId()) {
+					//enforce the user is signed in and only trying to edit their own User
+					if(empty($_SESSION["family"]) === true || $_SESSION["family"]->getFamilyId() !== $user->getUserFamilyId()) {
 						throw(new \InvalidArgumentException("You are not allowed to delete this user", 403));
 					}
 
@@ -125,18 +129,17 @@ try {
 					$user->delete($pdo);
 					// update reply
 					$reply->message = "User has been deleted";
+				}
 
 					// update the $reply->status $reply->message
-				}
-			catch
-				(\Exception | \TypeError $exception) {
-					$reply->status = $exception->getCode();
-					$reply->message = $exception->getMessage();
+				 catch(\Exception | \TypeError $exception) {
+				$reply->status = $exception->getCode();
+				$reply->message = $exception->getMessage();
 				}
 
-			}
-// encode and return reply to front end caller
+			// encode and return reply to front end caller
 			header("Content-type: application/json");
 			echo json_encode($reply);
 		}
+
 
