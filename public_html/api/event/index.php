@@ -43,7 +43,7 @@ try {
 		//make sure the id is valid for methods that require it
 		if(($method === "DELETE" || $method === "PUT") && (empty($id) === true)) {
 				throw(new InvalidArgumentException("id cannot be empty or negative", 402));
-	}
+		}
 
 	// handle GET request - if id is present, that event is returned, otherwise all events are returned
 	if($method === "GET") {
@@ -62,70 +62,70 @@ try {
 					$reply->data = Event::getAllEvents($pdo)->toArray();
 			}
 	} else if($method === "PUT" || $method === "POST") {
-		//enforce the user has an XSRF token
+			//enforce the user has an XSRF token
 		verifyXSRF();
 
-		//enforce the user is signed in
-		if(empty($_SESSION["user"]) === true) {
-			throw(new \InvalidArgumentException("you must be logged in to add an event", 401));
-		}
-
-		$requestContent = file_get - contents("php://input");
-		//Retrieves the JSON package that the front end sent and stores it in $requestContent. Here we are using
-		// file_get_contents("php://input") to get the request from the front end. file_get_contents() is a PHP
-		// function that reads a file into a string. The argument for the function, here, is "php://input". This is a
-		// read only stream that allows raw data to be read from the front end request which is, in this case, a JSON
-		// package.
-		$requestObject = json_decode($requestContent);
-		//This line then decodes the JSON package and stores that result in $requestObject
-		//make sure event content is available (required field)
-		if(empty($requestObject->requestContent) === true) {
-			throw(new \InvalidArgumentException ("No content for Event.", 405));
-		}
-
-		//make sure event date is accurate (optional field)
-		if(empty($requestObject->eventDate) === true) {
-			$requestObject->eventDate = null;
-		}
-
-		//perform the actual put or post
-		if($method === "PUT") {
-
-			//retrieve the event to update
-			$event = Event::getEventByEventId($pdo, $id);
-			if($event === null) {
-				throw(new RuntimeException("Event does not exist", 404));
+			//enforce the user is signed in
+			if(empty($_SESSION["user"]) === true) {
+				throw(new \InvalidArgumentException("you must be logged in to add an event", 401));
 			}
 
+			$requestContent = file_get - contents("php://input");
+			//Retrieves the JSON package that the front end sent and stores it in $requestContent. Here we are using
+			// file_get_contents("php://input") to get the request from the front end. file_get_contents() is a PHP
+			// function that reads a file into a string. The argument for the function, here, is "php://input". This is a
+			// read only stream that allows raw data to be read from the front end request which is, in this case, a JSON
+			// package.
+			$requestObject = json_decode($requestContent);
+			//This line then decodes the JSON package and stores that result in $requestObject
+			//make sure event content is available (required field)
+			if(empty($requestObject->requestContent) === true) {
+				throw(new \InvalidArgumentException ("No content for Event.", 405));
+			}
+
+			//make sure event date is accurate (optional field)
+			if(empty($requestObject->eventDate) === true) {
+						$requestObject->eventDate = null;
+			}
+
+			//perform the actual put or post
+			if($method === "PUT") {
+
+				//retrieve the event to update
+				$event = Event::getEventByEventId($pdo, $id);
+				if($event === null) {
+						throw(new RuntimeException("Event does not exist", 404));
+				}
+
+				//enforce the end user has a JWT Token
+				validateJwtHeader();
+
+				//update all attributes
+				//$event->setEventStartDate($requestObject->eventDate);
+				$event->setEventContent($requestObject->eventContent);
+				$event->update($pdo);
+
+				//update reply
+				$reply->message = "Event updated OK";
+
+			} else if($method === "POST") {
+
+				//enforce the user is signed in
+				if(empty($_SESSION["profile"]) === true) {
+							throw(new \InvalidArgumentException("you must be logged in to create an event", 403));
+				}
+
+				//enforce the user has a JWT token
+				validateJwtHeader();
+
+				//create new event and insert into the database
+				$event = new Event(generateUuidV4(), $_SESSION["user"]->getUserId(), $requestObject->eventContent, null);
+				$event->insert($pdo);
+
+				//update reply
+				$reply->message = "Event created OK";
+
 		}
-
-			//enforce the end user has a JWT Token
-			validateJwtHeader();
-
-		//update all attributes
-		//$event->setEventStartDate($requestObject->eventDate);
-		$event->setEventContent($requestObject->eventContent);
-		$event->update($pdo);
-
-		//update reply
-		$reply->message = "Event updated OK";
-
-	}else if($method === "POST") {
-
-		//enforce the user is signed in
-		if(empty($_SESSION["profile"]) === true) {
-					throw(new \InvalidArgumentException("you must be logged in to create an event", 403));
-		}
-
-		//enforce the user has a JWT token
-		validateJwtHeader();
-
-		//create new event and insert into the database
-		$event = new Event(generateUuidV4(), $_SESSION["user"]->getUserId(), $requestObject->eventContent, null);
-		$event->insert($pdo);
-
-		//update reply
-		$reply->message = "Event created OK";
 
 	} else if($method === "DELETE") {
 
