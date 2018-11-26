@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__, 3) . "/vendor/autoload.php";
-require_once dirname(__DIR__, 3) . "/php/classes/autoload.php";
+require_once dirname(__DIR__, 3) . "/php/Classes/autoload.php";
 require_once dirname(__DIR__, 3) . "/php/lib/xsrf.php";
 require_once dirname(__DIR__, 3) . "/php/lib/uuid.php";
 require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
@@ -19,7 +19,7 @@ $reply->status = 200;
 $reply->data = null;
 try {
 	//grab the mySQL statement
-	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/cohort22/familyconnect.ini");
+	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/cohort22/familyconnect");
 	//determine which HTTP method is being used
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_METHOD"] : $_SERVER["REQUEST_METHOD"];
 	if($method === "POST") {
