@@ -608,5 +608,4 @@ public function getUserEmail() {
 		return ($fields);
 	}
 
-
 }
