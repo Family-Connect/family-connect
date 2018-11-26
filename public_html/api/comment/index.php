@@ -48,6 +48,24 @@ try {
 		//set XSRF cookie
 		setXsrfCookie();
 
+		//get a specific comment based on arguments provided or all the comments and update reply
+		if(empty($id) === false) {
+			$reply->data = Comment::getCommentByCommentId($pdo, $id);
+		} else if(empty($commentEventId) === false) {
+			$reply->data = Comment::getCommentByCommentEventId($pdo, $commentEventId)->toArray();
+		} else if(empty($commentTaskId) === false) {
+			$reply->data = Comment::getCommentByCommentTaskId($pdo, $commentTaskId)->toArray();
+		} else if(empty($commentUserId) === false) {
+			$reply->data = Comment::getCommentByCommentUserId($pdo, $commentUserId)->toArray();
+		}
+
+		else if($method === "PUT" || $method === "POST") {
+
+			// enforce the user has a XSRF token
+			verifyXsrf();
+
+
+
 
 
 
