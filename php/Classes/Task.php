@@ -362,7 +362,20 @@ class Task implements \JsonSerializable {
 
 		// wire up variables to place holders in query
 		$formattedDate = $this->taskDueDate->format("Y-m-d H:i:s.u");
-		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $this->taskEventId->getBytes(), "taskUserId" => $this->taskUserId->getBytes(), "taskDescription" => $this->taskDescription, "taskDueDate" => $formattedDate, "taskIsComplete" => $this->taskIsComplete, "taskName" => $this->taskName];
+
+		if($this->taskEventId === null) {
+			$formattedTaskEventId = null;
+		} else {
+			$formattedTaskEventId = $this->taskEventId->getBytes();
+		}
+
+		if($this->taskUserId === null) {
+			$formattedTaskUserId = null;
+		} else {
+			$formattedTaskUserId = $this->taskUserId->getBytes();
+		}
+
+		$parameters = ["taskId" => $this->taskId->getBytes(), "taskEventId" => $formattedTaskEventId, "taskUserId" => $formattedTaskUserId, "taskDescription" => $this->taskDescription, "taskDueDate" => $formattedDate, "taskIsComplete" => $this->taskIsComplete, "taskName" => $this->taskName];
 		$statement->execute($parameters);
 	}
 
@@ -566,6 +579,36 @@ class Task implements \JsonSerializable {
 		return($tasks);
 	}
 
+	public static function getTaskByTaskName(\PDO $pdo, $taskName) : ?Task {
+		// sanitize string
+		try {
+			$taskName = filter_var($taskName, FILTER_SANITIZE_STRING);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create template for new query
+		$query = "SELECT taskId, taskEventId, taskUserId, taskDescription, taskDueDate, taskIsComplete, taskName FROM task WHERE taskName = :taskName";
+		$statement = $pdo->prepare($query);
+
+		// wire up variable (familyId) to query
+		$parameters = ["taskName" => $taskName];
+		$statement->execute($parameters);
+
+		// grab family from mySQL
+		try {
+			$task = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskIsComplete"], $row["taskName"]);
+			}
+		} catch(\Exception $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($task);
+	}
+
 	/**
 	 * formats the state variables for JSON serialization
 	 *
@@ -575,8 +618,14 @@ class Task implements \JsonSerializable {
 		$fields = get_object_vars($this);
 
 		$fields["taskId"] = $this->taskId->toString();
-		$fields["taskEventId"] = $this->taskEventId->toString();
-		$fields["taskUserId"] = $this->taskUserId->toString();
+
+		if($this->taskEventId !== null) {
+			$fields["taskEventId"] = $this->taskEventId->toString();
+		}
+
+		if($this->taskUserId !== null) {
+			$fields["taskUserId"] = $this->taskUserId->toString();
+		}
 
 		$fields["taskDueDate"] = round(floatval($this->taskDueDate->format("U.u")) * 1000);
 

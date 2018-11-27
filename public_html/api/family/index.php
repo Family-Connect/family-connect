@@ -121,7 +121,7 @@ try {
 
 		/*
 
-		// verify that the usesr is signed in and only attempting to edit their own family
+		// verify that the user is signed in and only attempting to edit their own family
 		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserFamilyId()->toString() !== $family->getFamilyId()->toString()) {
 			throw(new \InvalidArgumentException("You are not allowed to access this family", 403));
 		}

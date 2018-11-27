@@ -60,18 +60,19 @@ try {
 		if(empty($id) === false) {
 			$reply->data = Task::getTaskByTaskId($pdo, $id);
 		} else if(empty($taskEventId) === false) {
-			$reply->data = Task::getTaskByTaskEventId($pdo, $taskUserId);
+			$reply->data = Task::getTaskByTaskEventId($pdo, $taskEventId)->toArray();
 		} else if(empty($taskUserId) === false) {
-			$reply->data = Task::getTaskByTaskUserId($pdo, $_SESSION["user"]->getUserId())->toArray();
+			$reply->data = Task::getTaskByTaskUserId($pdo, $taskUserId)->toArray();
 		} else if(empty($taskStartInterval) === false || empty($taskEndInterval) === false) {
 			$reply->data = Task::getTaskByTaskDueDate($pdo, $taskStartInterval, $taskEndInterval);
 		} else if(empty($taskIsComplete) === false) {
 			$reply->data = Task::getTaskByTaskIsComplete($pdo, $taskIsComplete);
+		} else if(empty($taskName) === false) {
+			$reply->data = Task::getTaskByTaskName($pdo, $taskName);
 		}
 
 	} else if($method === "PUT" || $method === "POST") {
-		// verify user has XSRF token
-		verifyXsrf();
+
 
 		/*
 		// verify that the user is signed in
@@ -92,6 +93,9 @@ try {
 		// perform the actual put or post
 		if($method === "PUT") {
 
+			// verify user has XSRF token
+			verifyXsrf();
+
 			// retrieve task to update
 			$task = Task::getTaskByTaskId($pdo, $id);
 			if($task === null) {
@@ -104,7 +108,7 @@ try {
 			//}
 
 			// verify the user has a JWT token
-			validateJwtHeader();
+			//validateJwtHeader();
 
 			// update all attributes
 			$task->setTaskEventId($requestObject->taskEventId);
@@ -130,7 +134,6 @@ try {
 			//validateJwtHeader();
 
 			// create new task and insert into the database
-			var_dump($requestObject);
 
 			$task = new Task(generateUuidV4(), $requestObject->taskEventId, $requestObject->taskUserId, $requestObject->taskDescription, $requestObject->taskDueDate, $requestObject->taskIsComplete, $requestObject->taskName);
 			$task->insert($pdo);
@@ -155,7 +158,7 @@ try {
 		//}
 
 		// verify the user has a JWT token
-		validateJwtHeader();
+		//validateJwtHeader();
 
 		// delete task
 		$task->delete($pdo);
