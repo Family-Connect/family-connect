@@ -53,59 +53,6 @@ try {
 		} else {
 			$reply->data = Family::getFamilyByFamilyName($pdo, $familyName);
 		}
-	} elseif($method === "PUT" || $method = "POST") {
-		// verify that XSRF token is present
-		verifyXsrf();
-
-		/*
-		// verify that the end user has a JWT token
-		validateJwtHeader();
-
-		// verify that the user is signed in and only attempting to edit their own family
-		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserFamilyId()->toString() !== $id) {
-			throw(new \InvalidArgumentException("You are not allowed to access this family", 403));
-		}
-		*/
-
-		// decode response from front end
-		$requestContent = file_get_contents("php://input");
-		$requestObject = json_decode($requestContent);
-
-		if(empty($requestObject->familyName) === true) {
-			throw(new \InvalidArgumentException("No name for family.", 405));
-		}
-
-		// perform actual put or post
-
-		if($method === "PUT") {
-			// retrieve family to be updated
-			$family = Family::getFamilyByFamilyId($pdo, $id);
-			if($family === null) {
-				throw(new RuntimeException("Family does not exist", 404));
-			}
-
-			// require family name
-			if(empty($requestObject->familyName) === true) {
-				throw(new \InvalidArgumentException("No family name", 405));
-			}
-
-			$family->setFamilyName($requestObject->familyName);
-			$family->update($pdo);
-
-			// update reply
-			$reply->message = "Family information updated";
-		} else if ($method = "POST") {
-			// make sure user has a JWT token
-			//validateJwtHeader();
-
-			//create a new family and insert it into the database
-			$family = new Family(generateUuidV4(), $requestObject->familyName);
-			$family->insert($pdo);
-
-			// update reply
-			$reply->message = "Family created successfully";
-		}
-
 	} elseif($method === "DELETE") {
 
 		// verify XSRF token
@@ -131,7 +78,56 @@ try {
 		$family->delete($pdo);
 		$reply->message = "Family deleted";
 
-	} else {
+	} elseif($method === "PUT" || $method = "POST") {
+		// verify that XSRF token is present
+		verifyXsrf();
+
+		/*
+		// verify that the end user has a JWT token
+		validateJwtHeader();
+
+		// verify that the user is signed in and only attempting to edit their own family
+		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserFamilyId()->toString() !== $id) {
+			throw(new \InvalidArgumentException("You are not allowed to access this family", 403));
+		}
+		*/
+
+		// decode response from front end
+		$requestContent = file_get_contents("php://input");
+		$requestObject = json_decode($requestContent);
+
+		// require family name
+		if(empty($requestObject->familyName) === true) {
+			throw(new \InvalidArgumentException("No name for family", 405));
+		}
+
+		// perform actual put or post
+
+		if($method === "PUT") {
+			// retrieve family to be updated
+			$family = Family::getFamilyByFamilyId($pdo, $id);
+			if($family === null) {
+				throw(new RuntimeException("Family does not exist", 404));
+			}
+
+			$family->setFamilyName($requestObject->familyName);
+			$family->update($pdo);
+
+			// update reply
+			$reply->message = "Family information updated";
+		} else if ($method = "POST") {
+			// make sure user has a JWT token
+			//validateJwtHeader();
+
+			//create a new family and insert it into the database
+			$family = new Family(generateUuidV4(), $requestObject->familyName);
+			$family->insert($pdo);
+
+			// update reply
+			$reply->message = "Family created successfully";
+		}
+
+	}  else {
 		throw(new \InvalidArgumentException("Invalid HTTP request", 400));
 	}
 
