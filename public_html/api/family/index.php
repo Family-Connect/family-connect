@@ -140,6 +140,15 @@ try {
 	$reply->message = $exception->getMessage();
 }
 
+/*$password = "abc123";
+$hash = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
+
+$user = new \FamConn\FamilyConnect\User(generateUuidV4(), "b800b7ee-e4d8-4aa4-91ce-9eb71ddc4f00", "0CB1A0E520F194FF2226441E21CEC775", "string", "name", "email@email.com", $hash, "3030330330", 1);
+
+$user->insert($pdo);
+
+var_dump($user);*/
+
 header("Content-type: application/json");
 if($reply->data === null) {
 	unset($reply->data);

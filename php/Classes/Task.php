@@ -222,7 +222,11 @@ class Task implements \JsonSerializable {
 	 * @throws \Exception
 	 */
 	public function setTaskDueDate($newTaskDueDate = null) : void {
-
+		// base case: if the date is null, use the current date and time
+		if($newTaskDueDate === null) {
+			$this->taskDueDate = new \DateTime();
+			return;
+		}
 
 		try {
 			$newTaskDueDate = self::validateDateTime($newTaskDueDate);
@@ -353,7 +357,7 @@ class Task implements \JsonSerializable {
 	 */
 	public function update(\PDO $pdo) : void {
 		// create template for query
-		$query = "UPDATE task SET taskId = :taskId, taskEventId = :taskEventId, taskUserId = :taskUserId, taskDescription = :taskDescription, taskDueDate = :taskDueDate, taskIsComplete = :taskIsComplete, taskName = :taskName";
+		$query = "UPDATE task SET taskId = :taskId, taskEventId = :taskEventId, taskUserId = :taskUserId, taskDescription = :taskDescription, taskDueDate = :taskDueDate, taskIsComplete = :taskIsComplete, taskName = :taskName WHERE taskId = :taskId";
 		$statement = $pdo->prepare($query);
 
 		// wire up variables to place holders in query
