@@ -30,7 +30,8 @@ $reply->data = null;
 
 try {
 		//grab the mySQL connection
-		$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/cohort22/familyconnect.ini");
+	$secrets = new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect.ini");
+	$pdo = $secrets->getPdoObject();
 
 		//determine which HTTP method was used
 		$method = $_SERVER["HTTP_X_HTTP_METHOD"] ?? $_SERVER["REQUEST_METHOD"];
