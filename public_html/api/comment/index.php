@@ -75,7 +75,7 @@ else if($method === "PUT" || $method === "POST") {
 	$requestObject = json_decode($requestContent);
 
 	//  make sure commentId is available
-	if(empty($requestObject->commentId) === true) {
+	/*if(empty($requestObject->commentId) === true) {
 		throw(new \InvalidArgumentException ("No comment ID.", 405));
 	}
 
@@ -87,7 +87,7 @@ else if($method === "PUT" || $method === "POST") {
 	//  make sure commentTaskId is available
 	if(empty($requestObject->commentTaskId) === true) {
 		throw(new \InvalidArgumentException ("No comment Task ID.", 405));
-	}
+	}*/
 
 	//  make sure commentUserId is available
 	if(empty($requestObject->commentUserId) === true) {
@@ -139,9 +139,9 @@ else if($method === "PUT" || $method === "POST") {
 	} else if($method === "POST") {
 
 		// enforce the user is signed in
-		if(empty($_SESSION["comment"]) === true) {
+		/*if(empty($_SESSION["comment"]) === true) {
 			throw(new \InvalidArgumentException("you must be logged in to post comments", 403));
-		}
+		}*/
 
 		// create new comment and insert into the database
 		$commentId = generateUuidV4();
