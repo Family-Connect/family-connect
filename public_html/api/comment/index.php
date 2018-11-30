@@ -9,7 +9,7 @@ require_once dirname(__DIR__, 3) . "/vendor/autoload.php";
 require_once dirname(__DIR__, 3) . "/php/classes/autoload.php";
 require_once dirname(__DIR__, 3) . "/php/lib/xsrf.php";
 require_once dirname(__DIR__, 3) . "/php/lib/uuid.php";
-require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
+require_once("/etc/apache2/capstone-mysql/Secrets.php");
 
 use FamConn\FamilyConnect\{Comment};
 
@@ -31,7 +31,8 @@ $reply->data = null;
 
 try {
 	//grab the mySQL connection
-	$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/ddctwitter.ini");
+	$secrets =  new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect");
+	$pdo = $secrets->getPdoObject();
 
 	//determine which HTTP method was used
 	$method = $_SERVER["HTTP_X_HTTP_METHOD"] ?? $_SERVER["REQUEST_METHOD"];
@@ -174,6 +175,14 @@ else if($method === "DELETE") {
 	// update reply
 	$reply->message = "Comment deleted OK";
 }
+} catch(\Exception | \TypeError $exception) {
+	$reply->status = $exception->getCode();
+	$reply->message = $exception->getMessage();
 }
+
+// encode and return to front end
+header("Content-type: application/json");
+echo json_encode($reply);
+
 
 
