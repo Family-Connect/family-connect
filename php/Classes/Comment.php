@@ -135,7 +135,7 @@ public function getCommentEventId() : ?Uuid{
 public function setCommentEventId( $newCommentEventId =null) : void {
 	if($newCommentEventId === null) {
 		$this->commentEventId=null;
-	}
+	} else {
 		try {
 			$uuid = self::validateUuid($newCommentEventId);
 	}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -144,7 +144,7 @@ public function setCommentEventId( $newCommentEventId =null) : void {
 	}
 	// convert and store the comment event id
 	$this->commentEventId = $uuid;
-}
+}}
 
 	/**
 	 * accessor method for comment task id
@@ -165,7 +165,7 @@ public function setCommentEventId( $newCommentEventId =null) : void {
 	public function setCommentTaskId( $newCommentTaskId =null) : void {
 		if($newCommentTaskId === null) {
 			$this->commentTaskId=null;
-		}
+		} else {
 		try {
 				$uuid = self::validateUuid($newCommentTaskId);
 		}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -175,7 +175,7 @@ public function setCommentEventId( $newCommentEventId =null) : void {
 
 		// convert and store the comment task id
 		$this->commentTaskId = $uuid;
-	}
+	}}
 
 /**
  * accessor method for comment user id
@@ -291,7 +291,20 @@ public function insert(\PDO $pdo) : void {
 
 	// bind the member variables to the place holders in the template
 	$formattedDate = $this->commentDate->format("Y-m-d H:i:s.u");
-	$parameters = ["commentId" =>$this->commentId->getBytes(), "commentEventId" => $this->commentEventId->getBytes(), "commentTaskId" => $this->commentTaskId->getBytes(), "commentUserId" => $this->commentUserId->getBytes(), "commentContent" => $this->commentContent, "commentDate" => $formattedDate];
+
+	if($this->commentEventId === null) {
+		$formattedCommentEventId = null;
+	} else {
+		$formattedCommentEventId = $this->commentEventId->getBytes();
+	}
+
+	if($this->commentTaskId === null) {
+		$formattedCommentTaskId = null;
+	} else {
+		$formattedCommentTaskId = $this->commentTaskId->getBytes();
+	}
+
+	$parameters = ["commentId" =>$this->commentId->getBytes(), "commentEventId" => $formattedCommentEventId, "commentTaskId" => $formattedCommentTaskId, "commentUserId" => $this->commentUserId->getBytes(), "commentContent" => $this->commentContent, "commentDate" => $formattedDate];
 	$statement->execute($parameters);
 }
 
@@ -327,7 +340,20 @@ public function update(\PDO $pdo) : void {
 	$statement = $pdo->prepare($query);
 
 	$formattedDate = $this->commentDate->format("Y-m-d H:i:s.u");
-	$parameters = ["commentId" =>$this->commentId, "commentEventId" => $this->commentEventId, "commentTaskId" => $this->commentTaskId, "commentUserId" => $this->commentUserId, "commentContent" => $this->commentContent, "commentDate" => $formattedDate];
+
+	if($this->commentEventId === null) {
+		$formattedTaskEventId = null;
+	} else {
+		$formattedCommentEventId = $this->commentEventId->getBytes();
+	}
+
+	if($this->commentTaskId === null) {
+		$formattedCommentTaskId = null;
+	} else {
+		$formattedCommentTaskId = $this->commentTaskId->getBytes();
+	}
+
+	$parameters = ["commentId" =>$this->commentId, "commentEventId" => $formattedCommentEventId, "commentTaskId" => $formattedCommentTaskId, "commentUserId" => $this->commentUserId, "commentContent" => $this->commentContent, "commentDate" => $formattedDate];
 	$statement->execute($parameters);
 }
 
