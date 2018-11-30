@@ -4,7 +4,7 @@ require_once dirname(__DIR__, 3) . "/php/Classes/autoload.php";
 require_once dirname(__DIR__, 3) . "/php/lib/xsrf.php";
 require_once dirname(__DIR__, 3) . "/php/lib/uuid.php";
 require_once("/etc/apache2/capstone-mysql/Secrets.php");
-use FamConn\FamilyConnect;
+use FamConn\FamilyConnect\User;
 /**
  * api for handling sign-up
  * @author Anthony Garcia
@@ -32,8 +32,12 @@ try {
 			throw(new \InvalidArgumentException("No email address given", 405));
 		}
 		//verify that display name is present
-		if(empty($requestObject->UserDisplayName) === true) {
+		if(empty($requestObject->userDisplayName) === true) {
 			throw(new \InvalidArgumentException("No username given",405));
+		}
+
+		if(empty($requestObject->userPhoneNumber) === true) {
+			throw(new \InvalidArgumentException("Must input valid phone number", 405));
 		}
 		//verify that user password is present
 		if(empty($requestObject->userPassword) === true) {
@@ -43,6 +47,9 @@ try {
 		if(empty($requestObject->userPasswordConfirm) === true) {
 			throw(new \InvalidArgumentException ("Must input valid password", 405));
 		}
+		if(empty($requestObject->userFamilyId) === true) {
+			throw(new \InvalidArgumentException ("Must have family", 405));
+		}
 		//make sure the password and confirm password match
 		if ($requestObject->userPassword !== $requestObject->userPasswordConfirm) {
 			throw(new \InvalidArgumentException("Passwords do not match"));
@@ -50,7 +57,7 @@ try {
 		$hash = password_hash($requestObject->userPassword, PASSWORD_ARGON2I, ["time_cost" => 384]);
 		$userActivationToken = bin2hex(random_bytes(16));
 		// create the user object and prepare to insert into the database
-		$user = new User(generateUuidV4(), "null", $userActivationToken, "null", "null", "null", $requestObject ->userEmail, $hash, "null","null", "nm", $requestObject ->userDisplayName, 1, "null");
+		$user = new User(generateUuidV4(), $requestObject->userFamilyId, $userActivationToken, "http://awesomephoto.com" , $requestObject->userDisplayName, $requestObject ->userEmail, $hash, $requestObject->userPhoneNumber, 0);
 		//insert the user into the database
 		$user->insert($pdo);
 		//compose the email message to send with the activation token

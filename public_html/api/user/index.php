@@ -78,18 +78,13 @@ try {
 				throw(new \InvalidArgumentException ("No email for user.", 405));
 			}
 
-			//  make sure familyId is available
-			if(empty($requestObject->userFamilyId) === true) {
-				throw(new \InvalidArgumentException ("No family id.", 405));
-			}
-
 			//make sure user display name is available
 			if(empty($requestObject->userUserDisplayName) === true) {
 				throw(new \InvalidArgumentException ("No display name.", 405));
 			}
 
 			//  make sure user avatar is available
-			if(empty($requestObject->userFamilyId) === true) {
+			if(empty($requestObject->userAvatar) === true) {
 				throw(new \InvalidArgumentException ("No user avatar.", 405));
 			}
 			//make sure user phone number is available
