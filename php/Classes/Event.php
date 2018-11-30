@@ -14,7 +14,7 @@ use Ramsey\Uuid\Uuid;
 //TODO implement json serializable - completed
 class Event implements \JsonSerializable {
 	use ValidateUuid;
-	use validateDate;
+	use ValidateDate;
 	/**id for the Event, this is the primary key.
 	 * @var Uuid $eventId
 	 **/

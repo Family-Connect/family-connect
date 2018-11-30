@@ -30,7 +30,7 @@ $reply->data = null;
 
 try {
 		//grab the mySQL connection
-	$secrets = new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect.ini");
+	$secrets = new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect");
 	$pdo = $secrets->getPdoObject();
 
 		//determine which HTTP method was used
@@ -71,7 +71,7 @@ try {
 				throw(new \InvalidArgumentException("you must be logged in to add an event", 401));
 			}
 
-			$requestContent = file_get - contents("php://input");
+			$requestContent = file_get_contents("php://input");
 			//Retrieves the JSON package that the front end sent and stores it in $requestContent. Here we are using
 			// file_get_contents("php://input") to get the request from the front end. file_get_contents() is a PHP
 			// function that reads a file into a string. The argument for the function, here, is "php://input". This is a
@@ -120,7 +120,9 @@ try {
 				validateJwtHeader();
 
 				//create new event and insert into the database
-				$event = new Event(generateUuidV4(), $_SESSION["user"]->getUserId(), $requestObject->eventContent, null);
+				$event = new Event(generateUuidV4(), $_SESSION["user"]->getUserId(), $requestObject->eventId,
+					$requestObject->eventFamilyId, $requestObject->eventUserId, $requestObject->eventContent,
+					$requestObject->eventEndDate, $requestObject->eventName, $requestObject->eventStartDate);
 				$event->insert($pdo);
 
 				//update reply
