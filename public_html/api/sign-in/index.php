@@ -21,7 +21,8 @@ try {
 				session_start();
 		}
 		//grab mySQL statement
-		$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/cohort22/familyconnect.ini");
+	$secrets = new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect.ini");
+	$pdo = $secrets->getPdoObject();
 
 		//determine which HTTP method is being used
 		$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : 		  			$_SERVER["REQUEST_METHOD"];
@@ -54,21 +55,16 @@ try {
 				if(empty($user) === true) {
 							throw(new \InvalidArgumentException("Invalid Email", 401));
 				}
-				$user->setUserActivationToken(null);
-				$user->update($pdo);
 
 				//if the user activation token is not null throw an error
 				if($user->getUserActivationToken() !== null) {
-						throw (new \InvalidArgumentException ("you are not allowed to sign in unless you have 						activated your account", 403));
+						throw (new \InvalidArgumentException ("you are not allowed to sign in unless you have 							activated your account", 403));
 				}
 
 				//verify hash is correct
 				if(password_verify($requestObject->userPassword, $user->getUserHash()) === false) {
 						throw(new \InvalidArgumentException("Password or email is incorrect.", 401));
 				}
-
-				//grab user from database and put into a session
-				$user = User::getUserByUserId($pdo, $user->getUserId());
 
 				$_SESSION["user"] = $user;
 
