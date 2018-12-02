@@ -51,41 +51,29 @@ try {
 			$reply->data = User::getUserByUserId($pdo, $id);
 		} else if(empty($userFamilyId) === false) {
 			$reply->data = User::getUserByUserFamilyId($pdo, $id);
-		} else if(empty($userActivationToken) === false) {
-			$reply->data = User::getUserByUserActivationToken($pdo, $userActivationToken);
 		} else if(empty($userEmail) === false) {
 			$reply->data = User::getUserByUserEmail($pdo, $userEmail);
-
-
-			$reply->data = [];
-			$users = User::getAllUsers($pdo);
-			foreach($users as $user) {
-				$userId = $user->getUsersId()->toString();
-			}
+		}
 		} else if($method === "PUT") {
 
 			// enforce the user has a XSRF token
 			verifyXsrf();
 
 			//  Retrieves the JSON package that the front end sent, and stores it in $requestContent. Here we are using file_get_contents("php://input") to get the request from the front end. file_get_contents() is a PHP function that reads a file into a string. The argument for the function, here, is "php://input". This is a read only stream that allows raw data to be read from the front end request which is, in this case, a JSON package.
-			$requestContent = file_get_contents("php://input");
+
+		$requestContent = file_get_contents("php://input");
 
 			// This Line Then decodes the JSON package and stores that result in $requestObject
 			$requestObject = json_decode($requestContent);
+			var_dump($id,$requestObject);
 
 			//make sure user email is available
 			if(empty($requestObject->userEmail) === true) {
 				throw(new \InvalidArgumentException ("No email for user.", 405));
 			}
-
 			//make sure user display name is available
-			if(empty($requestObject->userUserDisplayName) === true) {
+			if(empty($requestObject->userDisplayName) === true) {
 				throw(new \InvalidArgumentException ("No display name.", 405));
-			}
-
-			//  make sure user avatar is available
-			if(empty($requestObject->userAvatar) === true) {
-				throw(new \InvalidArgumentException ("No user avatar.", 405));
 			}
 			//make sure user phone number is available
 			if(empty($requestObject->userPhoneNumber) === true) {
@@ -103,22 +91,19 @@ try {
 
 				//enforce the user is signed in and only trying to edit their own user
 				if(empty($_SESSION["family"]) === true || $_SESSION["family"]->getFamilyId()->toString() !== $user->getUserFamilyId()->toString()) {
-					throw(new \InvalidArgumentException("You are not allowed to edit this family", 403));
-				}
+				throw(new \InvalidArgumentException("You are not allowed to edit this family", 403));
 			}
+		}
 
 			// update all attributes
-			$user->setUserAvatar($requestObject->userAvatar);
 			$user->setUserDisplayName($requestObject->userDisplayName);
 			$user->setUserEmail($requestObject->userEmail);
 			$user->setUserPhoneNumber($requestObject->userPhoneNumber);
-			$user->setUserPrivilege($requestObject->userPrivilege);
 			$user->update($pdo);
 
 			// update reply
 			$reply->message = "user updated OK";
-		} else
-			if($method === "DELETE") {
+		} else if($method === "DELETE") {
 
 				//enforce that the end user has a XSRF token.
 				verifyXsrf();
@@ -139,7 +124,7 @@ try {
 				// update reply
 				$reply->message = "User has been deleted";
 			}
-	}
+
 }
 
 	// update the $reply->status $reply->message

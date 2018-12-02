@@ -50,7 +50,7 @@ try {
 		//gets family by content
 		if(empty($id) === false) {
 			$reply->data = Family::getFamilyByFamilyId($pdo, $id);
-		} else {
+		}else {
 			$reply->data = Family::getFamilyByFamilyName($pdo, $familyName);
 		}
 	} elseif($method === "DELETE") {
