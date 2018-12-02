@@ -21,7 +21,7 @@ try {
 				session_start();
 		}
 		//grab mySQL statement
-	$secrets = new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect.ini");
+	$secrets = new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect");
 	$pdo = $secrets->getPdoObject();
 
 		//determine which HTTP method is being used
