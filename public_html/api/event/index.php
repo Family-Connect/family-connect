@@ -87,7 +87,7 @@ try {
 			$requestObject = json_decode($requestContent);
 			//This line then decodes the JSON package and stores that result in $requestObject
 			//make sure event content is available (required field)
-			if(empty($requestObject->requestContent) === true) {
+			if(empty($requestObject->eventContent) === true) {
 				throw(new \InvalidArgumentException ("No content for Event.", 405));
 			}
 
