@@ -69,12 +69,14 @@ try {
 			}
 	} else if($method === "PUT" || $method === "POST") {
 			//enforce the user has an XSRF token
-		verifyXSRF();
+		//verifyXSRF();
 
-			//enforce the user is signed in
+		/**
+		//enforce the user is signed in
 			if(empty($_SESSION["user"]) === true) {
 				throw(new \InvalidArgumentException("you must be logged in to add an event", 401));
 			}
+		 **/
 
 			$requestContent = file_get_contents("php://input");
 			//Retrieves the JSON package that the front end sent and stores it in $requestContent. Here we are using
@@ -107,8 +109,12 @@ try {
 				validateJwtHeader();
 
 				//update all attributes
-				//$event->setEventStartDate($requestObject->eventDate);
+				$event->setEventFamilyId($requestObject->eventFamilyId);
+				$event->setEventUserId($requestObject->eventUserId);
 				$event->setEventContent($requestObject->eventContent);
+				$event->setEventEndDate($requestObject->eventEndDate);
+				$event->setEventName($requestObject->eventName);
+				$event->setEventStartDate($requestObject->eventDate);
 				$event->update($pdo);
 
 				//update reply
