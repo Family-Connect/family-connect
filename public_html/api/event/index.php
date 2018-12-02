@@ -38,13 +38,12 @@ try {
 
 		//sanitize input
 		$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		$eventId = filter_input(INPUT_GET, "eventId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		$eventFamilyId = filter_input(INPUT_GET, "eventFamilyId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		$eventUserId = filter_input(INPUT_GET, "eventUserId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		$eventContent = filter_input(INPUT_GET, "eventContent", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		$eventEndDate = filter_input("eventEndDate", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		$eventEndDate = filter_input(INPUT_GET,"eventEndDate", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		$eventName = filter_input(INPUT_GET, "eventName", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		$eventStartDate = filter_input("eventStartDate", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		$eventStartDate = filter_input(INPUT_GET,"eventStartDate", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
 		//make sure the id is valid for methods that require it
 		if(($method === "DELETE" || $method === "PUT") && (empty($id) === true)) {
@@ -125,7 +124,7 @@ try {
 				validateJwtHeader();
 
 				//create new event and insert into the database
-				$event = new Event(generateUuidV4(), $requestObject->eventId,
+				$event = new Event(generateUuidV4(),
 					$requestObject->eventFamilyId, $requestObject->eventUserId, $requestObject->eventContent,
 					$requestObject->eventEndDate, $requestObject->eventName, $requestObject->eventStartDate);
 				$event->insert($pdo);
