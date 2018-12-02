@@ -10,7 +10,7 @@ use FamConn\FamilyConnect\User;
  *
  * @author sromero130
  **/
-//prepare and empty reply
+//prepare an empty reply
 $reply = new stdClass();
 $reply->status = 200;
 $reply->data = null;
@@ -37,7 +37,7 @@ try {
 				$requestContent = file_get_contents("php://input");
 				$requestObject = json_decode($requestContent);
 
-				//check to make sure the password and email field is not empty.s
+				//check to make sure the password and email field is not empty.
 				if(empty($requestObject->userEmail) === true) {
 					throw(new \InvalidArgumentException("Wrong email address.", 401));
 				} else {
@@ -55,6 +55,8 @@ try {
 				if(empty($user) === true) {
 							throw(new \InvalidArgumentException("Invalid Email", 401));
 				}
+				$user->setUserActivationToken(null);
+				$user->update($pdo);
 
 				//if the user activation token is not null throw an error
 				if($user->getUserActivationToken() !== null) {
@@ -66,16 +68,19 @@ try {
 						throw(new \InvalidArgumentException("Password or email is incorrect.", 401));
 				}
 
+				//grab user from database and put into a session
+				$user = User::getUserByUserId($pdo, $user->getUserId());
+
 				$_SESSION["user"] = $user;
 
 				//create the Auth payload
 				$authObject = (object)[
-						"userId" => $user->getUserId(),
+						"userId" =>$user->getUserId(),
 						"userDisplayName" => $user->getUserDisplayName()
 				];
 
 				//create and set the JWT TOKEN
-				setJWTAndAuthHeader("auth", $authObject);
+				setJWTAndAuthHeader("auth",$authObject);
 
 				$reply->message = "Sign in was successful.";
 		} else {
