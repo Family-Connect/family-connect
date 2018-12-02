@@ -83,7 +83,8 @@ class User implements \JsonSerializable{
  * @throws \Exception if user hash is not hexadecimal
  */
 
-	public function __construct($newUserId, $newUserFamilyId, string $newUserActivationToken, string $newUserAvatar, string $newUserDisplayName, string $newUserEmail, $newUserHash, string $newUserPhoneNumber, int $newUserPrivilege) {
+	public function __construct($newUserId, $newUserFamilyId, ?string $newUserActivationToken, string $newUserAvatar,
+										 string $newUserDisplayName, string $newUserEmail, $newUserHash, string $newUserPhoneNumber, int $newUserPrivilege) {
 		try {
 			$this->setUserId($newUserId);
 			$this->setUserFamilyId($newUserFamilyId);
@@ -162,7 +163,7 @@ class User implements \JsonSerializable{
  *
  * @return string value of $userActivationToken
  */
-public function getUserActivationToken() : string {
+public function getUserActivationToken() : ?string {
 	return $this->userActivationToken;
 }
 
@@ -173,7 +174,11 @@ public function getUserActivationToken() : string {
  * @throws \InvalidArgumentException if $newUserActivationToken is not a valid data type
  * @throws \RangeException if $newUserActivationToken is longer than 32 characters
  */
-public function setUserActivationToken(string $newUserActivationToken): void {
+public function setUserActivationToken(?string $newUserActivationToken): void {
+	if($newUserActivationToken===null){
+		$this->userActivationToken = null;
+		return;
+	}
 	// verify the string is 32 characters
 	if(strlen($newUserActivationToken) !== 32) {
 		throw (new \RangeException("string is not 32 characters"));

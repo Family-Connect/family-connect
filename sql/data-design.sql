@@ -23,7 +23,7 @@ CREATE TABLE family (
 CREATE TABLE `user` (
 	userId BINARY(16) NOT NULL,
 	userFamilyId BINARY(16) NOT NULL,
-	userActivationToken CHAR(32) NOT NULL,
+	userActivationToken CHAR(32),
 	userAvatar VARCHAR(255) NOT NULL,
 	userDisplayName VARCHAR(32) NOT NULL,
 	userEmail VARCHAR(128) NOT NULL,
