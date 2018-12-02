@@ -145,7 +145,7 @@ else if($method === "PUT" || $method === "POST") {
 
 		// create new comment and insert into the database
 		$commentId = generateUuidV4();
-		$comment = new Comment($commentId, $this->event->getEventId(), $this->task->getTaskId(), $_SESSION ["user"]->getUserId(), $this->VALID_COMMENTCONTENT, $this->VALID_COMMENTDATE);
+		$comment = new Comment($commentId, $this->event->getEventId(), $this->task->getTaskId(), $_SESSION ["user"]->getUserId(), $this->commentContent, $this->commentDate);
 		$comment->insert($this->getPDO());
 
 		// update reply

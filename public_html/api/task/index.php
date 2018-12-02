@@ -72,7 +72,8 @@ try {
 		}
 
 	} else if($method === "PUT" || $method === "POST") {
-
+		// verify user has XSRF token
+		verifyXsrf();
 
 		/*
 		// verify that the user is signed in
@@ -92,9 +93,6 @@ try {
 
 		// perform the actual put or post
 		if($method === "PUT") {
-
-			// verify user has XSRF token
-			verifyXsrf();
 
 			// retrieve task to update
 			$task = Task::getTaskByTaskId($pdo, $id);
