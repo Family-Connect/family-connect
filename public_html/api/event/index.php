@@ -114,7 +114,7 @@ try {
 				$event->setEventContent($requestObject->eventContent);
 				$event->setEventEndDate($requestObject->eventEndDate);
 				$event->setEventName($requestObject->eventName);
-				$event->setEventStartDate($requestObject->eventDate);
+				$event->setEventStartDate($requestObject->eventStartDate);
 				$event->update($pdo);
 
 				//update reply
