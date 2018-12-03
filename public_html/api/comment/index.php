@@ -66,13 +66,13 @@ if($method === "GET") {
 
 else if($method === "PUT" || $method === "POST") {
 	// enforce the user has a XSRF token
-	//verifyXsrf();
+	verifyXsrf();
 
-	//  Retrieves the JSON package that the front end sent, and stores it in $requestContent. Here we are using file_get_contents("php://input") to get the request from the front end. file_get_contents() is a PHP function that reads a file into a string. The argument for the function, here, is "php://input". This is a read only stream that allows raw data to be read from the front end request which is, in this case, a JSON package.
 	$requestContent = file_get_contents("php://input");
+	//  Retrieves the JSON package that the front end sent, and stores it in $requestContent. Here we are using file_get_contents("php://input") to get the request from the front end. file_get_contents() is a PHP function that reads a file into a string. The argument for the function, here, is "php://input". This is a read only stream that allows raw data to be read from the front end request which is, in this case, a JSON package.
 
-	// This Line Then decodes the JSON package and stores that result in $requestObject
 	$requestObject = json_decode($requestContent);
+	// This Line Then decodes the JSON package and stores that result in $requestObject
 
 	//  make sure commentId is available
 	/*if(empty($requestObject->commentId) === true) {
@@ -111,6 +111,11 @@ else if($method === "PUT" || $method === "POST") {
 		$requestObject->commentDate = $commentDate;
 	}
 
+	//  make sure profileId is available
+	if(empty($requestObject->commentProfileId) !== true) {
+		throw(new \InvalidArgumentException ("No Profile ID.", 405));
+	}
+
 	//perform the actual put or post
 	if($method === "PUT") {
 
@@ -119,16 +124,13 @@ else if($method === "PUT" || $method === "POST") {
 		if($comment === null) {
 			throw(new RuntimeException("Comment does not exist", 404));
 		}
-
+/*
 		//enforce the user is signed in and only trying to edit their own comment
-		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId()->toString() !== $comment->getCommentProfileId()->toString()) {
+		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getProfileId()->toString() !== $comment->getCommentUserId()->toString()) {
 			throw(new \InvalidArgumentException("You are not allowed to edit this comment", 403));
-		}
+		}*/
 
-		// update all attributes
-		$comment->setCommentEventId($requestObject->commentEventId);
-		$comment->setCommentTaskId($requestObject->commentTaskId);
-		$comment->setCommentUserId($requestObject->commentUserId);
+		// update all attributes;
 		$comment->setCommentContent($requestObject->commentContent);
 		$comment->setCommentDate($requestObject->commentDate);
 		$comment->update($pdo);
@@ -163,11 +165,11 @@ else if($method === "DELETE") {
 	if($comment === null) {
 		throw(new RuntimeException("Comment does not exist", 404));
 	}
-
+	/*
 	//enforce the user is signed in and only trying to edit their own comment
-	if(empty($_SESSION["comment"]) === true || $_SESSION["comment"]->getCommentId() !== $comment->getCommentId()) {
+	if(empty($_SESSION["comment"]) === true || $_SESSION["comment"]->getUserId() !== $comment->getUserId()) {
 		throw(new \InvalidArgumentException("You are not allowed to delete this comment", 403));
-	}
+	}*/
 
 	// delete comment
 	$comment->delete($pdo);

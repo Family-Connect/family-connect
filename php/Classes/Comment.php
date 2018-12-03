@@ -342,7 +342,7 @@ public function update(\PDO $pdo) : void {
 	$formattedDate = $this->commentDate->format("Y-m-d H:i:s.u");
 
 	if($this->commentEventId === null) {
-		$formattedTaskEventId = null;
+		$formattedCommentEventId = null;
 	} else {
 		$formattedCommentEventId = $this->commentEventId->getBytes();
 	}
@@ -528,9 +528,18 @@ public static function getCommentByCommentUserId(\PDO $pdo, $commentUserId) : \S
 		$fields = get_object_vars($this);
 
 		$fields["commentId"] = $this->commentId->toString();
-		$fields["commentEventId"] = $this->commentEventId->toString();
-		$fields["commentTaskId"] = $this->commentTaskId->toString();
-		$fields["commentUserId"] = $this->commentUserId->toString();
+
+		if($this->commentEventId !== null) {
+			$fields["commentEventId"] = $this->commentEventId->toString();
+		}
+
+		if($this->commentTaskId !== null) {
+			$fields["commentTaskId"] = $this->commentTaskId->toString();
+		}
+
+		if($this->commentUserId !== null) {
+			$fields["commentUserId"] = $this->commentUserId->toString();
+		}
 
 		$fields["commentDate"] = round(floatval($this->commentDate->format("U.u")) * 1000);
 		return($fields);
