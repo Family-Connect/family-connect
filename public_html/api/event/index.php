@@ -61,7 +61,7 @@ try {
 					$reply->data = Event::getEventByEventId($pdo, $id);
 			} else if(empty($eventUserId) === false) {
 					//if the user is logged in grab all the events by that user based on who is logged in
-					$reply->data = Event::getEventByEventUserId($pdo, $_SESSION["id"]->getUserId())->toArray();
+					$reply->data = Event::getEventByEventUserId($pdo, $_SESSION["user"]->getUserId())->toArray();
 			} else if(empty($eventContent) === false) {
 					$reply->data = Event::getEventByEventContent($pdo, $eventContent)->toArray();
 			} else {
@@ -73,7 +73,7 @@ try {
 
 
 		//enforce the user is signed in
-			if(empty($_SESSION["id"]) === true) {
+			if(empty($_SESSION["user"]) === true) {
 				throw(new \InvalidArgumentException("you must be logged in to add an event", 401));
 			}
 
@@ -123,7 +123,7 @@ try {
 			} else if($method === "POST") {
 
 				//enforce the user is signed in
-				if(empty($_SESSION["id"]) === true) {
+				if(empty($_SESSION["user"]) === true) {
 							throw(new \InvalidArgumentException("you must be logged in to create an event", 403));
 				}
 
