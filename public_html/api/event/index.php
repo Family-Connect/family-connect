@@ -69,14 +69,14 @@ try {
 			}
 	} else if($method === "PUT" || $method === "POST") {
 			//enforce the user has an XSRF token
-		//verifyXSRF();
+		verifyXSRF();
 
-		/**
+
 		//enforce the user is signed in
 			if(empty($_SESSION["user"]) === true) {
 				throw(new \InvalidArgumentException("you must be logged in to add an event", 401));
 			}
-		 **/
+
 
 			$requestContent = file_get_contents("php://input");
 			//Retrieves the JSON package that the front end sent and stores it in $requestContent. Here we are using
