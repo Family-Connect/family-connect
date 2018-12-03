@@ -106,7 +106,7 @@ try {
 			//}
 
 			// verify the user has a JWT token
-			//validateJwtHeader();
+			validateJwtHeader();
 
 			// update all attributes
 			$task->setTaskEventId($requestObject->taskEventId);
@@ -129,7 +129,7 @@ try {
 			*/
 
 			// verify the user has a JWT token
-			//validateJwtHeader();
+			validateJwtHeader();
 
 			// create new task and insert into the database
 
@@ -156,7 +156,7 @@ try {
 		//}
 
 		// verify the user has a JWT token
-		//validateJwtHeader();
+		validateJwtHeader();
 
 		// delete task
 		$task->delete($pdo);

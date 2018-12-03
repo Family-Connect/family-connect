@@ -82,10 +82,10 @@ try {
 		// verify that XSRF token is present
 		verifyXsrf();
 
-		/*
 		// verify that the end user has a JWT token
 		validateJwtHeader();
 
+		/*
 		// verify that the user is signed in and only attempting to edit their own family
 		if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserFamilyId()->toString() !== $id) {
 			throw(new \InvalidArgumentException("You are not allowed to access this family", 403));
@@ -117,7 +117,7 @@ try {
 			$reply->message = "Family information updated";
 		} else if ($method = "POST") {
 			// make sure user has a JWT token
-			//validateJwtHeader();
+			validateJwtHeader();
 
 			//create a new family and insert it into the database
 			$family = new Family(generateUuidV4(), $requestObject->familyName);
