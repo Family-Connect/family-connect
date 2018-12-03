@@ -61,7 +61,7 @@ try {
 					$reply->data = Event::getEventByEventId($pdo, $id);
 			} else if(empty($eventUserId) === false) {
 					//if the user is logged in grab all the events by that user based on who is logged in
-					$reply->data = Event::getEventByEventUserId($pdo, $_SESSION["profile"]->getUserId())->toArray();
+					$reply->data = Event::getEventByEventUserId($pdo, $_SESSION["user"]->getUserId())->toArray();
 			} else if(empty($eventContent) === false) {
 					$reply->data = Event::getEventByEventContent($pdo, $eventContent)->toArray();
 			} else {
