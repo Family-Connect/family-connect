@@ -74,10 +74,11 @@ try {
 		verifyXsrf();
 
 
-		//enforce the user is signed in
+	/**
 			if(empty($_SESSION["user"]) === true) {
 				throw(new \InvalidArgumentException("you must be logged in to add an event", 401));
 			}
+	 * **/
 
 
 			$requestContent = file_get_contents("php://input");
@@ -89,7 +90,13 @@ try {
 			$requestObject = json_decode($requestContent);
 			//This line then decodes the JSON package and stores that result in $requestObject
 			//make sure event content is available (required field)
-			if(empty($requestObject->eventContent) === true) {
+
+		//enforce the user is signed in
+		if(empty($requestObject->eventUserId) === true) {
+			throw(new \InvalidArgumentException("you must be logged in to add an event", 401));
+		}
+
+		if(empty($requestObject->eventContent) === true) {
 				throw(new \InvalidArgumentException ("No content for Event.", 405));
 			}
 
