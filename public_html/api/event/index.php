@@ -61,7 +61,7 @@ try {
 					$reply->data = Event::getEventByEventId($pdo, $id);
 			} else if(empty($eventUserId) === false) {
 					//if the user is logged in grab all the events by that user based on who is logged in
-					$reply->data = Event::getEventByEventUserId($pdo, $_SESSION["user"]->getUserId())->toArray();
+					$reply->data = Event::getEventByEventUserId($pdo, $eventUserId)->toArray();
 			} else if(empty($eventContent) === false) {
 				$reply->data = Event::getEventByEventContent($pdo, $eventContent)->toArray();
 			}else if(empty($eventName) === false) {
@@ -134,8 +134,8 @@ try {
 				validateJwtHeader();
 
 				//create new event and insert into the database
-				$event = new Event(generateUuidV4(), $_SESSION["user"]->getUserId(), $requestObject->eventId,
-					$requestObject->eventFamilyId, $requestObject->eventUserId, $requestObject->eventContent,
+				$eventId = generateUuidV4();
+				$event = new Event($eventId, $requestObject->eventFamilyId, $requestObject->eventUserId, $requestObject->eventContent,
 					$requestObject->eventEndDate, $requestObject->eventName, $requestObject->eventStartDate);
 				$event->insert($pdo);
 
