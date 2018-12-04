@@ -1,9 +1,10 @@
 <?php
-require_once dirname(__DIR__,3)."/php/classes/autoload.php";
-require_once dirname(__DIR__,3)."/php/lib/xsrf.php";
-require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
-
-use FamConn\FamilyConnect\{Activation};
+require_once dirname(__DIR__, 3) . "/vendor/autoload.php";
+require_once dirname(__DIR__, 3) . "/php/Classes/autoload.php";
+require_once dirname(__DIR__, 3) . "/php/lib/xsrf.php";
+require_once dirname(__DIR__, 3) . "/php/lib/uuid.php";
+require_once("/etc/apache2/capstone-mysql/Secrets.php");
+use FamConn\FamilyConnect\User;
 
 /**
  * API to check profile activation status
@@ -20,7 +21,8 @@ $reply->status = 200;
 $reply->data = null;
 try{
 	// grab the MySQL connection
-	$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/ddctwitter.ini");
+	$secrets =  new \Secrets("/etc/apache2/capstone-mysql/cohort22/familyconnect");
+	$pdo = $secrets->getPdoObject();
 
 	//check the HTTP method being used
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
@@ -43,10 +45,10 @@ try{
 		setXsrfCookie();
 
 		//find user associated with the activation token
-		$profile = User::getUserByUserActivationToken($pdo, $activation);
+		$user = User::getUserByUserActivationToken($pdo, $activation);
 
 		//verify the user is not null
-		if($profile !== null) {
+		if($user !== null) {
 			//make sure the activation token matches
 			if($activation === $user->getUserActivationToken()) {
 

@@ -23,6 +23,7 @@ try {
 	$pdo = $secrets->getPdoObject();
 	//determine which HTTP method is being used
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_METHOD"] : $_SERVER["REQUEST_METHOD"];
+	var_dump($method);
 	if($method === "POST") {
 		//process the request content and decode the json object into a php object
 		$requestContent = file_get_contents("php://input");
@@ -116,7 +117,7 @@ EOF;
 		//update reply
 		$reply->message = "Thank you for creating an account with FamilyConnect. You'll receive a message shortly.";
 	} else {
-		throw (new InvalidArgumentException("invalid http request"));
+		throw (new InvalidArgumentException("invalid http request", 418));
 	}
 } catch(\Exception |\TypeError $exception) {
 	$reply->status = $exception->getCode();
