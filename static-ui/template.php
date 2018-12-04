@@ -3,7 +3,7 @@
 <div class="wrapper">
 
 	<!-- Sidebar -->
-	<nav id="sidebar" class="sidebar col-3">
+	<nav id="sidebar" class="sidebar">
 		<div class="sidebar-header">
 			<h3>Family Name</h3>
 		</div>
@@ -16,7 +16,7 @@
 	</nav>
 
 	<!-- Page Content -->
-	<div id="content" class="col-9">
+	<div id="content">
 		<div class="container-fluid">
 
 			<button type="button" id="sidebarCollapse" class="btn btn-info">

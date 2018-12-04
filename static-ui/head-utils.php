@@ -15,6 +15,7 @@
 	<!-- Custom CSS -->
 	<link rel="stylesheet" href="css/style.css"/>
 
-
+	<!-- Custom scripts -->
+	<script src="scripts/script.js"></script>
 
 </head>

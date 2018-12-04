@@ -1,0 +1,34 @@
+.wrapper {
+	display: flex;
+	align-items: stretch;
+}
+
+.sidebar {
+	min-width: 200px;
+	max-width: 200px;
+	min-height: 100vh;
+}
+
+.sidebar.active {
+	margin-left: -200px;
+}
+
+@media (min-width: 768px) {
+	.btn {
+		display: none;
+	}
+}
+
+@media (max-width: 768px) {
+	#sidebar {
+		margin-left: -200px;
+	}
+	#sidebar.active {
+		margin-left: 0;
+	}
+}
+
+.sidebar ul li.active > a, a[aria-expanded="true"] {
+	color: #fff;
+	background: #6d7fcc;
+}
