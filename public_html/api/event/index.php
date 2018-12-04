@@ -126,9 +126,14 @@ try {
 			} else if($method === "POST") {
 
 				//enforce the user is signed in
-				if(empty($_SESSION["user"]) === true) {
-							throw(new \InvalidArgumentException("you must be logged in to create an event", 403));
+				if(empty($requestObject->eventUserId) === true) {
+					throw(new \InvalidArgumentException("you must be logged in to create an event", 403));
 				}
+
+					/**
+					 *if(empty($_SESSION["user"]) === true) {
+					 *throw(new \InvalidArgumentException("you must be logged in to create an event", 403));
+				}**/
 
 				//enforce the user has a JWT token
 				validateJwtHeader();
