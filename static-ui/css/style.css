@@ -1,27 +1,29 @@
 .wrapper {
 	display: flex;
 	align-items: stretch;
+	font-family: 'Libre Franklin', sans-serif !important;
 }
 
 .sidebar {
-	min-width: 200px;
-	max-width: 200px;
+	min-width: 250px;
+	max-width: 25vw;
 	min-height: 100vh;
+	filter:drop-shadow(1px 0 3px black);
 }
 
 .sidebar.active {
-	margin-left: -200px;
+	margin-left: -255px;
 }
 
 @media (min-width: 768px) {
-	.btn {
+	.toggleButton {
 		display: none;
 	}
 }
 
 @media (max-width: 768px) {
 	#sidebar {
-		margin-left: -200px;
+		margin-left: -255px;
 	}
 	#sidebar.active {
 		margin-left: 0;
@@ -31,4 +33,35 @@
 .sidebar ul li.active > a, a[aria-expanded="true"] {
 	color: #fff;
 	background: #6d7fcc;
+}
+
+h3 {
+	padding: 2rem 1rem;
+}
+
+.btn {
+	background: none;
+	margin-top: .25rem;
+}
+
+p {
+	padding: 2rem;
+}
+
+.toggleButton {
+	margin-left: 2rem;
+	position: relative;
+	top: 0;
+	left: 0;
+}
+
+.toggleButton.active {
+	display: none;
+}
+
+.settingsButton {
+	margin-right: 2rem;
+	position: absolute;
+	top: 0;
+	right: 0;
 }

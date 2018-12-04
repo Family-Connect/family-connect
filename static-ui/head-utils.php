@@ -16,6 +16,9 @@
 	<link rel="stylesheet" href="css/style.css"/>
 
 	<!-- Custom scripts -->
-	<script src="scripts/script.js"></script>
+	<script src="scripts/script.js" defer></script>
+
+	<!-- Google fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Libre+Franklin:500" rel="stylesheet">
 
 </head>
