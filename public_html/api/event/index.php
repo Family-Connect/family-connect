@@ -63,13 +63,15 @@ try {
 					//if the user is logged in grab all the events by that user based on who is logged in
 					$reply->data = Event::getEventByEventUserId($pdo, $_SESSION["user"]->getUserId())->toArray();
 			} else if(empty($eventContent) === false) {
-					$reply->data = Event::getEventByEventContent($pdo, $eventContent)->toArray();
+				$reply->data = Event::getEventByEventContent($pdo, $eventContent)->toArray();
+			}else if(empty($eventName) === false) {
+				$reply->data = Event::getEventByEventName($pdo, $eventName)->toArray();
 			} else {
 					$reply->data = Event::getAllEvents($pdo)->toArray();
 			}
 	} else if($method === "PUT" || $method === "POST") {
 			//enforce the user has an XSRF token
-		verifyXSRF();
+		verifyXsrf();
 
 
 		//enforce the user is signed in
@@ -109,6 +111,7 @@ try {
 				validateJwtHeader();
 
 				//update all attributes
+				$event->setEventId($requestObject->eventId);
 				$event->setEventFamilyId($requestObject->eventFamilyId);
 				$event->setEventUserId($requestObject->eventUserId);
 				$event->setEventContent($requestObject->eventContent);
@@ -131,7 +134,7 @@ try {
 				validateJwtHeader();
 
 				//create new event and insert into the database
-				$event = new Event(generateUuidV4(),
+				$event = new Event(generateUuidV4(), $_SESSION["user"]->getUserId(), $requestObject->eventId,
 					$requestObject->eventFamilyId, $requestObject->eventUserId, $requestObject->eventContent,
 					$requestObject->eventEndDate, $requestObject->eventName, $requestObject->eventStartDate);
 				$event->insert($pdo);
