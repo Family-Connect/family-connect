@@ -1,28 +1,15 @@
 <?php require_once ("head-utils.php");?>
 
-<div class="wrapper">
+<div>
 
-	<!-- Sidebar -->
-	<nav id="sidebar" class="sidebar col-md-2 bg-light">
-		<div class="sidebar-header">
-			<h2>Family Name</h2>
-		</div>
-
-		<ul class="users">
-			<li>
-				<a href="#">User1</a>
-			</li>
-		</ul>
-	</nav>
+	<!-- As a heading -->
+	<nav class="navbar navbar-light bg-light fixed-top">
+		<span class="navbar-brand mb-0 h1">FamilyConnect</span>
 
 	<!-- Page Content -->
 	<div id="main container-fluid">
 		<!-- Buttons -->
 		<div class="buttons">
-
-			<button type="button" id="sidebarCollapse" class="btn toggleButton">
-				<i class="fas fa-ellipsis-h"></i>
-			</button>
 
 			<div class="configButtons">
 				<button type="button" id="plusButton" class="btn plusButton">
@@ -34,13 +21,13 @@
 				</button>
 			</div>
 		</div>
+	</nav>
+</div>
 
 		<!-- Actual content (not sidebar) - edit below -->
 
-		<div class="content container">
-			<h4>Privileges</h4>
-		</div>
-	</div>
+		<div class="content container-fluid">
+			<h4 class="whoseIn">Whose in the family?</h4>
 
 	<section>
 		<table class="table table-striped">
@@ -101,6 +88,5 @@
 				</tr>
 			</tbody>
 		</table>
+	</div>
 	</section>
-
-</div>

@@ -124,10 +124,12 @@ form button {
 }
 
 
-table{
-	margin-top: 10em;
+.whoseIn {
+	margin-top: 3em;
 }
 
-.fa-trash-alt {
-	vertical-align: center;
+table{
+	margin-top: 10em;
+	margin-right: 50px;
 }
+
