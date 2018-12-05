@@ -1,0 +1,82 @@
+body {
+	font-family: 'Libre Franklin', sans-serif !important;
+}
+
+.splash-background {
+	min-height: 100vh;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.buttons {
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	padding: 3rem;
+}
+
+.buttons button {
+	padding: 0.5rem 1.25rem;
+	width: 10rem;
+	margin: .5rem;
+	border: none;
+	border-radius: 50px;
+	box-shadow: 1px 1px 3px gray;
+}
+
+.splash-background.inactive{
+	display: none;
+}
+
+form button{
+	padding: .25rem 1rem;
+	margin: .35rem;
+	border: none;
+	border-radius: 50px;
+	box-shadow: 1px 1px 3px gray;
+}
+
+.main {
+	min-height: 100vh;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.column.inactive {
+	display: none;
+}
+
+form {
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+form.inactive{
+	opacity:0;
+}
+
+.form-buttons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.form-buttons button{
+	width: 6rem;
+	margin: .75rem;
+}
+
+
+.main h2 {
+	text-align: center;
+	padding: 0;
+}
+
+input {
+	margin: .35rem;
+}
