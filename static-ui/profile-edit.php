@@ -40,7 +40,7 @@
 		</div>
 	</div>
 	<!-- View/Edit Credentials -->
-	<section>
+	<section class="page-edit-content">
 	<form class="container-fluid">
 		<div class="form-group">
 			<label for="nameViewEdit">Name</label>

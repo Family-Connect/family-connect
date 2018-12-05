@@ -123,6 +123,10 @@ form button {
 	margin: 1rem;
 }
 
+.page-edit-content {
+	margin-left: -5em;
+	margin-top: 10em;
+}
 
 .whoseIn {
 	margin-top: 3em;
