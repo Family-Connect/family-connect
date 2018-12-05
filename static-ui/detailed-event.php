@@ -41,18 +41,9 @@
 			<div class="event-head">
 				<h4>Event Name</h4>
 				<h6>Event Creator</h6>
-				<ul>
-					<li>User</li>
-					<li>User</li>
-					<li>User</li>
-					<li>User</li>
-					<li>User</li>
-					<li>User</li>
-				</ul>
-			</div>
 
 			<div class="event-body row">
-				<div class="event-description-comments col-6">
+				<div class="event-description-comments col-md-6">
 					<div class="event-description">
 						<h4>Description</h4>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -65,23 +56,23 @@
 
 				</div>
 
-				<div class="event-tasks col-6">
+				<div class="event-tasks col-md-6">
 					<h4>Event Tasks</h4>
 					<div class="card">
 						<div class="card-body">
 							<h5 class="card-title">Task 1</h5>
-							<h6 class="card-subtitle mb-2 text-muted">Task assignee(s)</h6>
+							<h6 class="card-subtitle mb-2 text-muted">Task assignee</h6>
 							<p class="card-text">Contents of task go here</p>
-							<a href="#" class="card-link">Link to task</a>
+							<a href="#" class="card-link">Comment</a>
 						</div>
 					</div>
 
 					<div class="card">
 						<div class="card-body">
-							<h5 class="card-title">Task 1</h5>
-							<h6 class="card-subtitle mb-2 text-muted">Task assignee(s)</h6>
+							<h5 class="card-title">Task 2</h5>
+							<h6 class="card-subtitle mb-2 text-muted">Task assignee</h6>
 							<p class="card-text">Contents of task go here</p>
-							<a href="#" class="card-link">Link to task</a>
+							<a href="#" class="card-link">Comment</a>
 						</div>
 					</div>
 
