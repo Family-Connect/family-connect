@@ -91,6 +91,29 @@ h6 {
 	font-style: italic;
 }
 
+.event-comments li, .event-task-comment li, .task-comment li {
+	list-style-type: none;
+}
+
+.comment p, .event-task-comment p {
+	font-style: italic;
+}
+
+.event-comments textarea, .event-task-comment-textarea, .task-comment textarea {
+	min-width: 100%;
+	min-height: 7.5rem;
+}
+
+form textarea {
+	border-radius: 5px;
+	margin-top: 2rem;
+}
+
+form button {
+	float: right;
+	padding: .25rem;
+	margin: .25rem;
+}
 
 .event-description, .event-tasks {
 	margin-top: 2rem;
@@ -100,9 +123,6 @@ h6 {
 	margin: 1rem;
 }
 
-form {
-	margin-top: 10em;
-}
 
 table{
 	margin-top: 10em;

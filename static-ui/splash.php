@@ -80,7 +80,7 @@
 				</div>
 				<div class="form-buttons">
 					<div>
-						<button type="submit">Sign In</button>
+						<button type="submit">Sign Up</button>
 					</div>
 					<div>
 						<button type="button" id="backButton1">Back</button>
