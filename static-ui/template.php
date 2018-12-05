@@ -16,7 +16,7 @@
 	</nav>
 
 	<!-- Page Content -->
-	<div id="content">
+	<div id="main">
 		<div class="buttons">
 
 			<button type="button" id="sidebarCollapse" class="btn toggleButton">
@@ -29,7 +29,7 @@
 
 		</div>
 
-		<div>
+		<div class="content">
 			<p>Lorem ipsum</p>
 		</div>
 	</div>
