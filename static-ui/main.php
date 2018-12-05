@@ -40,8 +40,13 @@
 		<div class="content container">
 			<h4>Lorem ipsum</h4>
 		</div>
-		<div class="custom-control custom-radio">
-			<input type="radio" class="custom-control-input" id="event" name="defaultRadios" checked>
+		<div class="custom-control custom-radio custom-control-inline">
+			<input type="radio" class="custom-control-input" id="task" name="defaultRadios" checked>
+			<label class="custom-control-label" for="task">Task</label>
+		</div>
+
+		<div class="custom-control custom-radio custom-control-inline">
+			<input type="radio" class="custom-control-input" id="event" name="defaultRadios">
 			<label class="custom-control-label" for="event">Event</label>
 		</div>
 	</div>
