@@ -48,16 +48,55 @@
 		</div>
 
 			<!--Check box, just me-->
-			<div class="custom-control custom-checkbox mt-3">
+			<div class="container mt-3">
+			<div class="custom-control custom-checkbox">
 				<input type="checkbox" class="custom-control-input" id="justMe">
 				<label class="custom-control-label" for="justMe">Just Me</label>
 			</div>
 
 		<!--Search Box-->
-			<div>
-				<input class="form-control" type="text" placeholder="Search" aria-label="Search">
+
+		<!--Event Drop Down-->
+			<div class="container mt-3">
+				<div id="accordion" role="tablist">
+					<div class="card">
+						<div class="card-header" role="tab" id="headingOne">
+							<h5 class="mb-0">
+								<a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="">
+									Event 1
+								</a>
+							</h5>
+						</div>
+
+						<div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" style="">
+							<div class="card-body">
+								Information for Event 1. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu
+								sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit.
+								Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu
+								sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem.
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header" role="tab" id="headingTwo">
+							<h5 class="mb-0">
+								<a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+									Event 2
+								</a>
+							</h5>
+						</div>
+						<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+							<div class="card-body">
+								Information for Event 2. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu
+								sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit.
+								Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem.
+							</div>
+						</div>
+					</div>
+				</div>
+
+
 			</div>
 		</div>
 		</div>
 	</div>
-</div>
