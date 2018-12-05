@@ -20,12 +20,19 @@
 		<div class="buttons">
 
 			<button type="button" id="sidebarCollapse" class="btn toggleButton">
-				<i class="fas fa-arrows-alt-h"></i>
+				<i class="fas fa-ellipsis-h"></i>
 			</button>
 
-			<button type="button" id="settingsButton" class="btn settingsButton">
-				<i class="fas fa-cog"></i>
-			</button>
+			<div class="configButtons">
+				<button type="button" id="plusButton" class="btn plusButton">
+					<i class="fas fa-plus"></i>
+				</button>
+
+				<button type="button" id="settingsButton" class="btn settingsButton">
+					<i class="fas fa-cog"></i>
+				</button>
+			</div>
+
 
 		</div>
 
