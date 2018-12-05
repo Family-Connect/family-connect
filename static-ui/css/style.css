@@ -87,3 +87,23 @@ h2 {
 	padding: 2rem;
 }
 
+h6 {
+	font-style: italic;
+}
+
+.event-head ul, .task-head ul {
+	padding-left: 0;
+}
+
+.event-head ul li, .task-head ul li{
+	display: inline;
+	color: gray;
+}
+
+.event-description, .event-tasks {
+	margin-top: 2rem;
+}
+
+.event-tasks .card {
+	margin: 1rem;
+}
