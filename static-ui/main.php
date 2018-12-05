@@ -33,13 +33,11 @@
 					<i class="fas fa-cog"></i>
 				</button>
 			</div>
-		</div>
+
 
 		<!-- Actual content (not sidebar) - edit below -->
-
+			<!--Radio buttons-->
 		<div class="content container">
-			<h4>Lorem ipsum</h4>
-		</div>
 		<div class="custom-control custom-radio custom-control-inline">
 			<input type="radio" class="custom-control-input" id="task" name="defaultRadios" checked>
 			<label class="custom-control-label" for="task">Task</label>
@@ -49,6 +47,12 @@
 			<input type="radio" class="custom-control-input" id="event" name="defaultRadios">
 			<label class="custom-control-label" for="event">Event</label>
 		</div>
+			<!--Check box, just me-->
+			<div class="custom-control custom-checkbox mt-3">
+				<input type="checkbox" class="custom-control-input" id="justMe">
+				<label class="custom-control-label" for="justMe">Just Me</label>
+			</div>
+		</div>
+		</div>
 	</div>
-
 </div>
