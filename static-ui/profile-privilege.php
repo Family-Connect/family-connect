@@ -27,7 +27,7 @@
 		<!-- Actual content (not sidebar) - edit below -->
 
 		<div class="content container-fluid">
-			<h4 class="whoseIn">Whose in the family?</h4>
+			<h4 class="whoseIn">Who's in the family?</h4>
 
 	<section>
 		<table class="table table-striped">
