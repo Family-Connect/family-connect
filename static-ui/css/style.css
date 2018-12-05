@@ -91,11 +91,33 @@ h6 {
 	font-style: italic;
 }
 
-
 .event-description, .event-tasks {
 	margin-top: 2rem;
 }
 
 .event-tasks .card {
 	margin: 1rem;
+}
+.event-comments li, .event-task-comment li {
+	list-style-type: none;
+}
+
+.comment p, .event-task-comment p {
+	font-style: italic;
+}
+
+.event-comments textarea, .event-task-comment-textarea {
+	min-width: 100%;
+	min-height: 7.5rem;
+}
+
+form textarea {
+	border-radius: 5px;
+	margin-top: 2rem;
+}
+
+form button {
+	float: right;
+	padding: .25rem;
+	margin: .25rem;
 }
