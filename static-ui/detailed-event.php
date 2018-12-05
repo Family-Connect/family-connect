@@ -41,6 +41,7 @@
 			<div class="event-head">
 				<h4>Event Name</h4>
 				<h6>Event Creator</h6>
+			</div>
 
 			<div class="event-body row">
 				<div class="event-description-comments col-md-6">
@@ -50,34 +51,81 @@
 					</div>
 
 					<div class="event-comments">
-						<h4>Event Commments</h4>
+						<h4>Comments</h4>
 
+						<div class="comment">
+							<p>Comment creator</p>
+							<ul>
+								<li>Aliquet nibh praesent tristique magna sit amet purus gravida quis. Porttitor massa id neque aliquam. Mauris augue neque gravida in fermentum et. In ornare quam viverra orci.</li>
+							</ul>
+						</div>
+
+						<div class="comment">
+							<p>Comment creator 2</p>
+							<ul>
+								<li>Volutpat maecenas volutpat blandit aliquam etiam erat velit. Vel pharetra vel turpis nunc eget lorem dolor. Et netus et malesuada fames ac turpis egestas integer.</li>
+							</ul>
+						</div>
+
+						<form class="add-comment container-fluid">
+							<div>
+								<textarea id="comment" name="eventComment" placeholder="What's on your mind?" "></textarea>
+							</div>
+							<div class="button">
+								<button type="submit">Add comment</button>
+							</div>
+						</form>
 					</div>
-
 				</div>
 
-				<div class="event-tasks col-md-6">
-					<h4>Event Tasks</h4>
-					<div class="card">
-						<div class="card-body">
-							<h5 class="card-title">Task 1</h5>
-							<h6 class="card-subtitle mb-2 text-muted">Task assignee</h6>
-							<p class="card-text">Contents of task go here</p>
-							<a href="#" class="card-link">Comment</a>
+			<div class="event-tasks col-md-6">
+				<h4>Event Tasks</h4>
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Task 1</h5>
+						<h6 class="card-subtitle mb-2 text-muted">Task assignee</h6>
+						<p class="card-text">Contents of task go here</p>
+						<a class="btn" data-toggle="collapse" href="#collapseTask1" role="button" aria-expanded="false" aria-controls="collapseTask1"><i class="fas fa-comments"></i></a>
+						<div class="collapse multi-collapse" id="collapseTask1">
+							<div class="card card-body event-task-comment">
+								<p>Comment creator</p>
+								<ul>
+									<li>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.</li>
+								</ul>
+							</div>
+							<form class="add-task-comment container-fluid">
+								<div>
+									<textarea id="taskComment" name="eventTaskComment" class="event-task-comment-textarea" placeholder="What's on your mind?" "></textarea>
+								</div>
+								<div class="button">
+									<button type="submit">Add comment</button>
+								</div>
+							</form>
 						</div>
 					</div>
+				</div>
 
-					<div class="card">
-						<div class="card-body">
-							<h5 class="card-title">Task 2</h5>
-							<h6 class="card-subtitle mb-2 text-muted">Task assignee</h6>
-							<p class="card-text">Contents of task go here</p>
-							<a href="#" class="card-link">Comment</a>
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Task 2</h5>
+						<h6 class="card-subtitle mb-2 text-muted">Task assignee</h6>
+						<p class="card-text">Contents of task go here</p>
+						<a class="btn" data-toggle="collapse" href="#collapseTask2" role="button" aria-expanded="false" aria-controls="collapseTask2"><i class="fas fa-comments"></i></a>
+						<div class="collapse multi-collapse" id="collapseTask2">
+
+							<form class="add-task-comment container-fluid">
+								<div>
+									<textarea id="taskComment" name="eventTaskComment" class="event-task-comment-textarea" placeholder="What's on your mind?" "></textarea>
+								</div>
+								<div class="button">
+									<button type="submit">Add comment</button>
+								</div>
+							</form>
 						</div>
 					</div>
+				</div>
 
 				</div>
-			</div>
 		</div>
 	</div>
 
