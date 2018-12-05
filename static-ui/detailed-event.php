@@ -24,10 +24,19 @@
 				<i class="fas fa-ellipsis-h"></i>
 			</button>
 
+
 			<div class="configButtons">
-				<button type="button" id="plusButton" class="btn plusButton">
-					<i class="fas fa-plus"></i>
-				</button>
+				<div class="dropdown">
+
+					<button type="button" id="plusButton" class="btn plusButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-plus"></i>
+					</button>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="#">Edit Event Name</a>
+						<a class="dropdown-item" href="#">Edit Event Owner</a>
+						<a class="dropdown-item" href="#">Edit Event Description</a>
+					</div>
+				</div>
 
 				<button type="button" id="settingsButton" class="btn settingsButton">
 					<i class="fas fa-cog"></i>
