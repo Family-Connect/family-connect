@@ -81,6 +81,7 @@ h2 {
 	transition:.3s;
 }
 
+
 .content {
 	min-height: 100vh;
 	padding: 2rem;
@@ -90,6 +91,7 @@ h6 {
 	font-style: italic;
 }
 
+
 .event-description, .event-tasks {
 	margin-top: 2rem;
 }
@@ -97,28 +99,15 @@ h6 {
 .event-tasks .card {
 	margin: 1rem;
 }
-.event-comments li, .event-task-comment li, .task-comment li {
-	list-style-type: none;
+
+form {
+	margin-top: 10em;
 }
 
-.comment p, .event-task-comment p {
-	font-style: italic;
+table{
+	margin-top: 10em;
 }
 
-.event-comments textarea, .event-task-comment-textarea, .task-comment textarea {
-	min-width: 100%;
-	min-height: 7.5rem;
+.fa-trash-alt {
+	vertical-align: center;
 }
-
-form textarea {
-	border-radius: 5px;
-	margin-top: 2rem;
-}
-
-form button {
-	float: right;
-	padding: .25rem;
-	margin: .25rem;
-}
-
-

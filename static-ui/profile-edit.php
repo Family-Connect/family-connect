@@ -67,12 +67,23 @@
 			<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
 			<label class="form-check-label" for="inlineRadio2">1</label>
 		</div>
+		<div class="userLists">
+			<div>
+				<h4>Events</h4>
+					<ul>
+						<li>Event 1</li>
+						<li>Event 2</li>
+						<li>Event 3</li>
+					</ul>
+				<h4>Tasks</h4>
+				<ul>
+					<li>Task 1</li>
+					<li>Task 2</li>
+					<li>Task 3</li>
+				</ul>
+			</div>
+		</div>
 	</form>
 	</section>
-	<section>
-		<div>
-		<h4>Events</h4>
-		<h4>Tasks</h4>
-	</div>
-	</section>
+
 </div>
