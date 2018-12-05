@@ -38,7 +38,8 @@
 		<!-- Actual content (not sidebar) - edit below -->
 
 		<div class="content container">
-			<h4>Lorem ipsum</h4>
+			<h4>Event Name</h4>
+			<h6>Event Creator</h6>
 		</div>
 	</div>
 
