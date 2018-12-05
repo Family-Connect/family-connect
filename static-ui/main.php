@@ -38,19 +38,24 @@
 		<!-- Actual content (not sidebar) - edit below -->
 			<!--Radio buttons-->
 		<div class="content container">
-		<div class="custom-control custom-radio custom-control-inline">
-			<input type="radio" class="custom-control-input" id="task" name="defaultRadios" checked>
-			<label class="custom-control-label" for="task">Task</label>
+		<div class="btn-group btn-group-toggle" data-toggle="buttons">
+			<label class="btn btn-secondary active">
+			<input type="radio" name="task" id="task" autocomplete="off" checked> Task
+			</label>
+			<label class="btn btn-secondary">
+				<input type="radio" name="event" id="event" autocomplete="off"> Event
+			</label>
 		</div>
 
-		<div class="custom-control custom-radio custom-control-inline">
-			<input type="radio" class="custom-control-input" id="event" name="defaultRadios">
-			<label class="custom-control-label" for="event">Event</label>
-		</div>
 			<!--Check box, just me-->
 			<div class="custom-control custom-checkbox mt-3">
 				<input type="checkbox" class="custom-control-input" id="justMe">
 				<label class="custom-control-label" for="justMe">Just Me</label>
+			</div>
+
+		<!--Search Box-->
+			<div>
+				<input class="form-control" type="text" placeholder="Search" aria-label="Search">
 			</div>
 		</div>
 		</div>
