@@ -60,7 +60,7 @@
 							</ul>
 						</div>
 
-						<div class="comment">
+						<div class="task-comment">
 							<p>Comment creator 2</p>
 							<ul>
 								<li>Volutpat maecenas volutpat blandit aliquam etiam erat velit. Vel pharetra vel turpis nunc eget lorem dolor. Et netus et malesuada fames ac turpis egestas integer.</li>
@@ -82,7 +82,7 @@
 					<h4>Due Date</h4>
 					<div class="card">
 						<div class="card-body">
-							Task due date will go here.
+							00/00/0000
 						</div>
 					</div>
 				</div

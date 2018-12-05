@@ -97,7 +97,7 @@ h6 {
 .event-tasks .card {
 	margin: 1rem;
 }
-.event-comments li, .event-task-comment li {
+.event-comments li, .event-task-comment li, .task-comment li {
 	list-style-type: none;
 }
 
@@ -105,7 +105,7 @@ h6 {
 	font-style: italic;
 }
 
-.event-comments textarea, .event-task-comment-textarea {
+.event-comments textarea, .event-task-comment-textarea, .task-comment textarea {
 	min-width: 100%;
 	min-height: 7.5rem;
 }
@@ -120,3 +120,5 @@ form button {
 	padding: .25rem;
 	margin: .25rem;
 }
+
+
