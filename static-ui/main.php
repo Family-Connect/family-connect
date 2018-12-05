@@ -43,21 +43,31 @@
 			<input type="radio" name="task" id="task" autocomplete="off" checked> Task
 			</label>
 			<label class="btn btn-secondary">
-				<input type="radio" name="event" id="event" autocomplete="off"> Event
+			<input type="radio" name="event" id="event" autocomplete="off"> Event
 			</label>
 		</div>
 
 			<!--Check box, just me-->
 			<div class="container mt-3">
-			<div class="custom-control custom-checkbox">
+				<div class="row no-gutters">
+				<div class="custom-control custom-checkbox col-sm-6 col-md-8">
 				<input type="checkbox" class="custom-control-input" id="justMe">
 				<label class="custom-control-label" for="justMe">Just Me</label>
 			</div>
 
 		<!--Search Box-->
+				<div class="input-group input-group-sm col-6 col-md-4">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
+					</div>
+					<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+				</div>
+			</div>
+			</div>
 
-		<!--Event Drop Down-->
-			<div class="container mt-3">
+
+				<!--Event Drop Down-->
+			<div class="container mt-5">
 				<div id="accordion" role="tablist">
 					<div class="card">
 						<div class="card-header" role="tab" id="headingOne">
@@ -96,7 +106,6 @@
 				</div>
 
 
-			</div>
 		</div>
 		</div>
 	</div>
