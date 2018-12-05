@@ -99,3 +99,7 @@ h6 {
 .event-tasks .card {
 	margin: 1rem;
 }
+
+form {
+	margin-top: 10em;
+}
