@@ -105,7 +105,9 @@ class Event implements \JsonSerializable {
 	public function setEventId($newEventId): void {
 		try {
 			$uuid = self::validateUuid($newEventId);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		}	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 2, $exception));
 		}
 
 		//convert and store the event id
@@ -135,7 +137,7 @@ class Event implements \JsonSerializable {
 		} catch
 		(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+			throw(new $exceptionType($exception->getMessage(), 1, $exception));
 		}
 		// convert and store the event family id
 		$this->eventFamilyId = $uuid;
@@ -164,7 +166,7 @@ class Event implements \JsonSerializable {
 		} catch
 		(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+			throw(new $exceptionType($exception->getMessage(), 3, $exception));
 		}
 		// convert and store the event user id
 		$this->eventUserId = $uuid;

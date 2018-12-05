@@ -89,12 +89,7 @@ try {
 			// package.
 			$requestObject = json_decode($requestContent);
 			//This line then decodes the JSON package and stores that result in $requestObject
-			//make sure event content is available (required field)
-
-		//enforce the user is signed in
-		if(empty($requestObject->eventUserId) === true) {
-			throw(new \InvalidArgumentException("you must be logged in to add an event", 401));
-		}
+			//make sure event content is available (required field
 
 		if(empty($requestObject->eventContent) === true) {
 				throw(new \InvalidArgumentException ("No content for Event.", 405));
@@ -114,13 +109,13 @@ try {
 						throw(new RuntimeException("Event does not exist", 404));
 				}
 
+
+
+				;
 				//enforce the end user has a JWT Token
 				validateJwtHeader();
 
 				//update all attributes
-				$event->setEventId($requestObject->eventId);
-				$event->setEventFamilyId($requestObject->eventFamilyId);
-				$event->setEventUserId($requestObject->eventUserId);
 				$event->setEventContent($requestObject->eventContent);
 				$event->setEventEndDate($requestObject->eventEndDate);
 				$event->setEventName($requestObject->eventName);
@@ -142,12 +137,14 @@ try {
 					 *throw(new \InvalidArgumentException("you must be logged in to create an event", 403));
 				}**/
 
-				//enforce the user has a JWT token
+
+				//var_dump($_SESSION);//enforce the user has a JWT token
 				validateJwtHeader();
 
 				//create new event and insert into the database
 				$eventId = generateUuidV4();
-				$event = new Event($eventId, $requestObject->eventFamilyId, $requestObject->eventUserId, $requestObject->eventContent,
+				$event = new Event($eventId, $requestObject->eventFamilyId, $_SESSION["user"]->getUserId(),
+					$requestObject->eventContent,
 					$requestObject->eventEndDate, $requestObject->eventName, $requestObject->eventStartDate);
 				$event->insert($pdo);
 
@@ -181,6 +178,7 @@ try {
 } catch(\Exception | \TypeError $exception) {
 		$reply->status = $exception->getCode();
 		$reply->message = $exception->getMessage();
+		$reply->trace = $exception->getTraceAsString();
 }
 
 //encode and return reply to front end caller
