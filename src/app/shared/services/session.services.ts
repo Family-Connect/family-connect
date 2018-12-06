@@ -12,9 +12,9 @@ export class SessionService {
 
 	private sessionUrl = "api/earl-grey/";
 
-	//setSession() {
-	//return (this.http.get<Status>(this.sessionUrl, {}));
+	setSession() {
+	return (this.http.get<Status>(this.sessionUrl, {}));
 
-	//}
+	}
 
 }
