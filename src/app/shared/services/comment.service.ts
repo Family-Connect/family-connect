@@ -7,7 +7,7 @@ import {Observable} from "rxjs";
 
 
 @Injectable()
-export class PostService {
+export class CommentService {
 	constructor(protected http: HttpClient) {
 	}
 
