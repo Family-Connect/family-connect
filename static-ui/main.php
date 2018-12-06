@@ -38,30 +38,35 @@
 		<!-- Actual content (not sidebar) - edit below -->
 			<!--Radio buttons-->
 		<div class="content container">
-		<div class="btn-group btn-group-toggle" data-toggle="buttons">
-			<label class="btn btn-secondary active">
-			<input type="radio" name="task" id="task" autocomplete="off" checked> Task
-			</label>
-			<label class="btn btn-secondary">
-			<input type="radio" name="event" id="event" autocomplete="off"> Event
-			</label>
-		</div>
+			<div class="row no-gutters">
+			<div class="custom-control custom-radio col-sm-6 col-md-8">
+				<input type="radio" id="task" name="customRadio" class="custom-control-input">
+				<label class="custom-control-label" for="task">Task</label>
+			</div>
+			<div class="custom-control custom-radio col-sm-6 col-md-5">
+				<input type="radio" id="event" name="customRadio" class="custom-control-input">
+				<label class="custom-control-label" for="event">Event</label>
+			</div>
 
-			<!--Check box, just me-->
+				<!--Search Box-->
+			<div class="input-group input-group-sm">
+				<div class="input-group-prepend col-sm-6 col-md-3">
+					<div class="custom-control custom-radio">
+					<span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
+				</div>
+				<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+			</div>
+			</div>
+			</div>
+
+
+				<!--Check box, just me-->
 			<div class="container mt-3">
 				<div class="row no-gutters">
-				<div class="custom-control custom-checkbox col-sm-6 col-md-8">
+				<div class="custom-control custom-checkbox">
 				<input type="checkbox" class="custom-control-input" id="justMe">
 				<label class="custom-control-label" for="justMe">Just Me</label>
 			</div>
-
-		<!--Search Box-->
-				<div class="input-group input-group-sm col-6 col-md-4">
-					<div class="input-group-prepend">
-						<span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
-					</div>
-					<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-				</div>
 			</div>
 			</div>
 
@@ -104,8 +109,6 @@
 						</div>
 					</div>
 				</div>
+			</div>
 
 
-		</div>
-		</div>
-	</div>
