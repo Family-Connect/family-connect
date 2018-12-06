@@ -1,6 +1,6 @@
 // interfaces are based on what the API wants, not the class
 export interface Comment {
-	commentId: null,
+	commentId: string,
 	commentEventId: string,
 	commentTaskId: string,
 	commentUserId: string,

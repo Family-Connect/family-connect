@@ -1,10 +1,10 @@
 // interfaces are based on what the API wants, not the class
 export interface Task {
 	taskId: string,
-	taskDescription: null,
+	taskDescription: string,
 	taskDueDate: Date,
-	taskEventId: null,
+	taskEventId: string,
 	taskIsComplete: string,
 	taskName: string,
-	taskUserId: null,
+	taskUserId: string,
 }
