@@ -16,7 +16,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
 	<!-- Custom CSS -->
-	<link rel="stylesheet" href="css/splash.css"/>
+	<link rel="stylesheet" href="css/style.css"/>
 
 	<!-- Custom scripts -->
 	<script src="scripts/splash.js" defer></script>
@@ -26,7 +26,7 @@
 
 </head>
 
-<body>
+<body class="splash">
 	<div class="container-fluid splash-background">
 		<h1>Welcome to Family Connect</h1>
 		<div class="buttons">

@@ -137,3 +137,90 @@ table{
 	margin-right: 50px;
 }
 
+/*below is css for splash*/
+
+.splash {
+	font-family: 'Libre Franklin', sans-serif !important;
+	background: linear-gradient(217deg, rgba(193,200,228,.8), rgba(193,200,228,0) 70.71%),linear-gradient(127deg, rgba(132,206,235,.8), rgba(132,206,235,0) 70.71%),linear-gradient(336deg, rgba(90,185,234,.8), rgba(90,185,234,0) 70.71%);
+}
+
+.splash .splash-background {
+	min-height: 100vh;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+
+
+}
+
+.splash .buttons {
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2.5rem;
+}
+
+.splash .buttons button {
+	padding: 0.5rem;
+	width: 10rem;
+	margin: .75rem 1.25rem;
+	border: none;
+	border-radius: 50px;
+	box-shadow: 1px 1px 3px gray;
+}
+
+.splash .splash-background.inactive{
+	display: none;
+}
+
+.splash form button{
+	padding: .25rem 1rem;
+	margin: .35rem;
+	border: none;
+	border-radius: 50px;
+	box-shadow: 1px 1px 3px gray;
+}
+
+.splash .main {
+	min-height: 100vh;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.splash .column.inactive {
+	display: none;
+}
+
+.splash form {
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.splash form.inactive{
+	opacity:0;
+}
+
+.splash .form-buttons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.splash .form-buttons button{
+	width: 6rem;
+	margin: .75rem;
+}
+
+
+.splash .main h2 {
+	text-align: center;
+	padding: 0;
+}
+
+.splash input {
+	margin: .35rem;
+}
