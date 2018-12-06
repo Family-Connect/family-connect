@@ -12,4 +12,6 @@ export class TaskService {
 	}
 
 	//define the API endpoint
-	private taskUrl = "apis/post/";
+	private taskUrl = "api/post/";
+
+}

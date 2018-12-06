@@ -12,4 +12,6 @@ export class UserService {
 	}
 
 	//define the API endpoint
-	private userUrl = "apis/post/";
+	private userUrl = "api/post/";
+
+}
