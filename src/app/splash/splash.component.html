@@ -31,7 +31,7 @@
 
 		<div class="column col-md-3 sign-up inactive">
 			<h2>Sign Up</h2>
-			<form [formGroup]="signUpForm" (ngSubmit)="createUser()" novalidate>
+			<form name="signUpForm" id="signUpForm" class="signUpForm" [formGroup]="signUpForm" (ngSubmit)="createUser()" novalidate>
 				<div>
 					<input type="email" id="userEmail" name="userEmail" placeholder="Email" formControlName="userEmail"/>
 				</div>
