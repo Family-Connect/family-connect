@@ -31,24 +31,24 @@
 
 		<div class="column col-md-3 sign-up inactive">
 			<h2>Sign Up</h2>
-			<form>
+			<form [formGroup]="signUpForm" (ngSubmit)="createUser()" novalidate>
 				<div>
-					<input type="email" id="userEmail" name="userEmail" placeholder="Email"/>
+					<input type="email" id="userEmail" name="userEmail" placeholder="Email" formControlName="userEmail"/>
 				</div>
 				<div>
-					<input type="text" id="userDisplayName" name="userDisplayName" placeholder="User Name"/>
+					<input type="text" id="userDisplayName" name="userDisplayName" placeholder="User Name" formControlName="userDisplayName"/>
 				</div>
 				<div>
-					<input type="text" id="userPhoneNumber" name="userPhoneNumber" placeholder="Phone Number"/>
+					<input type="text" id="userPhoneNumber" name="userPhoneNumber" placeholder="Phone Number" formControlName="userPhoneNumber"/>
 				</div>
 				<div>
-					<input id="userPassword" name="userPassword" placeholder="Password"/>
+					<input id="userPassword" name="userPassword" placeholder="Password" formControlName="userPassword"/>
 				</div>
 				<div>
-					<input id="userPasswordConfirm" name="userPasswordConfirm" placeholder="Confirm Password"/>
+					<input id="userPasswordConfirm" name="userPasswordConfirm" placeholder="Confirm Password" formControlName="userPasswordConfirm"/>
 				</div>
 				<div>
-					<input type="text" id="familyName" name="family-name" placeholder="Family Name"/>
+					<input type="text" id="familyName" name="family-name" placeholder="Family Name" formControlName="userFamilyId"/>
 				</div>
 				<div class="form-buttons">
 					<div>

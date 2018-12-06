@@ -1,4 +1,4 @@
-@import 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';
+/*@import 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';
 @import url('https://fonts.googleapis.com/css?family=Libre+Franklin:500');
 .wrapper {
 	display: flex;
@@ -140,13 +140,13 @@ table{
 }
 
 /*below is css for splash*/
-
+/*
 .splash {
 	font-family: 'Libre Franklin', sans-serif !important;
 	background: linear-gradient(217deg, rgba(193,200,228,.8), rgba(193,200,228,0) 70.71%),linear-gradient(127deg, rgba(132,206,235,.8), rgba(132,206,235,0) 70.71%),linear-gradient(336deg, rgba(90,185,234,.8), rgba(90,185,234,0) 70.71%);
-}
+}*/
 
-.splash .splash-background {
+/*.splash .splash-background {
 	min-height: 100vh;
 	display:flex;
 	align-items: center;
