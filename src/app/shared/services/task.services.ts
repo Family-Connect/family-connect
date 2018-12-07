@@ -35,6 +35,9 @@ export class TaskService {
 		return (this.http.get<Task>(this.taskUrl + taskId));
 	}
 
-
+// call to the task API and get an array of tasks based off the eventId
+	getTaskByEventId(taskEventId: string): Observable<any[]> {
+		return (this.http.get<any[]>(this.taskUrl, {params: new HttpParams().set("taskEventId", taskEventId)}));
+	}
 
 }

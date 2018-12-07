@@ -24,7 +24,7 @@ export class CommentService {
 		return (this.http.put<Status>(this.commentUrl + comment.commentId, comment));
 	}
 
-	// call to the comment API and creat the comment in question
+	// call to the comment API and create the comment in question
 	createComment(comment: Comment): Observable<Status> {
 		return (this.http.post<Status>(this.commentUrl, +comment));
 	}
@@ -35,22 +35,22 @@ export class CommentService {
 	}
 
 	// call to the comment API and get an array of comments based off the eventId
-	getCommentbyEventId(commentEventId: string): Observable<any[]> {
+	getCommentByEventId(commentEventId: string): Observable<any[]> {
 		return (this.http.get<any[]>(this.commentUrl, {params: new HttpParams().set("commentEventId", commentEventId)}));
 	}
 
 	// call to the comment API and get an array of comments based off the taskId
-	getCommentbyTaskId(commentTaskId: string): Observable<any[]> {
+	getCommentByTaskId(commentTaskId: string): Observable<any[]> {
 		return (this.http.get<any[]>(this.commentUrl, {params: new HttpParams().set("commentTaskId", commentTaskId)}));
 	}
 
-	// call to the comment API and get an array of commentss based off the userId
-	getCommentbyUserId(commentUserId: string): Observable<any[]> {
+	// call to the comment API and get an array of comments based off the userId
+	getCommentByUserId(commentUserId: string): Observable<any[]> {
 		return (this.http.get<any[]>(this.commentUrl, {params: new HttpParams().set("commentUserId", commentUserId)}));
 	}
 
 	// call to the comment API and get an array of comments based off the profileId
-	getCommentbyProfileId(commentProfileId: string): Observable<Comment[]> {
+	getCommentByProfileId(commentProfileId: string): Observable<Comment[]> {
 		return (this.http.get<Comment[]>(this.commentUrl, {params: new HttpParams().set("commentProfileId", commentProfileId)}));
 	}
 
