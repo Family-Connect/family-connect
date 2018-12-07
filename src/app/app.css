@@ -138,11 +138,11 @@ table{
 	margin-top: 10em;
 	margin-right: 50px;
 }
-/*
-.splash {
-	font-family: 'Libre Franklin', sans-serif !important;
-	background: linear-gradient(217deg, rgba(193,200,228,.8), rgba(193,200,228,0) 70.71%),linear-gradient(127deg, rgba(132,206,235,.8), rgba(132,206,235,0) 70.71%),linear-gradient(336deg, rgba(90,185,234,.8), rgba(90,185,234,0) 70.71%);
-}
+
+/*.splash {*/
+	/*font-family: 'Libre Franklin', sans-serif !important;*/
+	/*background: linear-gradient(217deg, rgba(193,200,228,.8), rgba(193,200,228,0) 70.71%),linear-gradient(127deg, rgba(132,206,235,.8), rgba(132,206,235,0) 70.71%),linear-gradient(336deg, rgba(90,185,234,.8), rgba(90,185,234,0) 70.71%);*/
+/*}*/
 
 .splash .splash-background {
 	min-height: 100vh;
@@ -223,4 +223,4 @@ table{
 
 .splash input {
 	margin: .35rem;
-}*/
+}

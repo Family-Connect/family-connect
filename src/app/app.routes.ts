@@ -6,12 +6,14 @@ import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {SessionService} from "./shared/services/session.service";
 import {SignUpService} from "./shared/services/sign-up.service";
 import {SignInService} from "./shared/services/sign-in.service";
+import {MainComponent} from "./main/main.component";
 
 
-export const allAppComponents = [SplashComponent];
+export const allAppComponents = [SplashComponent, MainComponent];
 
 export const routes: Routes = [
-	{path: "", component: SplashComponent}
+	{path: "", component: SplashComponent},
+	{path: "main", component: MainComponent}
 ];
 
 const services: any[] = [SessionService, SignUpService, SignInService];

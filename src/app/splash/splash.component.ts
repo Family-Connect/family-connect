@@ -10,11 +10,14 @@ import {SignInService} from "../shared/services/sign-in.service";
 	template: require("./splash.component.html")
 })
 
+
 export class SplashComponent implements OnInit {
 	signUp: SignUp;
 	signUpForm: FormGroup;
 	signInForm: FormGroup;
 	status: Status = {status:null, message:null, type:null};
+
+	testSelector = document.querySelector('.splash-background');
 
 	constructor(private signUpService: SignUpService, private signInService : SignInService, private formBuilder : FormBuilder) {}
 
@@ -32,6 +35,8 @@ export class SplashComponent implements OnInit {
 			userEmail: ["", [Validators.maxLength(128), Validators.required]],
 			userPassword: ["", [Validators.maxLength(97), Validators.required]]
 		})
+
+		console.log(status);
 	}
 
 	createUser() : void {
@@ -59,5 +64,12 @@ export class SplashComponent implements OnInit {
 				}
 			});
 	}
+
+	//console.log("click")
+
+	// clickEvent() {
+	// 	console.log('hey');
+	// 	this.toggleStatus = !this.toggleStatus;
+	// }
 
 }
