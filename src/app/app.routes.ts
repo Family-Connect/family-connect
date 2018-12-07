@@ -3,7 +3,7 @@ import {SplashComponent} from "./splash/splash.component";
 import {APP_BASE_HREF} from "@angular/common";
 import {DeepDiveInterceptor} from "./shared/interceptors/deep.dive.interceptor";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
-import {SessionService} from "./shared/services/session.services";
+import {SessionService} from "./shared/services/session.service";
 import {SignUpService} from "./shared/services/sign-up.service";
 import {SignInService} from "./shared/services/sign-in.service";
 

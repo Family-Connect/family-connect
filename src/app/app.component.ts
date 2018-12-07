@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {SessionService} from "./shared/services/session.services";
+import {SessionService} from "./shared/services/session.service";
 import {Status} from "./shared/interfaces/status";
 
 @Component({
