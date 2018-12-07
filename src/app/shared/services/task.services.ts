@@ -50,6 +50,29 @@ export class TaskService {
 		return (this.http.get<Task[]>(this.taskUrl, {params: new HttpParams().set("taskDescription", taskDescription)}));
 	}
 
+	//call to the task API and get an array of tasks based off the taskDueDate
+	getTaskByTaskDueDate(taskDueDate: string): Observable<task[]> {
+		return (this.http.get<Task[]>(this.taskUrl, {params: new HttpParams().set("taskDueDate", taskDueDate)}));
+	}
 
+	//call to the task API and get an array of tasks based off the taskEndInterval
+	getTaskByTaskEndInterval(taskEndInterval: string): Observable<task[]> {
+		return (this.http.get<Task[]>(this.taskUrl, {params: new HttpParams().set("taskEndInterval", taskEndInterval)}));
+	}
+
+	//call to the task API and get an array of tasks based off of taskIsComplete
+	getTaskByTaskIsComplete(taskIsComplete: string): Observable<task[]> {
+		return (this.http.get<Task[]>(this.taskUrl, {params: new HttpParams().set("taskIsComplete", taskIsComplete)}));
+	}
+
+	//call to the task API and get an array of tasks based off the taskName
+	getTaskByTaskName(taskName: string): Observable<task[]> {
+		return (this.http.get<Task[]>(this.taskUrl, {params: new HttpParams().set("taskName", taskName)}));
+	}
+
+//call to the task API and get an array of tasks based off the taskStartInterval
+	getTaskByTaskStartInterval(taskStartInterval: string): Observable<task[]> {
+		return (this.http.get<Task[]>(this.taskUrl, {params: new HttpParams().set("taskStartInterval", taskStartInterval)}));
+	}
 
 }
