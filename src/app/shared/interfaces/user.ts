@@ -5,4 +5,5 @@ export interface User {
 	userEmail: string,
 	userDisplayName: string,
 	userFamilyId: string,
+	userPhoneNumber: string,
 }

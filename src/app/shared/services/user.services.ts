@@ -31,6 +31,13 @@ export class UserService {
 	getUser(userId: string): Observable<User> {
 		return(this.http.get<User>(this.userUrl + userId));
 	}
+	// call to the user API and get an array of users based off the familyId
+	getUserByFamilyId(userFamilyId: string): Observable<any[]> {
+		return (this.http.get<any[]>(this.userUrl, {params: new HttpParams().set("userFamilyId", userFamilyId)}));
+	}
+	getUserAvatar(userAvatar: string): Observable<User> {
+		return(this.http.get<User>(this.userUrl + userAvatar));
+	}
 	//call to the user API and get a user object based on its Email
 	getUserEmail(userEmail: string): Observable<User> {
 		return(this.http.get<User>(this.userUrl + userEmail));
