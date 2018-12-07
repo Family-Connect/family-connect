@@ -10,23 +10,23 @@
 	<div class="container-fluid row main">
 		<div class="column col-md-3 sign-in inactive">
 			<h2>Sign In</h2>
-			<!--<form>-->
-				<!--<div>-->
-					<!--<input type="email" id="mail" name="user_mail" placeholder="Email"/>-->
-				<!--</div>-->
-				<!--<div>-->
-					<!--<input id="password" name="userPassword" placeholder="Password"/>-->
-				<!--</div>-->
-				<!--<div class="form-buttons">-->
-					<!--<div>-->
-						<!--<button type="submit">Sign In</button>-->
-					<!--</div>-->
-					<!--<div>-->
-						<!--<button type="button" id="backButton">Back</button>-->
-					<!--</div>-->
-				<!--</div>-->
+			<form (ngSubmit)="signIn()" [formGroup]="signInForm" novalidate>
+				<div>
+					<input type="email" id="mail" name="user_mail" placeholder="Email" formControlName="userEmail"/>
+				</div>
+				<div>
+					<input id="password" name="userPassword" placeholder="Password" formControlName="userPassword"/>
+				</div>
+				<div class="form-buttons">
+					<div>
+						<button type="submit">Sign In</button>
+					</div>
+					<div>
+						<button type="button" id="backButton">Back</button>
+					</div>
+				</div>
 
-			<!--</form>-->
+			</form>
 		</div>
 
 		<div class="column col-md-3 sign-up inactive">

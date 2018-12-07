@@ -13,7 +13,7 @@ export class SignInService {
 
 	}
 
-	//preform the post to initiate sign in
+	//perform the post to initiate sign in
 	postSignIn(signIn:SignIn) : Observable<Status> {
 		return(this.http.post<Status>(this.signInUrl, signIn));
 	}
