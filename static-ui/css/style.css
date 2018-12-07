@@ -128,6 +128,8 @@ form button {
 	margin-top: 10em;
 }
 
+/*Styling for "Who's in the Family page*/
+
 .whoseIn {
 	margin-top: 3em;
 }
@@ -135,6 +137,12 @@ form button {
 table{
 	margin-top: 10em;
 	margin-right: 50px;
+}
+
+/*stying for profile page*/
+
+.userLists {
+	margin-top: 3em;
 }
 
 /*below is css for splash*/

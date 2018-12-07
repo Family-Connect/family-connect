@@ -60,7 +60,7 @@
 		</div>
 		<h6>Privilege</h6>
 		<div class="form-check form-check-inline">
-			<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" disabled>
+			<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
 			<label class="form-check-label" for="inlineRadio1">0</label>
 		</div>
 		<div class="form-check form-check-inline">
@@ -72,14 +72,10 @@
 				<h4>Events</h4>
 					<ul>
 						<li>Event 1</li>
-						<li>Event 2</li>
-						<li>Event 3</li>
 					</ul>
 				<h4>Tasks</h4>
 				<ul>
 					<li>Task 1</li>
-					<li>Task 2</li>
-					<li>Task 3</li>
 				</ul>
 			</div>
 		</div>
