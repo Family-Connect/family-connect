@@ -2,7 +2,9 @@
 export interface Event {
 	eventId: string,
 	eventContent: string,
-	eventDate: Date,
+	eventEndDate: Date,
+	eventFamilyId: string,
 	eventName: string,
+	eventStartDate: Date,
 	eventUserId: string,
 }
