@@ -40,4 +40,16 @@ export class TaskService {
 		return (this.http.get<any[]>(this.taskUrl, {params: new HttpParams().set("taskEventId", taskEventId)}));
 	}
 
+	// call to the task API and get an array of tasks based off the userId
+	getTaskByUserId(TaskUserId: string) : Observable<any[]> {
+		return (this.http.get<any[]>(this.taskUrl, {params: new HttpParams().set()"taskUserId", taskUserId}));
+	}
+
+	//call to the task API and get an array of tasks based off the taskDescription
+	getTaskByTaskDescription(taskDescription: string): Observable<task[]> {
+		return (this.http.get<Task[]>(this.taskUrl, {params: new HttpParams().set("taskDescription", taskDescription)}));
+	}
+
+
+
 }
