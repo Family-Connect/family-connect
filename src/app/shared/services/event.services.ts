@@ -34,9 +34,19 @@ export class EventService {
 		return (this.http.get<Event>(this.eventUrl + eventId));
 	}
 
+	// call to the event API and get an array of events based off the familyId
+	getEventByFamilyId(eventFamilyId: string): Observable<any[]> {
+		return (this.http.get<any[]>(this.eventUrl, {params: new HttpParams().set("eventFamilyId", eventFamilyId)}));
+	}
+
 	// call to the event API and get an array of events based off the userId
-	getEventbyUserId(eventUserId: string): Observable<any[]> {
+	getEventByUserId(eventUserId: string): Observable<any[]> {
 		return (this.http.get<any[]>(this.eventUrl, {params: new HttpParams().set("eventUserId", eventUserId)}));
+	}
+
+	// call to the event API and get an array of events based off the event name
+	getEventByEventName(eventName: string): Observable<any[]> {
+		return (this.http.get<any[]>(this.eventUrl, {params: new HttpParams().set("eventName", eventName)}));
 	}
 
 	// call to the event API and get an array of events based off the eventContent
@@ -44,8 +54,13 @@ export class EventService {
 		return (this.http.get<Event[]>(this.eventUrl, {params: new HttpParams().set("eventContent", eventContent)}));
 	}
 
-	//call to the API to get an array of events within a specific date range
-	getEventbyDates() : Observable<Event[]> {
+	//call to the event API to get an array of events based off of the end date
+	getEventByEndDate() : Observable<Event[]> {
+		return(this.http.get<Event[]>(this.eventUrl));
+	}
+
+	//call to the event API to get an array of events based off of the start date
+	getEventByStartDate() : Observable<Event[]> {
 		return(this.http.get<Event[]>(this.eventUrl));
 	}
 
