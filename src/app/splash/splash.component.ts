@@ -65,11 +65,40 @@ export class SplashComponent implements OnInit {
 			});
 	}
 
-	//console.log("click")
+	stateFlag = false;
+	stateFlag1 = false;
+	stateFlag2 = false;
 
-	// clickEvent() {
-	// 	console.log('hey');
-	// 	this.toggleStatus = !this.toggleStatus;
-	// }
+	toggleState1() {
+		this.stateFlag = !this.stateFlag;
+		this.stateFlag1 = !this.stateFlag1;
+	}
+
+	toggleState2() {
+		this.stateFlag = !this.stateFlag;
+		this.stateFlag2 = !this.stateFlag2;
+	}
+
+	hideButtons() {
+		return {
+			'inactive': this.stateFlag
+		};
+	}
+
+	showForm1() {
+		return {
+			'inactive': !this.stateFlag1
+		}
+	}
+
+	showForm2() {
+		return {
+			'inactive': !this.stateFlag2
+		}
+	}
+
+
+
+
 
 }
