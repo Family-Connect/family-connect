@@ -26,7 +26,7 @@ export class CommentService {
 
 	// call to the comment API and create the comment in question
 	createComment(comment: Comment): Observable<Status> {
-		return (this.http.post<Status>(this.commentUrl, +comment));
+		return (this.http.post<Status>(this.commentUrl, + comment));
 	}
 
 	// call to the comment API and get a comment object based on its Id
