@@ -5,20 +5,21 @@ import {Family} from "../interfaces/family";
 import {User} from "../interfaces/user";
 
 @Component({
-	template: require("./sidebar.component.html")
+	template: require("./sidebar.component.html"),
+	selector: "sidebar"
 })
 
-export class DetailedEventComponent implements OnInit{
+export class SidebarComponent implements OnInit{
 	users: User[];
-	family: Family;
+	family: Family = {familyId:null, familyName:null};
 
 	constructor(private userService: UserService, private familyService:FamilyService) {}
 
 	ngOnInit() {
 		this.userService.getUserByFamilyId('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe(users => this.users = users);
-		this.familyService.getFamily('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe();
+		this.familyService.getFamily('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe(family =>this.family = family);
 		this.loadUsers();
-		this.loadFamily();
+		//this.loadFamily();
 	}
 
 	loadUsers() : void {

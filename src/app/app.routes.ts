@@ -17,9 +17,10 @@ import {DetailedTaskComponent} from "./detailed-task/detailed-task.component";
 import {ProfileEditComponent} from "./profile-edit/profile-edit.component";
 import {FamilyService} from "./shared/services/family.service";
 import {ProfilePrivilegeComponent} from "./profile-privilege/profile-privilege.component";
+import {SidebarComponent} from "./shared/components/sidebar.component";
 
 
-export const allAppComponents = [SplashComponent, MainComponent, DetailedEventComponent, DetailedTaskComponent, ProfileEditComponent, ProfilePrivilegeComponent];
+export const allAppComponents = [SplashComponent, MainComponent, DetailedEventComponent, DetailedTaskComponent, ProfileEditComponent, ProfilePrivilegeComponent, SidebarComponent];
 
 export const routes: Routes = [
 	{path: "main", component: MainComponent},

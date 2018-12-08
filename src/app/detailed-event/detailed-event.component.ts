@@ -17,7 +17,7 @@ export class DetailedEventComponent implements OnInit{
 	users: User[];
 	comments : Comment[];
 	family: Family = {familyId: null, familyName: null};
-	event: Event = {eventId:null, eventContent: null, eventEndDate: null, eventFamilyId:null, eventName: null, eventStartDate: null, eventUserId: null};
+	//event: Event = {eventId:null, eventContent: null, eventEndDate: null, eventFamilyId:null, eventName: null, eventStartDate: null, eventUserId: null};
 	status: Status = {status:null, message:null, type:null};
 
 	constructor(private commentService: CommentService, private eventService: EventService, private taskService: TaskService, private userService: UserService, private familyService: FamilyService, private formBuilder: FormBuilder) {}
@@ -25,9 +25,9 @@ export class DetailedEventComponent implements OnInit{
 	ngOnInit() {
 		this.userService.getUserByFamilyId('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe(users => this.users = users);
 		this.familyService.getFamily('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe();
-		this.eventService.getEvent().subscribe();
+		//this.eventService.getEvent().subscribe();
 
-		this.loadEvent();
+		//this.loadEvent();
 		this.loadUsers();
 		this.loadFamily();
 	}
@@ -40,9 +40,9 @@ export class DetailedEventComponent implements OnInit{
 			this.familyService.getFamily('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe();
 		}
 
-		loadEvent() : void {
-			this.eventService.getEvent().subscribe()
-		}
+		// loadEvent() : void {
+		// 	this.eventService.getEvent().subscribe()
+		// }
 
 
 
