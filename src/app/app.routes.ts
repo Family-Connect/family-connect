@@ -15,6 +15,7 @@ import {TaskService} from "./shared/services/task.service";
 import {UserService} from "./shared/services/user.service";
 import {DetailedTaskComponent} from "./detailed-task/detailed-task.component";
 import {ProfileEditComponent} from "./profile-edit/profile-edit.component";
+import {FamilyService} from "./shared/services/family.service";
 import {ProfilePrivilegeComponent} from "./profile-privilege/profile-privilege.component";
 
 
@@ -30,7 +31,7 @@ export const routes: Routes = [
 
 ];
 
-const services: any[] = [SessionService, SignUpService, SignInService, CommentService, EventService, SignOutService, TaskService, UserService];
+const services: any[] = [SessionService, SignUpService, SignInService, CommentService, EventService, SignOutService, TaskService, UserService, FamilyService];
 
 const providers: any[] = [
 	{provide: APP_BASE_HREF, useValue: window["_base_href"]},
