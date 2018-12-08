@@ -26,7 +26,6 @@
 		<div class="content container-fluid">
 			<div class="task-head">
 				<h4>{{task.taskName}}</h4>
-				<h6>{{task.taskUserName}}</h6>
 			</div>
 
 			<div class="task-body row">
@@ -61,7 +60,7 @@
 				<h4>Due Date</h4>
 				<div class="card">
 					<div class="card-body">
-						{{task.taskDueDate}}
+						{{task.taskDueDate | date}}
 					</div>
 				</div>
 			</div>

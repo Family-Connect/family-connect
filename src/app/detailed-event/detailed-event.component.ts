@@ -13,36 +13,35 @@ import {Family} from "../shared/interfaces/family";
 	template: require("./detailed-event.component.html")
 })
 
-export class DetailedEventComponent implements OnInit{
-	users: User[];
-	comments : Comment[];
-	family: Family = {familyId: null, familyName: null};
+export class DetailedEventComponent implements OnInit {
+	comments: Comment[];
 	//event: Event = {eventId:null, eventContent: null, eventEndDate: null, eventFamilyId:null, eventName: null, eventStartDate: null, eventUserId: null};
-	status: Status = {status:null, message:null, type:null};
+	status: Status = {status: null, message: null, type: null};
 
-	constructor(private commentService: CommentService, private eventService: EventService, private taskService: TaskService, private userService: UserService, private familyService: FamilyService, private formBuilder: FormBuilder) {}
-
-	ngOnInit() {
-		this.userService.getUserByFamilyId('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe(users => this.users = users);
-		this.familyService.getFamily('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe();
-		//this.eventService.getEvent().subscribe();
-
-		//this.loadEvent();
-		this.loadUsers();
-		this.loadFamily();
+	constructor(private commentService: CommentService, private eventService: EventService, private taskService: TaskService, private userService: UserService, private familyService: FamilyService, private formBuilder: FormBuilder) {
 	}
 
-		loadUsers() : void {
-			this.userService.getUserByFamilyId('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe(users => this.users = users)
+	ngOnInit() {
+	// 	this.userService.getUserByFamilyId('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe(users => this.users = users);
+	// 	this.familyService.getFamily('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe();
+	// 	//this.eventService.getEvent().subscribe();
+	//
+	// 	//this.loadEvent();
+	// 	this.loadUsers();
+	// 	this.loadFamily();
+	// }
+	//
+	// 	loadUsers() : void {
+	// 		this.userService.getUserByFamilyId('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe(users => this.users = users)
+	// 	}
+	//
+	// 	loadFamily() : void {
+	// 		this.familyService.getFamily('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe();
+	// 	}
+	//
+	// 	// loadEvent() : void {
+	// 	// 	this.eventService.getEvent().subscribe()
 		}
-
-		loadFamily() : void {
-			this.familyService.getFamily('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe();
-		}
-
-		// loadEvent() : void {
-		// 	this.eventService.getEvent().subscribe()
-		// }
 
 
 
