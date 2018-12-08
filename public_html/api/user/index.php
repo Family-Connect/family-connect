@@ -50,7 +50,7 @@ try {
 		if(empty($id) === false) {
 			$reply->data = User::getUserByUserId($pdo, $id);
 		} else if(empty($userFamilyId) === false) {
-			$reply->data = User::getUserByUserFamilyId($pdo, $id);
+			$reply->data = User::getUserByUserFamilyId($pdo, $userFamilyId);
 		} else if(empty($userEmail) === false) {
 			$reply->data = User::getUserByUserEmail($pdo, $userEmail);
 		}

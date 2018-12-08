@@ -7,13 +7,15 @@ import {SessionService} from "./shared/services/session.service";
 import {SignUpService} from "./shared/services/sign-up.service";
 import {SignInService} from "./shared/services/sign-in.service";
 import {MainComponent} from "./main/main.component";
+import {DetailedEventComponent} from "./detailed-event/detailed-event.component";
 
 
-export const allAppComponents = [SplashComponent, MainComponent];
+export const allAppComponents = [SplashComponent, MainComponent, DetailedEventComponent];
 
 export const routes: Routes = [
 	{path: "", component: SplashComponent},
-	{path: "main", component: MainComponent}
+	{path: "main", component: MainComponent},
+	{path: "detailed-event", component: DetailedEventComponent}
 ];
 
 const services: any[] = [SessionService, SignUpService, SignInService];
