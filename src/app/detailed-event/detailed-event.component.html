@@ -6,9 +6,9 @@
 			<h2>Family Name</h2>
 		</div>
 
-		<ul class="users">
+		<ul class="users" *ngFor="let user of users">
 			<li>
-				<a href="#">User1</a>
+				<a href="#">{{user.userDisplayName}}</a>
 			</li>
 		</ul>
 	</nav>

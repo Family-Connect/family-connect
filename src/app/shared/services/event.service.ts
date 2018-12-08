@@ -12,7 +12,7 @@ export class EventService {
 	}
 
 	//define the API endpoint
-	private eventUrl = "api/post/";
+	private eventUrl = "api/event/";
 
 	// call to the event API and delete the event in question
 	deleteEvent(eventId: string): Observable<Status> {

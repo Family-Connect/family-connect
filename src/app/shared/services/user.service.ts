@@ -13,7 +13,7 @@ export class UserService {
 	}
 
 	//define the API endpoint
-	private userUrl = "api/post/";
+	private userUrl = "api/user/";
 
 	//call to the user API and delete the user in question
 	deleteUser(userId: string): Observable<Status> {

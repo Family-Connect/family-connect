@@ -12,7 +12,7 @@ export class TaskService {
 	}
 
 	//define the API endpoint
-	private taskUrl = "api/post/";
+	private taskUrl = "api/task/";
 
 	// call to the task API and delete the task in question
 	deleteTask(taskId: string): Observable<Status> {

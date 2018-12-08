@@ -12,7 +12,7 @@ export class CommentService {
 	}
 
 	//define the API endpoint
-	private commentUrl = "apis/post/";
+	private commentUrl = "api/comment/";
 
 	// call to the comment API and delete the comment in question
 	deleteComment(commentId: string): Observable<Status> {
