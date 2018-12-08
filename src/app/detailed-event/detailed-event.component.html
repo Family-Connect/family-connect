@@ -6,8 +6,8 @@
 			<h2>Family Name</h2>
 		</div>
 
-		<ul class="users" *ngFor="let user of users">
-			<li>
+		<ul class="users">
+			<li *ngFor="let user of users">
 				<a href="#">{{user.userDisplayName}}</a>
 			</li>
 		</ul>
