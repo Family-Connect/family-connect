@@ -14,14 +14,16 @@ import {SignOutService} from "./shared/services/sign-out.service";
 import {TaskService} from "./shared/services/task.service";
 import {UserService} from "./shared/services/user.service";
 import {DetailedTaskComponent} from "./detailed-task/detailed-task.component";
+import {ProfileEditComponent} from "./profile-edit/profile-edit.component";
 
 
-export const allAppComponents = [SplashComponent, MainComponent, DetailedEventComponent, DetailedTaskComponent];
+export const allAppComponents = [SplashComponent, MainComponent, DetailedEventComponent, DetailedTaskComponent, ProfileEditComponent];
 
 export const routes: Routes = [
 	{path: "main", component: MainComponent},
 	{path: "detailed-event", component: DetailedEventComponent},
 	{path: "detailed-task", component: DetailedTaskComponent},
+	{path: "profile-edit", component: ProfileEditComponent},
 	{path: "", component: SplashComponent}
 
 ];
