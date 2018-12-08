@@ -15,15 +15,17 @@ import {TaskService} from "./shared/services/task.service";
 import {UserService} from "./shared/services/user.service";
 import {DetailedTaskComponent} from "./detailed-task/detailed-task.component";
 import {ProfileEditComponent} from "./profile-edit/profile-edit.component";
+import {ProfilePrivilegeComponent} from "./profile-privilege/profile-privilege.component";
 
 
-export const allAppComponents = [SplashComponent, MainComponent, DetailedEventComponent, DetailedTaskComponent, ProfileEditComponent];
+export const allAppComponents = [SplashComponent, MainComponent, DetailedEventComponent, DetailedTaskComponent, ProfileEditComponent, ProfilePrivilegeComponent];
 
 export const routes: Routes = [
 	{path: "main", component: MainComponent},
 	{path: "detailed-event", component: DetailedEventComponent},
 	{path: "detailed-task", component: DetailedTaskComponent},
 	{path: "profile-edit", component: ProfileEditComponent},
+	{path: "profile-privilege", component: ProfilePrivilegeComponent},
 	{path: "", component: SplashComponent}
 
 ];

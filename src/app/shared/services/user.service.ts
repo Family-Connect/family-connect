@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpParams} from "@angular/common/http";
-
-import {Comment} from "../interfaces/comment";
+import {HttpClient} from "@angular/common/http";
+import {HttpParams} from "@angular/common/http";
 import {Status} from "../interfaces/status";
 import {Observable} from "rxjs";
 import {User} from "../interfaces/user";
@@ -42,9 +41,11 @@ export class UserService {
 	getUserEmail(userEmail: string): Observable<User> {
 		return(this.http.get<User>(this.userUrl + userEmail));
 	}
+	//call to the user API and get a user object based on its Display Name
 	getUserDisplayName(userDisplayName: string): Observable<User> {
 		return(this.http.get<User>(this.userUrl + userDisplayName));
 	}
+	//call to the user API and get a user object based on its Phone Number
 	getUserPhoneNumber(userPhoneNumber: string): Observable<User> {
 		return(this.http.get<User>(this.userUrl + userPhoneNumber));
 	}
