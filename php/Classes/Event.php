@@ -655,7 +655,6 @@ event WHERE eventUserId = :eventUserId";
 
 		//format the date so that the front end can consume it
 		$fields["eventStartDate"] = round(floatval($this->eventStartDate->format("U.u")) * 1000);
-		return ($fields);
 		$fields["eventEndDate"] = round(floatval($this->eventEndDate->format("U.u")) * 1000);
 		return ($fields);
 	}

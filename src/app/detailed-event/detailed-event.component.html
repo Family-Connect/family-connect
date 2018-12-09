@@ -56,14 +56,14 @@
 							</ul>
 						</div>
 
-						<!--<form class="add-comment container-fluid">-->
-							<!--<div>-->
-								<!--<textarea id="comment" name="eventComment" placeholder="What's on your mind?"></textarea>-->
-							<!--</div>-->
-							<!--<div class="button">-->
-								<!--<button type="submit">Add comment</button>-->
-							<!--</div>-->
-						<!--</form>-->
+						<form class="add-comment container-fluid" [formGroup]="commentOnEventForm" (ngSubmit)="commentOnEvent();" novalidate>
+							<div>
+								<textarea id="comment" name="eventComment" placeholder="What's on your mind?" formControlName="eventCommentContent"></textarea>
+							</div>
+							<div class="button">
+								<button type="submit">Add comment</button>
+							</div>
+						</form>
 					</div>
 				</div>
 

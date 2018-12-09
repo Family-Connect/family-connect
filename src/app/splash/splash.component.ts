@@ -36,7 +36,6 @@ export class SplashComponent implements OnInit {
 			userPassword: ["", [Validators.maxLength(97), Validators.required]]
 		})
 
-		console.log(status);
 	}
 
 	createUser() : void {
