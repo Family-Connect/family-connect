@@ -7,10 +7,10 @@ import {Status} from "../shared/interfaces/status";
 import {User} from "../shared/interfaces/user";
 
 @Component({
-	template: require("./profile-edit.component.html")
+	template: require("./user-profile.component.html")
 })
 
-export class ProfileEditComponent implements OnInit {
+export class UserProfileComponent implements OnInit {
 	status: Status = {status:null, message:null, type:null};
 
 	constructor(private eventService: EventService, private taskService: TaskService, private userService: UserService, private formBuilder: FormBuilder) { }
