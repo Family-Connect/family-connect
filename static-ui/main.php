@@ -5,12 +5,21 @@
 	<!-- Sidebar -->
 	<nav id="sidebar" class="sidebar col-md-2 bg-light">
 		<div class="sidebar-header">
-			<h2>Family Name</h2>
+			<h2>Sanchez</h2>
 		</div>
 
 		<ul class="users">
 			<li>
-				<a href="#">User1</a>
+				<a href="#">Erika</a>
+			</li>
+			<li>
+				<a href="#">Stephanie</a>
+			</li>
+			<li>
+				<a href="#">Fran</a>
+			</li>
+			<li>
+				<a href="#">Andy</a>
 			</li>
 		</ul>
 	</nav>
