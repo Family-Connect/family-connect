@@ -52,7 +52,7 @@
 					<div class="row no-gutters">
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" class="custom-control-input" id="justMe">
-							<label class="custom-control-label" for="justMe">Just Me</label>
+							<label class="custom-control-label" for="justMe">Just Me {{event.eventUserId}} {{task.taskUserId}}</label>
 						</div>
 					</div>
 				</div>
@@ -61,21 +61,24 @@
 				<!--Event Drop Down-->
 				<div class="container mt-3">
 					<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-						<ngb-panel title="Christmas Party">
+						<h4><ngb-panel title="event-title">{{event.eventName}}</h4>
 							<ng-template ngbPanelContent>
-							Information for Event 1. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu sollicitudin
-							libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis
-							adipiscing velit. Nam eu vulputate sem. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu
-							sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis 							adipiscing velit. Nam eu vulputate sem.
+							<p>{{event.eventContent}}</p>
 							</ng-template>
 						</ngb-panel>
-						<ngb-panel title="Birthday Party">
+						<ngb-panel title="event-title2">{{event.eventName}}
 							<ng-template ngbPanelContent>
-							Information for Event 2. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu sollicitudin
-							libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis
-							adipiscing velit. Nam eu vulputate sem. Lorem ipsum dolor sit amet, magna nec amet tristique,
-							arcu sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit.
-							Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem.
+								<p>{{event.eventContent}}</p>
+							</ng-template>
+						</ngb-panel>
+						<h4><ngb-panel title="task-title">{{task.taskName}}</h4>
+						<ng-template ngbPanelContent>
+							<p>{{task.taskDescription}}</p>
+						</ng-template>
+						</ngb-panel>
+						<h4><ngb-panel title="task-title2">{{task.taskName}}</h4>
+							<ng-template ngbPanelContent>
+								<p>{{task.taskDescription}}</p>
 							</ng-template>
 						</ngb-panel>
 					</ngb-accordion>
