@@ -37,6 +37,7 @@
 					<th scope="col">Email</th>
 					<th scope="col">Username</th>
 					<th scope="col">Phone Number</th>
+					<th scope="col">Privilege</th>
 					<th scope="col">Delete User</th>
 					<th scope="col">Edit User</th>
 				</tr>
@@ -47,6 +48,7 @@
 					<td>anEmail@handle.com</td>
 					<td>UserName1</td>
 					<td>55555555</td>
+					<td>1</td>
 					<td><button type="button" id="plusButton" class="btn plusButton">
 						<span class="fa-stack fa-1x">
 							<i class="fas fa-trash-alt"></i>
@@ -62,6 +64,7 @@
 					<td>otherEmail@handle.com</td>
 					<td>UserName2</td>
 					<td>5555557</td>
+					<td>0</td>
 					<td><button type="button" id="plusButton" class="btn plusButton">
 						<span class="fa-stack fa-1x">
 							<i class="fas fa-trash-alt"></i>
@@ -77,6 +80,7 @@
 					<td>bob@handle.com</td>
 					<td>UserName3</td>
 					<td>5555556</td>
+					<td>1</td>
 					<td><button type="button" id="plusButton" class="btn plusButton">
 						<span class="fa-stack fa-1x">
 							<i class="fas fa-trash-alt"></i>
