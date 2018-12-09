@@ -33,10 +33,15 @@ export class DetailedEventComponent implements OnInit {
 
 	ngOnInit() : void {
 		this.eventService.getEvent(this.eventId).subscribe(event => this.event = event);
+		this.loadComments();
 
 		this.commentOnEventForm = this.formBuilder.group({
-			commentContent : ["", [Validators.maxLength(855), Validators.required]]
+			eventCommentContent : ["", [Validators.maxLength(855), Validators.required]]
 		})
+	}
+
+	loadComments() : any {
+		this.commentService.getCommentByEventId(this.eventId).subscribe(comments => this.comments = comments);
 	}
 
 	commentOnEvent() : any {
@@ -53,12 +58,12 @@ export class DetailedEventComponent implements OnInit {
 			.subscribe(status => {
 				this.status = status;
 
-				// if(status.status === 200) {
-				// 	this.commentOnEventForm.reset();
-				// 	this.loadComments();
-				// } else {
-				// 	alert(status.message);
-				// }
+				if(status.status === 200) {
+					this.commentOnEventForm.reset();
+					this.loadComments();
+				} else {
+					alert(status.message);
+				}
 			})
 	}
 }

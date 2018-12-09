@@ -46,12 +46,12 @@
 						<p>{{event.eventContent}}</p>
 					</div>
 
-					<div class="event-comments" *ngFor="let comment of comments">
+					<div class="event-comments">
 						<h4>Comments</h4>
 
-						<div class="comment">
-							<p>{{comment.userDisplayName}}</p>
-							<ul>
+						<div class="comment" *ngFor="let comment of comments">
+							<p>{{comment.commentUserId}}</p>
+							<ul >
 								<li>{{comment.commentContent}}</li>
 							</ul>
 						</div>
