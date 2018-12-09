@@ -12,11 +12,12 @@ import {Event} from "../shared/interfaces/event";
 import {Comment} from "../shared/interfaces/comment";
 import {User} from "../shared/interfaces/user";
 import {Task} from "../shared/interfaces/task";
+import {UserComment} from "../shared/interfaces/UserComment";
+import {EventTask} from "../shared/interfaces/EventTask";
 
 //Status and router
 import {Status} from "../shared/interfaces/status";
 import {ActivatedRoute} from "@angular/router";
-import {UserComment} from "../shared/interfaces/UserComment";
 
 @Component({
 	template: require("./detailed-event.component.html")
@@ -27,7 +28,7 @@ export class DetailedEventComponent implements OnInit {
 	comment: Comment = {commentId: null, commentEventId: null, commentTaskId: null, commentUserId: null, commentContent: null, commentDate:null};
 	userComments: UserComment[];
 	task: Task = {taskId:null, taskEventId:null, taskUserId:null, taskDueDate:null, taskDescription:null, taskIsComplete:null, taskName:null};
-	tasks: Task[];
+	eventTasks: EventTask[];
 	event: Event = {eventId:null, eventFamilyId:null, eventUserId:null, eventContent:null, eventEndDate:null, eventName:null, eventStartDate:null};
 	eventId: string = this.route.snapshot.params["eventId"];
 	commentOnEventForm: FormGroup;
@@ -50,7 +51,7 @@ export class DetailedEventComponent implements OnInit {
 	}
 
 	loadTasks() : any {
-		this.taskService.getTaskByEventId(this.eventId).subscribe(tasks => this.tasks = tasks);
+		this.taskService.getTaskByEventId(this.eventId).subscribe(eventTasks => this.eventTasks = eventTasks);
 	}
 
 	commentOnEvent() : any {

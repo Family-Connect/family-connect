@@ -69,17 +69,17 @@
 
 				<div class="event-tasks col-md-6">
 					<h4>Event Tasks</h4>
-					<div class="card" *ngFor="let task of tasks">
+					<div class="card" *ngFor="let eventTask of eventTasks">
 						<div class="card-body">
-							<h5 class="card-title">{{task.taskName}}</h5>
-							<h6 class="card-subtitle mb-2 text-muted">{{task.taskUserId}}</h6>
-							<p class="card-text">{{task.taskDescription}}</p>
-							<a class="btn" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample"><i class="fas fa-comments"></i></a>
-							<div class="collapse multi-collapse" id="collapseTask1" [ngbCollapse]="isCollapsed">
+							<h5 class="card-title">{{eventTask.task.taskName}}</h5>
+							<h6 class="card-subtitle mb-2 text-muted">{{eventTask.userDisplayName}} <br> Due Date: {{eventTask.task.taskDueDate | date}}</h6>
+							<p class="card-text">{{eventTask.task.taskDescription}}</p>
+							<a class="btn" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="isCollapsed" aria-controls="collapseExample"><i class="fas fa-comments"></i></a>
+							<div class="collapse multi-collapse" id="collapseTask1" [ngbCollapse]="!isCollapsed">
 								<div class="card card-body event-task-comment">
 									<p>Comment creator</p>
 									<ul>
-										<li>{{task.taskDescription}}</li>
+										<li></li>
 									</ul>
 								</div>
 								<!--<form class="add-task-comment container-fluid">-->

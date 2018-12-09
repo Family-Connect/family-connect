@@ -437,7 +437,7 @@ class Task implements \JsonSerializable {
 		}
 
 		// create template for new query
-		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskIsComplete, task.taskName, event.eventName FROM task INNER JOIN event ON task.taskEventId = event.eventId WHERE taskEventId = :taskEventId";
+		$query = "SELECT task.taskId, task.taskEventId, task.taskUserId, task.taskDescription, task.taskDueDate, task.taskIsComplete, task.taskName, event.eventName, user.userDisplayName FROM task INNER JOIN event ON task.taskEventId = event.eventId INNER JOIN `user` ON task.taskUserId = user.userId WHERE taskEventId = :taskEventId";
 		$statement = $pdo->prepare($query);
 
 		// wire up variable (taskEventId) to query
@@ -450,7 +450,7 @@ class Task implements \JsonSerializable {
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				$task = new Task($row["taskId"], $row["taskEventId"], $row["taskUserId"], $row["taskDescription"], $row["taskDueDate"], $row["taskIsComplete"], $row["taskName"]);
-				$tasks[$tasks->key()] = (object) ["task" => $task, "eventName" => $row["eventName"]];
+				$tasks[$tasks->key()] = (object) ["task" => $task, "userDisplayName" => $row["userDisplayName"]];
 				$tasks->next();
 			} catch(\Exception $exception) {
 				throw(new \PDOException($exception->getMessage(), 0, $exception));

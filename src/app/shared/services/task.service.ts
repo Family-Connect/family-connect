@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Task} from "../interfaces/task";
 import {Status} from "../interfaces/status";
 import {Observable} from "rxjs";
+import {EventTask} from "../interfaces/EventTask";
 
 
 @Injectable()
@@ -35,8 +36,8 @@ export class TaskService {
 	}
 
 // call to the task API and get an array of tasks based off the eventId
-	getTaskByEventId(taskEventId: string): Observable<any[]> {
-		return (this.http.get<any[]>(this.taskUrl, {params: new HttpParams().set("taskEventId", taskEventId)}));
+	getTaskByEventId(taskEventId: string): Observable<EventTask[]> {
+		return (this.http.get<EventTask[]>(this.taskUrl, {params: new HttpParams().set("taskEventId", taskEventId)}));
 	}
 
 	// call to the task API and get an array of tasks based off the userId
