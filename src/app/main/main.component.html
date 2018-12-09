@@ -61,7 +61,7 @@
 				<!--Event Drop Down-->
 				<div class="container mt-3">
 					<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-						<h4><ngb-panel title="event-title">{{event.eventName}}</h4>
+						<ngb-panel title="event-title"><h4>{{event.eventName}}</h4>
 							<ng-template ngbPanelContent>
 							<p>{{event.eventContent}}</p>
 							</ng-template>
@@ -71,12 +71,12 @@
 								<p>{{event.eventContent}}</p>
 							</ng-template>
 						</ngb-panel>
-						<h4><ngb-panel title="task-title">{{task.taskName}}</h4>
+						<ngb-panel title="task-title"><h4>{{task.taskName}}</h4>
 						<ng-template ngbPanelContent>
 							<p>{{task.taskDescription}}</p>
 						</ng-template>
 						</ngb-panel>
-						<h4><ngb-panel title="task-title2">{{task.taskName}}</h4>
+						<ngb-panel title="task-title2"><h4>{{task.taskName}}</h4>
 							<ng-template ngbPanelContent>
 								<p>{{task.taskDescription}}</p>
 							</ng-template>
