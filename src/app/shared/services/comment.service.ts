@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Comment} from "../interfaces/comment";
 import {Status} from "../interfaces/status";
 import {Observable} from "rxjs";
+import {UserComment} from "../interfaces/UserComment";
 
 
 @Injectable()
@@ -35,8 +36,8 @@ export class CommentService {
 	}
 
 	// call to the comment API and get an array of comments based off the eventId
-	getCommentByEventId(commentEventId: string): Observable<any[]> {
-		return (this.http.get<any[]>(this.commentUrl, {params: new HttpParams().set("commentEventId", commentEventId)}));
+	getCommentByEventId(commentEventId: string): Observable<UserComment[]> {
+		return (this.http.get<UserComment[]>(this.commentUrl, {params: new HttpParams().set("commentEventId", commentEventId)}));
 	}
 
 	// call to the comment API and get an array of comments based off the taskId

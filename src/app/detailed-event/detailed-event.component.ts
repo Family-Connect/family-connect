@@ -11,10 +11,12 @@ import {UserService} from "../shared/services/user.service";
 import {Event} from "../shared/interfaces/event";
 import {Comment} from "../shared/interfaces/comment";
 import {User} from "../shared/interfaces/user";
+import {Task} from "../shared/interfaces/task";
 
 //Status and router
 import {Status} from "../shared/interfaces/status";
 import {ActivatedRoute} from "@angular/router";
+import {UserComment} from "../shared/interfaces/UserComment";
 
 @Component({
 	template: require("./detailed-event.component.html")
@@ -23,7 +25,9 @@ import {ActivatedRoute} from "@angular/router";
 export class DetailedEventComponent implements OnInit {
 	user: User = {userId: null, userFamilyId:null, userAvatar:null, userDisplayName:null, userEmail:null, userPhoneNumber:null};
 	comment: Comment = {commentId: null, commentEventId: null, commentTaskId: null, commentUserId: null, commentContent: null, commentDate:null};
-	comments: Comment[];
+	userComments: UserComment[];
+	task: Task = {taskId:null, taskEventId:null, taskUserId:null, taskDueDate:null, taskDescription:null, taskIsComplete:null, taskName:null};
+	tasks: Task[];
 	event: Event = {eventId:null, eventFamilyId:null, eventUserId:null, eventContent:null, eventEndDate:null, eventName:null, eventStartDate:null};
 	eventId: string = this.route.snapshot.params["eventId"];
 	commentOnEventForm: FormGroup;
@@ -34,6 +38,7 @@ export class DetailedEventComponent implements OnInit {
 	ngOnInit() : void {
 		this.eventService.getEvent(this.eventId).subscribe(event => this.event = event);
 		this.loadComments();
+		this.loadTasks();
 
 		this.commentOnEventForm = this.formBuilder.group({
 			eventCommentContent : ["", [Validators.maxLength(855), Validators.required]]
@@ -41,7 +46,11 @@ export class DetailedEventComponent implements OnInit {
 	}
 
 	loadComments() : any {
-		this.commentService.getCommentByEventId(this.eventId).subscribe(comments => this.comments = comments);
+		this.commentService.getCommentByEventId(this.eventId).subscribe(userComments => this.userComments = userComments);
+	}
+
+	loadTasks() : any {
+		this.taskService.getTaskByEventId(this.eventId).subscribe(tasks => this.tasks = tasks);
 	}
 
 	commentOnEvent() : any {
