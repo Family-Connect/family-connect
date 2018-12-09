@@ -29,35 +29,37 @@
 			</div>
 
 			<div class="task-body row">
-				<div class="task-description-comments col-6">
+				<div class="task-description-comments col-md-6">
 					<div class="task-description">
-						<h4>Description</h4>
+						<h4> Task Description will go here</h4>
 						<p>{{task.taskDescription}}</p>
 					</div>
 
-					<div class="comment" *ngFor="let comment of comments ">
+					<div class="task-comments" *ngFor="let comment of comments ">
 						<p>{{comment.userDisplayName}}</p>
 						<ul>
 							<li>{{comment.commentContent}}</li>
 						</ul>
 					</div>
 
-					<!--<form class="add-task-comment container-fluid">-->
-					<!--<div>-->
-					<!--<textarea id="taskComment" name="TaskComment" class="task-comment-textarea" placeholder="What's on your mind?"></textarea>-->
-					<!--</div>-->
-					<!--<div class="button">-->
-					<!--<button type="submit">Add comment</button>-->
-					<!--</div>-->
-					<!--</form>-->
+					<form class="add-task-comment container-fluid" [formGroup]="commentOnTaskForm" (ngSubmit)="commentOnTask();" novalidate>
+						<div>
+							<textarea id="comment" name="taskComment" placeholder="What's on your mind?" formControlName="taskCommentContent"></textarea>
+						</div>
+						<div class="button">
+							<button type="submit">Add comment</button>
+						</div>
+					</form>
 				</div>
 			</div>
 
-			<div class="task-due-date col-md-6">
-				<h4>Due Date</h4>
-				<div class="card">
-					<div class="card-body">
-						{{task.taskDueDate | date}}
+			<div class="task-body row">
+				<div class="task-due-date col-md-6">
+					<h4>Due Date</h4>
+					<div class="card">
+						<div class="card-body">
+							{{task.taskDueDate | date}}
+						</div>
 					</div>
 				</div>
 			</div>
