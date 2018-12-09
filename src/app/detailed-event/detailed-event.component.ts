@@ -6,8 +6,8 @@ import {TaskService} from "../shared/services/task.service";
 import {UserService} from "../shared/services/user.service";
 import {FamilyService} from "../shared/services/family.service";
 import {Status} from "../shared/interfaces/status";
-import {User} from "../shared/interfaces/user";
-import {Family} from "../shared/interfaces/family";
+import {Event} from "../shared/interfaces/event";
+import {Comment} from "../shared/interfaces/comment";
 
 @Component({
 	template: require("./detailed-event.component.html")
@@ -15,32 +15,14 @@ import {Family} from "../shared/interfaces/family";
 
 export class DetailedEventComponent implements OnInit {
 	comments: Comment[];
-	//event: Event = {eventId:null, eventContent: null, eventEndDate: null, eventFamilyId:null, eventName: null, eventStartDate: null, eventUserId: null};
+	event: Event = {eventId:null, eventFamilyId:null, eventUserId:null, eventContent:null, eventEndDate:null, eventName:null, eventStartDate:null};
 	status: Status = {status: null, message: null, type: null};
 
 	constructor(private commentService: CommentService, private eventService: EventService, private taskService: TaskService, private userService: UserService, private familyService: FamilyService, private formBuilder: FormBuilder) {
 	}
 
 	ngOnInit() {
-	// 	this.userService.getUserByFamilyId('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe(users => this.users = users);
-	// 	this.familyService.getFamily('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe();
-	// 	//this.eventService.getEvent().subscribe();
-	//
-	// 	//this.loadEvent();
-	// 	this.loadUsers();
-	// 	this.loadFamily();
-	// }
-	//
-	// 	loadUsers() : void {
-	// 		this.userService.getUserByFamilyId('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe(users => this.users = users)
-	// 	}
-	//
-	// 	loadFamily() : void {
-	// 		this.familyService.getFamily('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe();
-	// 	}
-	//
-	// 	// loadEvent() : void {
-	// 	// 	this.eventService.getEvent().subscribe()
+
 		}
 
 

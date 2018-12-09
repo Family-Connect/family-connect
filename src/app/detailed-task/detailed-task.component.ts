@@ -21,7 +21,6 @@ export class DetailedTaskComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.taskService.getTask(this.taskId).subscribe(task => this.task = task);
-		//this.loadTask();
 	}
 
 }
