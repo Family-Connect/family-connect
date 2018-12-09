@@ -35,10 +35,10 @@
 						<p>{{task.taskDescription}}</p>
 					</div>
 
-					<div class="task-comments" *ngFor="let comment of comments ">
-						<p>{{comment.userDisplayName}}</p>
+					<div class="comment" *ngFor="let userComment of userComments ">
+						<p>{{userComment.userDisplayName}}</p>
 						<ul>
-							<li>{{comment.commentContent}}</li>
+							<li>{{userComment.comment.commentContent}}</li>
 						</ul>
 					</div>
 
