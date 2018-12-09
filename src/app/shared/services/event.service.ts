@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
 
-import {Comment} from "../interfaces/comment";
+import {Event} from "../interfaces/event";
 import {Status} from "../interfaces/status";
 import {Observable} from "rxjs";
 
@@ -20,12 +20,12 @@ export class EventService {
 	}
 
 	// call to the event API and edit the event in question
-	editEvent(event: Comment): Observable<Status> {
-		return (this.http.put<Status>(this.eventUrl + event.commentId, event));
+	editEvent(event: Event): Observable<Status> {
+		return (this.http.put<Status>(this.eventUrl + event.eventId, event));
 	}
 
 	// call to the event API and creat the event in question
-	createEvent(event: Comment): Observable<Status> {
+	createEvent(event: Event): Observable<Status> {
 		return (this.http.post<Status>(this.eventUrl, +event));
 	}
 

@@ -24,7 +24,7 @@ export const allAppComponents = [SplashComponent, MainComponent, DetailedEventCo
 
 export const routes: Routes = [
 	{path: "main", component: MainComponent},
-	{path: "detailed-event", component: DetailedEventComponent},
+	{path: "detailed-event/:eventId", component: DetailedEventComponent},
 	{path: "detailed-task/:taskId", component: DetailedTaskComponent},
 	{path: "profile-edit", component: ProfileEditComponent},
 	{path: "profile-privilege", component: ProfilePrivilegeComponent},
