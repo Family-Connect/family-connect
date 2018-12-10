@@ -83,6 +83,9 @@ h2 {
 	transition:.3s;
 }
 
+.profile-main {
+	min-width: 100%;
+}
 
 .content {
 	min-height: 100vh;
@@ -126,8 +129,7 @@ form button {
 }
 
 .page-edit-content {
-	margin-left: -5em;
-	margin-top: 10em;
+	margin-top: 7.5em;
 }
 
 .whoseIn {

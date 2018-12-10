@@ -27,7 +27,7 @@ export const routes: Routes = [
 	{path: "main", component: MainComponent},
 	{path: "detailed-event/:eventId", component: DetailedEventComponent},
 	{path: "detailed-task/:taskId", component: DetailedTaskComponent},
-	{path: "user-profile", component: UserProfileComponent},
+	{path: "user-profile/:userId", component: UserProfileComponent},
 	{path: "profile-privilege", component: ProfilePrivilegeComponent},
 	{path: "", component: SplashComponent}
 
