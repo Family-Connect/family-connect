@@ -1,14 +1,20 @@
 import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+
+// Service needed
 import {CommentService} from "../shared/services/comment.service";
 import {TaskService} from "../shared/services/task.service";
 import {UserService} from "../shared/services/user.service";
+
+// Interfaces needed
 import {Status} from "../shared/interfaces/status";
 import {User} from "../shared/interfaces/user";
 import {Task} from "../shared/interfaces/task";
-import {ActivatedRoute} from "@angular/router";
 import {Comment} from "../shared/interfaces/comment";
 import {UserComment} from "../shared/interfaces/UserComment";
+
+// Status and routher
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
 	template: require("./detailed-task.component.html")
@@ -41,8 +47,8 @@ export class DetailedTaskComponent implements OnInit {
 	commentOnTask() : any {
 		let comment: Comment = {
 			commentId: null,
-			commentEventId: this.taskId,
-			commentTaskId: null,
+			commentEventId: null,
+			commentTaskId: this.task.taskId,
 			commentUserId: this.user.userId,
 			commentContent: this.commentOnTaskForm.value.commentContent,
 			commentDate: null

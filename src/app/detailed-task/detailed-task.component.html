@@ -41,22 +41,20 @@
 			<div class="task-body row">
 				<div class="task-description-comments col-md-6">
 					<div class="task-description">
-						<h4> Task Description will go here</h4>
-						<p>{{task.taskDescription}}</p>
+						<h4> {{task.taskDescription}}</h4>
+						<p></p>
 					</div>
 
 					<div class="comment" *ngFor="let userComment of userComments ">
-						<p>{{userComment.userDisplayName}}</p>
-						<ul>
-							<li>{{userComment.comment.commentContent}}</li>
-						</ul>
-					</div>
-
-					<div class="card">
-						<div class="card-body">
-							user comment will go here.
+						<div class="card">
+							<div class="card-body">
+								<p>{{userComment.userDisplayName}}</p>
+								{{userComment.comment.commentContent}}
+							</div>
 						</div>
 					</div>
+
+
 
 					<form class="add-task-comment container-fluid" [formGroup]="commentOnTaskForm" (ngSubmit)="commentOnTask();" novalidate>
 						<div>
