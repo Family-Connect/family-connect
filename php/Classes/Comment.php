@@ -455,7 +455,7 @@ public static function getCommentByCommentTaskId(\PDO $pdo, $commentTaskId) : \S
 		}
 
 		// create query template
-	$query = "SELECT comment.commentId, comment.commentEventId,comment.commentTaskId, comment.commentUserId, comment.commentContent, comment.commentDate, `task`.taskName FROM comment INNER JOIN `task` ON comment.commentTaskId = task.taskId WHERE commentTaskId = :commentTaskId";
+	$query = "SELECT comment.commentId, comment.commentEventId,comment.commentTaskId, comment.commentUserId, comment.commentContent, comment.commentDate, user.userDisplayName  FROM comment INNER JOIN `user` ON comment.commentUserId = user.userId WHERE commentTaskId = :commentTaskId";
 		$statement = $pdo->prepare($query);
 
 		// bind the comment task id to the place holder in the template
@@ -468,7 +468,7 @@ public static function getCommentByCommentTaskId(\PDO $pdo, $commentTaskId) : \S
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				$comment = new Comment($row["commentId"], $row["commentEventId"], $row["commentTaskId"], $row["commentUserId"], $row["commentContent"], $row["commentDate"]);
-				$comments [$comments->key()] = $comment;
+				$comments [$comments->key()] = (object) ["comment" => $comment, "userDisplayName" => $row["userDisplayName"]];
 				$comments->next();
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it

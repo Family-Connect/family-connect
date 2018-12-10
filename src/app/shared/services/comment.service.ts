@@ -46,8 +46,8 @@ export class CommentService {
 	}
 
 	// call to the comment API and get an array of comments based off the userId
-	getCommentByUserId(commentUserId: string): Observable<any[]> {
-		return (this.http.get<any[]>(this.commentUrl, {params: new HttpParams().set("commentUserId", commentUserId)}));
+	getCommentByUserId(commentUserId: string): Observable<UserComment[]> {
+		return (this.http.get<UserComment[]>(this.commentUrl, {params: new HttpParams().set("commentUserId", commentUserId)}));
 	}
 
 	// call to the comment API and get an array of comments based off the profileId
