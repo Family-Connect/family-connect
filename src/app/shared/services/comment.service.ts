@@ -5,6 +5,7 @@ import {Comment} from "../interfaces/comment";
 import {Status} from "../interfaces/status";
 import {Observable} from "rxjs";
 import {UserComment} from "../interfaces/UserComment";
+import {UserTaskComment} from "../interfaces/UserTaskComment";
 
 
 @Injectable()

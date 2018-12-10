@@ -36,7 +36,7 @@
 		<div class="content container-fluid">
 			<div class="event-head">
 				<h4>{{event.eventName}}</h4>
-				<h6>{{event.eventStartDate | date}} - {{event.eventEndDate | date}}</h6>
+				<h6>{{event.eventStartDate | date:'medium'}} - {{event.eventEndDate | date:'medium'}}</h6>
 			</div>
 
 			<div class="event-body row">
@@ -56,7 +56,7 @@
 							</ul>
 						</div>
 
-						<form class="add-comment container-fluid" [formGroup]="commentOnEventForm" (ngSubmit)="commentOnEvent();" novalidate>
+				<form class="add-comment container-fluid" [formGroup]="commentOnEventForm" (ngSubmit)="commentOnEvent();" novalidate>
 							<div>
 								<textarea id="comment" name="eventComment" placeholder="What's on your mind?" formControlName="eventCommentContent"></textarea>
 							</div>
@@ -74,22 +74,22 @@
 							<h5 class="card-title">{{eventTask.task.taskName}}</h5>
 							<h6 class="card-subtitle mb-2 text-muted">{{eventTask.userDisplayName}} <br> Due Date: {{eventTask.task.taskDueDate | date}}</h6>
 							<p class="card-text">{{eventTask.task.taskDescription}}</p>
-							<a class="btn" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="isCollapsed" aria-controls="collapseExample"><i class="fas fa-comments"></i></a>
+							<a class="btn text-primary" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="isCollapsed" aria-controls="collapseExample"><i class="fas fa-comments"></i></a>
 							<div class="collapse multi-collapse" id="collapseTask1" [ngbCollapse]="!isCollapsed">
-								<div class="card card-body event-task-comment">
-									<p>Comment creator</p>
+								<div class="card card-body event-task-comment" *ngFor="let userTaskComment of userTaskComments">
+									<p>{{userTaskComment | json}}</p>
 									<ul>
-										<li></li>
+										<li>{{userTaskComment.comment.commentContent}}</li>
 									</ul>
 								</div>
-								<!--<form class="add-task-comment container-fluid">-->
-									<!--<div>-->
-										<!--<textarea id="taskComment1" name="eventTaskComment" class="event-task-comment-textarea" placeholder="What's on your mind?"></textarea>-->
-									<!--</div>-->
-									<!--<div class="button">-->
-										<!--<button type="submit">Add comment</button>-->
-									<!--</div>-->
-								<!--</form>-->
+								<form class="add-task-comment container-fluid" [formGroup]="commentOnEventTaskForm" (ngSubmit)="commentOnEventTask();" novalidate>
+									<div>
+										<textarea id="taskComment1" name="eventTaskComment" class="event-task-comment-textarea" placeholder="What's on your mind?" formControlName="eventTaskCommentContent"></textarea>
+									</div>
+									<div class="button">
+										<button type="submit">Add comment</button>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>

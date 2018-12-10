@@ -14,10 +14,13 @@ import {User} from "../shared/interfaces/user";
 import {Task} from "../shared/interfaces/task";
 import {UserComment} from "../shared/interfaces/UserComment";
 import {EventTask} from "../shared/interfaces/EventTask";
+import {UserTaskComment} from "../shared/interfaces/UserTaskComment";
+
 
 //Status and router
 import {Status} from "../shared/interfaces/status";
 import {ActivatedRoute} from "@angular/router";
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
 	template: require("./detailed-event.component.html")
@@ -29,9 +32,12 @@ export class DetailedEventComponent implements OnInit {
 	userComments: UserComment[];
 	task: Task = {taskId:null, taskEventId:null, taskUserId:null, taskDueDate:null, taskDescription:null, taskIsComplete:null, taskName:null};
 	eventTasks: EventTask[];
+	userTaskComments: UserTaskComment[];
 	event: Event = {eventId:null, eventFamilyId:null, eventUserId:null, eventContent:null, eventEndDate:null, eventName:null, eventStartDate:null};
 	eventId: string = this.route.snapshot.params["eventId"];
+	//taskId: string =;
 	commentOnEventForm: FormGroup;
+	commentOnEventTaskForm: FormGroup;
 	status: Status = {status: null, message: null, type: null};
 
 	constructor(private commentService: CommentService, private eventService: EventService, private taskService: TaskService, private userService: UserService, private formBuilder: FormBuilder, private route: ActivatedRoute) { }
@@ -39,10 +45,15 @@ export class DetailedEventComponent implements OnInit {
 	ngOnInit() : void {
 		this.eventService.getEvent(this.eventId).subscribe(event => this.event = event);
 		this.loadComments();
-		this.loadTasks();
+		this.loadTasks(this.commentService, this.userTaskComments);
+		// this.loadTaskComments();
 
 		this.commentOnEventForm = this.formBuilder.group({
 			eventCommentContent : ["", [Validators.maxLength(855), Validators.required]]
+		});
+
+		this.commentOnEventTaskForm = this.formBuilder.group({
+			eventTaskCommentContent : ["", [Validators.maxLength(855), Validators.required]]
 		})
 	}
 
@@ -50,9 +61,19 @@ export class DetailedEventComponent implements OnInit {
 		this.commentService.getCommentByEventId(this.eventId).subscribe(userComments => this.userComments = userComments);
 	}
 
-	loadTasks() : any {
-		this.taskService.getTaskByEventId(this.eventId).subscribe(eventTasks => this.eventTasks = eventTasks);
+	loadTasks(commentService, userTaskCmmnts) : any {
+		this.taskService.getTaskByEventId(this.eventId)
+			.subscribe(eventTasks => {
+				this.eventTasks = eventTasks;
+				this.eventTasks.forEach(function(eventTask) {
+						commentService.getCommentByTaskId(eventTask.task.taskId).subscribe(userTaskComments => userTaskCmmnts = userTaskComments)
+					}
+				)
+			})
 	}
+	// loadTaskComments() : any {
+	//
+	// }
 
 	commentOnEvent() : any {
 		let comment: Comment = {
@@ -70,6 +91,29 @@ export class DetailedEventComponent implements OnInit {
 
 				if(status.status === 200) {
 					this.commentOnEventForm.reset();
+					this.loadComments();
+				} else {
+					alert(status.message);
+				}
+			})
+	}
+
+	commentOnEventTask() : any {
+		let comment: Comment = {
+			commentId: null,
+			commentEventId: null,
+			commentTaskId: this.task.taskId,
+			commentUserId: this.user.userId,
+			commentContent: this.commentOnEventForm.value.commentContent,
+			commentDate: null
+		};
+
+		this.commentService.createComment(comment)
+			.subscribe(status => {
+				this.status = status;
+
+				if(status.status === 200) {
+					this.commentOnEventTaskForm.reset();
 					this.loadComments();
 				} else {
 					alert(status.message);

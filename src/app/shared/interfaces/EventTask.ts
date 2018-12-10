@@ -1,7 +1,7 @@
 import {Task} from "./task";
 
 export interface EventTask {
-	comment: Task,
+	task: Task,
 	userDisplayName: string
 
 
