@@ -75,12 +75,13 @@ try {
 		// verify user has XSRF token
 		verifyXsrf();
 
-		/*
-		// verify that the user is signed in
-		if(empty($_SESSION["user"]) === true) {
-			throw(new \InvalidArgumentException("You must be logged in to make and edit tasks", 405));
+		// verify that the user adding/editing the task is a member of the correct family
+		$task = Task::getTaskByTaskId($pdo, $id);
+		$user = User::getUserByUserId($pdo, $task->getTaskUserId());
+
+		if(empty($_SESSION["user"]) === true || ($_SESSION["user"]->getUserByUserId()->getUserFamilyId()->toString() !== $user->getUserFamilyId()->toString())) {
+			throw(new \InvalidArgumentException("You are not allowed to post or edit this task", 403));
 		}
-		*/
 
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
@@ -94,16 +95,16 @@ try {
 		// perform the actual put or post
 		if($method === "PUT") {
 
+			// verify the user has the correct privileges
+			if($_SESSION["user"]->getUserPrivilege === 0) {
+				throw(new \InvalidArgumentException("You are not authorized to make, edit, or delete tasks", 405));
+			}
+
 			// retrieve task to update
 			$task = Task::getTaskByTaskId($pdo, $id);
 			if($task === null) {
 				throw(new RuntimeException("Task does not exist", 404));
 			}
-
-			// verify the user is signed in and only trying to edit their own task
-			//if(empty($_SESSION["user"]) === true || $_SESSION["user"]->getUserId()->toString() !== $task->getTaskUserId()->toString()) {
-			//	throw(new \InvalidArgumentException("You are not allowed to edit this task", 403));
-			//}
 
 			// verify the user has a JWT token
 			validateJwtHeader();
@@ -121,12 +122,6 @@ try {
 			$reply->message = "Task updated successfully";
 
 		} else if($method === "POST") {
-			/*
-			// verify the user is signed in
-			if(empty($_SESSION["user"]) === true) {
-				throw(new \InvalidArgumentException("You must be logged in to post tasks", 403));
-			}
-			*/
 
 			// verify the user has a JWT token
 			validateJwtHeader();

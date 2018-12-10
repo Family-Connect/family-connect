@@ -83,7 +83,7 @@
 				<!--Event Drop Down-->
 			<div class="container">
 			<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-				<ngb-panel title="Christmas Party">
+				<ngb-panel title="Christmas Party" href="detailed-event">
 					<ng-template ngbPanelContent>
 						Information for Event 1. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu sollicitudin
 						libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis

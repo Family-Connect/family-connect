@@ -75,7 +75,7 @@ try {
 		$user = User::getUserByUserId($pdo, $user->getUserId());
 
 		$_SESSION["user"] = $user;
-		$_SESSION["family"] = $user->getUserFamilyId();
+		$_SESSION["familyId"] = $user->getUserFamilyId()->toString();
 
 		//create the Auth payload
 		$authObject = (object)[

@@ -66,7 +66,7 @@ export class DetailedEventComponent implements OnInit {
 			.subscribe(eventTasks => {
 				this.eventTasks = eventTasks;
 				this.eventTasks.forEach(function(eventTask) {
-						//commentService.getCommentByTaskId(eventTask.task.taskId).subscribe(userTaskComments => userTaskCmmnts = userTaskComments)
+						commentService.getCommentByTaskId(eventTask.task.taskId).subscribe(userTaskComments => userTaskCmmnts = userTaskComments)
 					}
 				)
 			})

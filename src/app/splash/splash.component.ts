@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {SignUp} from "../shared/interfaces/sign-up";
 import {Status} from "../shared/interfaces/status";
 import {SignIn} from "../shared/interfaces/sign-in";
+import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {SignUpService} from "../shared/services/sign-up.service";
 import {SignInService} from "../shared/services/sign-in.service";
@@ -19,7 +20,7 @@ export class SplashComponent implements OnInit {
 
 	testSelector = document.querySelector('.splash-background');
 
-	constructor(private signUpService: SignUpService, private signInService : SignInService, private formBuilder : FormBuilder) {}
+	constructor(private signUpService: SignUpService, private signInService : SignInService, private formBuilder : FormBuilder, private router: Router) {}
 
 	ngOnInit() {
 		this.signUpForm = this.formBuilder.group({
@@ -59,7 +60,7 @@ export class SplashComponent implements OnInit {
 				this.status = status;
 
 				if(this.status.status === 200) {
-					alert(status.message);
+					this.router.navigate(['/main']);
 				}
 			});
 	}
