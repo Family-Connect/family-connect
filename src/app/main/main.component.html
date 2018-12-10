@@ -52,7 +52,7 @@
 					<div class="row no-gutters">
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" class="custom-control-input" id="justMe">
-							<label class="custom-control-label" for="justMe">Just Me {{event.eventUserId}} {{task.taskUserId}}</label>
+							<label class="custom-control-label" for="justMe" (click)="justMe()" >Just Me </label>
 						</div>
 					</div>
 				</div>
@@ -60,26 +60,16 @@
 
 				<!--Event Drop Down-->
 				<div class="container mt-3">
-					<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+					<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" *ngFor="let event of events">
 						<ngb-panel title="event-title"><h4>{{event.eventName}}</h4>
 							<ng-template ngbPanelContent>
 							<p>{{event.eventContent}}</p>
-							</ng-template>
-						</ngb-panel>
-						<ngb-panel title="event-title2">{{event.eventName}}
-							<ng-template ngbPanelContent>
-								<p>{{event.eventContent}}</p>
 							</ng-template>
 						</ngb-panel>
 						<ngb-panel title="task-title"><h4>{{task.taskName}}</h4>
 						<ng-template ngbPanelContent>
 							<p>{{task.taskDescription}}</p>
 						</ng-template>
-						</ngb-panel>
-						<ngb-panel title="task-title2"><h4>{{task.taskName}}</h4>
-							<ng-template ngbPanelContent>
-								<p>{{task.taskDescription}}</p>
-							</ng-template>
 						</ngb-panel>
 					</ngb-accordion>
 				</div>
