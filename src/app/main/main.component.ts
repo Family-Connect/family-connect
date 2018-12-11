@@ -12,7 +12,6 @@ import {template} from "@angular/core/src/render3";
 
 @Component({
 	template: require("./main.component.html"),
-	selector: 'demo-datepicker-date-initial-state',
 })
 
 export class MainComponent implements OnInit {
@@ -40,21 +39,11 @@ export class MainComponent implements OnInit {
 
 	jwt = this.jwtHelperService.decodeToken(window.localStorage.getItem("jwt-token"));
 
-	export class DemoDatepickerDateInitialStateComponent {
-	bsValue = new Date();
-	bsRangeValue: Date[];
-	maxDate = new Date();
-
 
 	constructor(private userService: UserService, private eventService: EventService, private route: ActivatedRoute, private jwtHelperService: JwtHelperService) {
 	}
 
-	constructor() {
-		this.maxDate.setDate(this.maxDate.getDate() + 7);
-		this.bsRangeValue = [this.bsValue, this.maxDate];
-	}
-
-		ngOnInit(): void {
+	ngOnInit(): void {
 		//	this.taskService.getTaskByFamilyId(this.jwt.auth.taskId).subscribe(task => this.task = task);
 		// 	this.loadTasks();
 
@@ -86,7 +75,20 @@ export class MainComponent implements OnInit {
 		return {
 			'inactive': this.stateFlag
 		}
-
-			}
-		}
 	}
+}
+
+@Component({
+	selector: 'demo-datepicker-date-initial-state',
+})
+
+export class DemoDatepickerDateInitialStateComponent {
+	bsValue = new Date();
+	bsRangeValue: Date[];
+	maxDate = new Date();
+
+	constructor() {
+		this.maxDate.setDate(this.maxDate.getDate() + 7);
+		this.bsRangeValue = [this.bsValue, this.maxDate];
+	}
+}
