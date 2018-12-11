@@ -2,7 +2,9 @@
 	<!-- Sidebar -->
 	<nav id="sidebar" class="sidebar col-md-2 bg-light">
 		<div class="sidebar-header">
-			<h2>{{family.familyName}}</h2>
+			<h2>
+				<a [routerLink]="['/main']">{{family.familyName}}</a>
+			</h2>
 		</div>
 
 		<ul class="users">

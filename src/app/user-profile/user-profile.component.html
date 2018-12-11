@@ -28,54 +28,62 @@
 			</div>
 			<!-- View/Edit Credentials -->
 			<div class="profile-body row">
-				<div class="mt-3 col-md-6">
+				<div class="mt-3 column">
 					<p>Phone Number: {{user.userPhoneNumber}}</p>
 					<p>Email: {{user.userEmail}}</p>
 					<div class="userLists">
 						<div>
 							<h4>Events {{user.userDisplayName}} is attending:</h4>
-							<ul *ngFor="let event of events">
-								<li>{{event.eventName}}</li>
-							</ul>
+							<dl *ngFor="let event of events">
+								<dt>
+									<a [routerLink]="['/detailed-event',event.eventId]">{{event.eventName}}</a>
+								</dt>
+								<dd>{{event.eventContent}}</dd>
+							</dl>
 							<h4>Tasks for {{user.userDisplayName}}: </h4>
 							<dl *ngFor="let task of tasks">
-								<dt>{{task.task.taskName}}</dt>
+								<dt>
+									<a [routerLink]="['/detailed-task',task.task.taskId]">{{task.task.taskName}}</a>
+								</dt>
 								<dd>{{task.task.taskDescription}}</dd>
 							</dl>
 						</div>
 					</div>
+					<button *ngIf="userShow" (click)="toggleEditForm()">{{buttonName}}</button>
 				</div>
 
-				<form class="col-md-6" [formGroup]="editUserForm" (ngSubmit)="editUserFormSubmit()" novalidate>
-					<h4>Edit Profile</h4>
-					<div class="form-group">
-						<label for="nameViewEdit">Name</label>
-						<input type="text" class="form-control" id="nameViewEdit" placeholder="Name" formControlName="editDisplayName">
-					</div>
-					<div class="form-group">
-						<label for="emailViewEdit">Email</label>
-						<input type="text" class="form-control" id="emailViewEdit" placeholder="Email" formControlName="editEmail">
-					</div>
-					<div class="form-group">
-						<label for="PhoneNumberViewEdit">Phone Number</label>
-						<input type="text" class="form-control" id="PhoneNumberViewEdit" placeholder="Phone Number" formControlName="editPhoneNumber">
-					</div>
+				<div class="mt-3 col-md-6">
+					<div *ngIf="showEditForm">
+						<form [formGroup]="editUserForm" (ngSubmit)="editUserFormSubmit()" novalidate>
+							<h4>Edit Profile</h4>
+							<div class="form-group">
+								<label for="nameViewEdit">Name</label>
+								<input type="text" class="form-control" id="nameViewEdit" placeholder="Name" formControlName="editDisplayName">
+							</div>
+							<div class="form-group">
+								<label for="emailViewEdit">Email</label>
+								<input type="text" class="form-control" id="emailViewEdit" placeholder="Email" formControlName="editEmail">
+							</div>
+							<div class="form-group">
+								<label for="PhoneNumberViewEdit">Phone Number</label>
+								<input type="text" class="form-control" id="PhoneNumberViewEdit" placeholder="Phone Number" formControlName="editPhoneNumber">
+							</div>
 
-					<!--<div class="form-check form-check-inline">-->
-						<!--<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">-->
-						<!--<label class="form-check-label" for="inlineRadio1">0</label>-->
-					<!--</div>-->
-					<!--<div class="form-check form-check-inline">-->
-						<!--<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">-->
-						<!--<label class="form-check-label" for="inlineRadio2">1</label>-->
-					<!--</div>-->
+							<!--<div class="form-check form-check-inline">-->
+							<!--<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">-->
+							<!--<label class="form-check-label" for="inlineRadio1">0</label>-->
+							<!--</div>-->
+							<!--<div class="form-check form-check-inline">-->
+							<!--<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">-->
+							<!--<label class="form-check-label" for="inlineRadio2">1</label>-->
+							<!--</div>-->
 
-					<div class="button">
-						<button type="submit">Submit changes</button>
+							<div class="button">
+								<button type="submit">Submit changes</button>
+							</div>
+						</form>
 					</div>
-				</form>
-
-
+				</div>
 			</div>
 		</div>
 	</div>

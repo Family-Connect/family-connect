@@ -60,6 +60,7 @@ export class SplashComponent implements OnInit {
 				this.status = status;
 
 				if(this.status.status === 200) {
+					localStorage.clear();
 					this.router.navigate(['/main']);
 				}
 			});
