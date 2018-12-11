@@ -7,7 +7,7 @@
 
 		<ul class="users">
 			<li *ngFor="let user of users">
-				<a href="#">{{user.userDisplayName}}</a>
+				<a [routerLink]="['/user-profile/',user.userId]" routerLinkActive="active">{{user.userDisplayName}}</a>
 			</li>
 		</ul>
 	</nav>

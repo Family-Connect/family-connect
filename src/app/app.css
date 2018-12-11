@@ -10,6 +10,7 @@
 	min-width: 250px;
 	max-width: 25vw;
 	min-height: 100vh;
+	height: 100%;
 	filter:drop-shadow(1px 0 3px black);
 	transition: .3s;
 }
@@ -83,12 +84,9 @@ h2 {
 	transition:.3s;
 }
 
-.profile-main {
-	min-width: 100%;
-}
-
 .content {
 	min-height: 100vh;
+	height: 100%;
 	padding: 2rem;
 }
 
