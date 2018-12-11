@@ -28,7 +28,7 @@
 			</div>
 			<!-- View/Edit Credentials -->
 			<div class="profile-body row">
-				<div class="col">
+				<div class="m-3 col-md-6">
 					<p>Phone Number: {{user.userPhoneNumber}}</p>
 					<p>Phone Email: {{user.userEmail}}</p>
 					<p>Phone Number: {{user.userPhoneNumber}}</p>
@@ -38,32 +38,28 @@
 							<ul *ngFor="let event of events">
 								<li>{{event.eventName}}</li>
 							</ul>
-							<h4>Tasks</h4>
-							<ul>
-								<li>Task 1</li>
+							<h4>Tasks for {{user.userDisplayName}}: </h4>
+							<ul *ngFor="let task of tasks">
+								<li>{{task | json}}</li>
 							</ul>
 						</div>
 					</div>
 				</div>
 
-				<!--<form class="container-fluid">-->
-					<!--<div class="form-group">-->
-						<!--<label for="nameViewEdit">Name</label>-->
-						<!--<input type="text" class="form-control" id="nameViewEdit" placeholder="Name">-->
-					<!--</div>-->
-					<!--<div class="form-group">-->
-						<!--<label for="emailViewEdit">Email</label>-->
-						<!--<input type="text" class="form-control" id="emailViewEdit" placeholder="Email">-->
-					<!--</div>-->
-					<!--<div class="form-group">-->
-						<!--<label for="UsernameViewEdit">Username</label>-->
-						<!--<input type="text" class="form-control" id="UsernameViewEdit" placeholder="Username">-->
-					<!--</div>-->
-					<!--<div class="form-group">-->
-						<!--<label for="PhoneNumberViewEdit">Phone Number</label>-->
-						<!--<input type="text" class="form-control" id="PhoneNumberViewEdit" placeholder="Phone Number">-->
-					<!--</div>-->
-					<!--<h6>Privilege</h6>-->
+				<form class="col-6" [formGroup]="editUserForm" (ngSubmit)="editUserFormSubmit()" novalidate>
+					<div class="form-group">
+						<label for="nameViewEdit">Name</label>
+						<input type="text" class="form-control" id="nameViewEdit" placeholder="Name" formControlName="editDisplayName">
+					</div>
+					<div class="form-group">
+						<label for="emailViewEdit">Email</label>
+						<input type="text" class="form-control" id="emailViewEdit" placeholder="Email" formControlName="editEmail">
+					</div>
+					<div class="form-group">
+						<label for="PhoneNumberViewEdit">Phone Number</label>
+						<input type="text" class="form-control" id="PhoneNumberViewEdit" placeholder="Phone Number" formControlName="editPhoneNumber">
+					</div>
+					<h6>Privilege</h6>
 					<!--<div class="form-check form-check-inline">-->
 						<!--<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">-->
 						<!--<label class="form-check-label" for="inlineRadio1">0</label>-->
@@ -72,7 +68,7 @@
 						<!--<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">-->
 						<!--<label class="form-check-label" for="inlineRadio2">1</label>-->
 					<!--</div>-->
-				<!--</form>-->
+				</form>
 
 
 			</div>

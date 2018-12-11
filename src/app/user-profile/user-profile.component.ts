@@ -20,13 +20,12 @@ import {ActivatedRoute} from "@angular/router";
 export class UserProfileComponent implements OnInit {
 	user: User = {userId: null, userFamilyId:null, userAvatar:null, userDisplayName:null, userEmail:null, userPhoneNumber:null};
 	task: Task = {taskId:null, taskEventId:null, taskUserId:null, taskDueDate:null, taskDescription:null, taskIsComplete:null, taskName:null};
+	tasks: Task[];
 	event: Event = {eventId:null, eventFamilyId:null, eventUserId:null, eventContent:null, eventEndDate:null, eventName:null, eventStartDate:null};
-	events: Event[]
+	events: Event[];
 	userId: string = this.route.snapshot.params["userId"];
+	editUserForm : FormGroup;
 	status: Status = {status:null, message:null, type:null};
-
-
-
 
 	constructor(private eventService: EventService, private taskService: TaskService, private userService: UserService, private formBuilder: FormBuilder, private route: ActivatedRoute) { }
 
@@ -38,6 +37,23 @@ export class UserProfileComponent implements OnInit {
 
 	loadEvents() : any {
 		this.eventService.getEventByUserId(this.userId).subscribe(events => this.events = events)
+	}
+
+	loadTasks() : any {
+		this.taskService.getTaskByUserId(this.userId).subscribe(tasks => this.tasks = tasks)
+	}
+
+	editUserFormSubmit() : any {
+		let user : User = {
+			userId: null,
+			userAvatar: null,
+			userEmail: this.editUserForm.value.editEmail,
+			userDisplayName: this.editUserForm.value.editDisplayName,
+			userFamilyId: null,
+			userPhoneNumber: this.editUserForm.value.editPhoneNumber
+		};
+
+		this.userService.editUser(user)
 	}
 
 
