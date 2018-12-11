@@ -9,8 +9,10 @@ import {EventService} from "../shared/services/event.service";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {Config} from "@fortawesome/fontawesome";
 import {template} from "@angular/core/src/render3";
+import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 
 @Component({
+	selector: 'main',
 	template: require("./main.component.html"),
 })
 
@@ -77,10 +79,11 @@ export class MainComponent implements OnInit {
 }
 
 @Component({
-	selector: 'demo-datepicker-date-initial-state',
+	selector: 'datepicker',
+	templateUrl: "./main.component.html"
 })
 
-export class DemoDatepickerDateInitialStateComponent {
+export class Datepicker {
 	bsValue = new Date();
 	bsRangeValue: Date[];
 	maxDate = new Date();
@@ -89,4 +92,12 @@ export class DemoDatepickerDateInitialStateComponent {
 		this.maxDate.setDate(this.maxDate.getDate() + 7);
 		this.bsRangeValue = [this.bsValue, this.maxDate];
 	}
+}
+
+@Component({
+	selector: 'ngbd-accordion-basic',
+	templateUrl: "./main.component.html"
+})
+
+export class NgbdAccordionBasic {
 }
