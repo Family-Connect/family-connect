@@ -8,6 +8,9 @@ import {User} from "../interfaces/user";
 
 @Injectable()
 export class UserService {
+	getAllUsers(): any {
+		throw new Error("Method not implemented.");
+	}
 	constructor(protected http: HttpClient) {
 	}
 

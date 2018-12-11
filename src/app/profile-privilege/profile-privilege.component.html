@@ -23,72 +23,72 @@
 
 <!-- Actual content (not sidebar) - edit below -->
 
-<div class="content container-fluid">
+<div class="content">
 	<h4 class="whoseIn">Who's in the family?</h4>
 
 
-	<div>
+<div class="container-fluid">
+	<div class="user">
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th scope="col">Name</th>
 					<th scope="col">Email</th>
-					<th scope="col">Username</th>
+					<th scope="col">Display Name</th>
 					<th scope="col">Phone Number</th>
-					<th scope="col">Privilege</th>
 					<th scope="col">Delete User</th>
 					<th scope="col">Edit User</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<th scope="row">Frank G</th>
-					<td>anEmail@handle.com</td>
-					<td>UserName1</td>
-					<td>55555555</td>
-					<td>1</td>
-					<td><button type="button" id="plusButton" class="btn plusButton">
+				<tr *ngFor="let user of users; let i = index">
+					<th scope="row">{{ user.userEmail}}</th>
+					<td>{{ user.userDisplayName}}</td>
+					<td>{{ user.userPhoneNumber}}</td>
+					<td><button type="button" id="deleteButton" class="btn plusButton" (click)="onDelete(i)">
 						<span class="fa-stack fa-1x">
 							<i class="fas fa-trash-alt"></i>
 						</span>
 					</button></td>
-					<td><button type="button" id="plusButton" class="btn plusButton">
-						<i class="fas fa-pencil-alt"></i>
-					</button></td>
-				</tr>
-
-				<tr>
-					<th scope="row">Jake G</th>
-					<td>otherEmail@handle.com</td>
-					<td>UserName2</td>
-					<td>5555557</td>
-					<td>0</td>
-					<td><button type="button" id="plusButton" class="btn plusButton">
-						<span class="fa-stack fa-1x">
-							<i class="fas fa-trash-alt"></i>
-						</span>
-					</button></td>
-					<td><button type="button" id="plusButton" class="btn plusButton">
-						<i class="fas fa-pencil-alt"></i>
-					</button></td>
-				</tr>
-
-				<tr>
-					<th scope="row">Bob G</th>
-					<td>bob@handle.com</td>
-					<td>UserName3</td>
-					<td>5555556</td>
-					<td>1</td>
-					<td><button type="button" id="plusButton" class="btn plusButton">
-						<span class="fa-stack fa-1x">
-							<i class="fas fa-trash-alt"></i>
-						</span>
-					</button></td>
-					<td><button type="button" id="plusButton" class="btn plusButton">
+					<td><button type="button" id="editButton" class="btn plusButton" (click)="onEdit(i)">
 						<i class="fas fa-pencil-alt"></i>
 					</button></td>
 				</tr>
 			</tbody>
 		</table>
+		<!--<div class="text-right">-->
+			<!--<button type="submit" class="btn btn-primary" (click)="onNew()">New</button>-->
+		<!--</div>-->
 	</div>
+	<br>
+	<div class="users" *ngIf="showNew">
+		<form (ngSubmit)="onSave()">
+			<div class="form-group row">
+				<label id="email-input" class="col-12 col-form-label">Email</label>
+				<div class="col-12">
+					<label>
+						<input class="form-control" type="email" name="emailaddress">
+					</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label id="displayname-input" class="col-12 col-form-label">Display Name</label>
+				<div class="col-12 input-group">
+					<label>
+						<input type="text" class="form-control" name="displayName">
+					</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label id="phoneNumber-input" class="col-12 col-form-label">Phone Number</label>
+				<div class="col-12">
+					<label>
+						<input class="form-control" type="number" name="email">
+					</label>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-success">{{submitType}}</button>
+			<button type="submit" class="btn btn-primary" (click)="onCancel()">Cancel</button>
+		</form>
+	</div>
+</div>
 </div>

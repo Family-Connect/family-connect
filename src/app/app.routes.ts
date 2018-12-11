@@ -20,7 +20,6 @@ import {ProfilePrivilegeComponent} from "./profile-privilege/profile-privilege.c
 import {SidebarComponent} from "./shared/components/sidebar.component";
 
 
-
 export const allAppComponents = [SplashComponent, MainComponent, DetailedEventComponent, DetailedTaskComponent, UserProfileComponent, ProfilePrivilegeComponent, SidebarComponent];
 
 export const routes: Routes = [
