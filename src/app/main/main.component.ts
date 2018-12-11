@@ -4,7 +4,7 @@ import {UserService} from "../shared/services/user.service";
 import {Status} from "../shared/interfaces/status";
 import {User} from "../shared/interfaces/user";
 import {Event} from "../shared/interfaces/event";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {EventService} from "../shared/services/event.service";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {Config} from "@fortawesome/fontawesome";
@@ -100,4 +100,44 @@ export class Datepicker {
 })
 
 export class NgbdAccordionBasic {
+}
+
+@Component({
+	templateUrl: "./main.component.html"
+})
+
+export class HomeComponent implements OnInit {
+
+	today: number = Date.now();
+
+	eventId: string;
+	user: User;
+	event: Event;
+	status: Status = null;
+
+	events: Event[] = [];
+	users: User[] = [];
+
+	constructor(private eventService: EventService, private userService: UserService, private jwtHelperService: JwtHelperService, private route: ActivatedRoute, private router: Router) {
+	}
+
+	ngOnInit(): void {
+		this.getUser();
+		this.listEvents()
+	}
+
+	getUser() {
+		let userToken = this.jwtHelperService.decodeToken(localStorage.getItem("jwt-token"));
+		let userId = userToken.auth.userId;
+		this.userService.getUser(userId)
+			.subscribe(user => this.user = user);
+	}
+
+	listEvents(): void {
+		this.eventService.getAllEvents()
+			.subscribe(events => {
+				this.events = events;
+				this.listUsers();
+			});
+	}
 }
