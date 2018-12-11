@@ -25,9 +25,15 @@
 					</div>
 				</div>
 
-				<button type="button" id="settingsButton" class="btn settingsButton">
-					<i class="fas fa-cog"></i>
-				</button>
+				<div ngbDropdown placement="bottom bottom-right" class="dropdown">
+					<button type="button" id="settingsButton" class="btn settingsButton" ngbDropdownToggle>
+						<i class="fas fa-cog"></i>
+					</button>
+					<div ngbDropdownMenu>
+						<button class="dropdown-item">Log out</button>
+					</div>
+				</div>
+
 			</div>
 		</div>
 
@@ -76,10 +82,10 @@
 							<p class="card-text">{{eventTask.task.taskDescription}}</p>
 							<a class="btn text-primary" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="isCollapsed" aria-controls="collapseExample"><i class="fas fa-comments"></i></a>
 							<div class="collapse multi-collapse" id="collapseTask1" [ngbCollapse]="!isCollapsed">
-								<div class="card card-body event-task-comment" *ngFor="let userTaskComment of userTaskComments">
-									<p>{{userTaskComment | json}}</p>
+								<div class="card card-body event-task-comment" *ngFor="let kitchenSink of kitchenSinks">
+									<p *ngFor="let comment of comments"> {{comment | json}}</p>
 									<ul>
-										<li>{{userTaskComment.comment.commentContent}}</li>
+										<!--<li>{{userTaskComment.comment.commentContent}}</li>-->
 									</ul>
 								</div>
 								<form class="add-task-comment container-fluid" [formGroup]="commentOnEventTaskForm" (ngSubmit)="commentOnEventTask();" novalidate>

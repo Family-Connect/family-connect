@@ -8,7 +8,7 @@ require_once(dirname(__DIR__, 3). "/php/lib/uuid.php");
 
 require_once ("/etc/apache2/capstone-mysql/Secrets.php");
 
-use FamConn\FamilyConnect\{Task, Family, Event, User};
+use FamConn\FamilyConnect\{Task, Family, Event, User, Comment};
 
 /**
  * API for Task
@@ -60,7 +60,13 @@ try {
 		if(empty($id) === false) {
 			$reply->data = Task::getTaskByTaskId($pdo, $id);
 		} else if(empty($taskEventId) === false) {
-			$reply->data = Task::getTaskByTaskEventId($pdo, $taskEventId)->toArray();
+			$tasks = Task::getTaskByTaskEventId($pdo, $taskEventId);
+			$storage = new \FamConn\FamilyConnect\JsonObjectStorage();
+			foreach($tasks as $task){
+				$comments = Comment::getCommentByCommentTaskId($pdo, $task->task->getTaskId())->toArray();
+				$storage->attach($task, $comments);
+			}
+			$reply->data = $storage;
 		} else if(empty($taskUserId) === false) {
 			$reply->data = Task::getTaskByTaskUserId($pdo, $taskUserId)->toArray();
 		} else if(empty($taskStartInterval) === false || empty($taskEndInterval) === false) {

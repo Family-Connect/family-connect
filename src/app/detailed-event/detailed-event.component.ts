@@ -14,7 +14,7 @@ import {User} from "../shared/interfaces/user";
 import {Task} from "../shared/interfaces/task";
 import {UserComment} from "../shared/interfaces/UserComment";
 import {EventTask} from "../shared/interfaces/EventTask";
-import {UserTaskComment} from "../shared/interfaces/UserTaskComment";
+import {KitchenSink} from "../shared/interfaces/kitchenSink";
 
 
 //Status and router
@@ -32,10 +32,9 @@ export class DetailedEventComponent implements OnInit {
 	userComments: UserComment[];
 	task: Task = {taskId:null, taskEventId:null, taskUserId:null, taskDueDate:null, taskDescription:null, taskIsComplete:null, taskName:null};
 	eventTasks: EventTask[];
-	userTaskComments: UserTaskComment[];
 	event: Event = {eventId:null, eventFamilyId:null, eventUserId:null, eventContent:null, eventEndDate:null, eventName:null, eventStartDate:null};
+	kitchenSinks: KitchenSink[];
 	eventId: string = this.route.snapshot.params["eventId"];
-	//taskId: string =;
 	commentOnEventForm: FormGroup;
 	commentOnEventTaskForm: FormGroup;
 	status: Status = {status: null, message: null, type: null};
@@ -45,8 +44,8 @@ export class DetailedEventComponent implements OnInit {
 	ngOnInit() : void {
 		this.eventService.getEvent(this.eventId).subscribe(event => this.event = event);
 		this.loadComments();
-		this.loadTasks(this.commentService, this.userTaskComments);
-		// this.loadTaskComments();
+		this.loadTasks();
+		this.loadTaskComments();
 
 		this.commentOnEventForm = this.formBuilder.group({
 			eventCommentContent : ["", [Validators.maxLength(855), Validators.required]]
@@ -61,19 +60,13 @@ export class DetailedEventComponent implements OnInit {
 		this.commentService.getCommentByEventId(this.eventId).subscribe(userComments => this.userComments = userComments);
 	}
 
-	loadTasks(commentService, userTaskCmmnts) : any {
-		this.taskService.getTaskByEventId(this.eventId)
-			.subscribe(eventTasks => {
-				this.eventTasks = eventTasks;
-				this.eventTasks.forEach(function(eventTask) {
-						commentService.getCommentByTaskId(eventTask.task.taskId).subscribe(userTaskComments => userTaskCmmnts = userTaskComments)
-					}
-				)
-			})
+	loadTasks() : any {
+		this.taskService.getTaskByEventId(this.eventId).subscribe(eventTasks => this.eventTasks = eventTasks);
 	}
-	// loadTaskComments() : any {
-	//
-	// }
+
+	loadTaskComments() : any {
+		this.taskService.getTaskByEventId(this.eventId).subscribe(kitchenSinks => this.kitchenSinks = kitchenSinks);
+	}
 
 	commentOnEvent() : any {
 		let comment: Comment = {
