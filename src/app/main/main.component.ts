@@ -26,12 +26,12 @@ export class MainComponent implements OnInit {
 
 	constructor(private userService: UserService, private eventService: EventService, private route : ActivatedRoute,private jwtHelperService: JwtHelperService){ }
 
-	// ngOnInit(): void {
-	// 	this.taskService.getTaskByFamilyId(this.jwt.auth.taskId).subscribe(task => this.task = task);
+	ngOnInit(): void {
+	 //	this.taskService.getTaskByFamilyId(this.jwt.auth.taskId).subscribe(task => this.task = task);
 	// 	this.loadTasks();
 
 
-		this.eventService.getEventByFamilyId(this.jwt.auth.familyId).subscribe(event => this.events = event);
+		//this.eventService.getEventByFamilyId(this.jwt.auth.familyId).subscribe(event => this.events = event);
 	}
 
 		// loadTasks() : any {
