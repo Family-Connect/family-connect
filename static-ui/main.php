@@ -42,19 +42,22 @@
 					<i class="fas fa-cog"></i>
 				</button>
 			</div>
+		</div>
 
 
 		<!-- Actual content (not sidebar) - edit below -->
 			<!--Radio buttons-->
 		<div class="content container">
 			<div class="row no-gutters">
-			<div class="custom-control custom-radio col-sm-6 col-md-8">
-				<input type="radio" id="task" name="customRadio" class="custom-control-input">
-				<label class="custom-control-label" for="task">Task</label>
-			</div>
-			<div class="custom-control custom-radio col-sm-6 col-md-5">
-				<input type="radio" id="event" name="customRadio" class="custom-control-input">
-				<label class="custom-control-label" for="event">Event</label>
+				<h2>Events</h2>
+<!--			<div class="custom-control custom-radio col-sm-6 col-md-8">-->
+<!--				<input type="radio" id="task" name="customRadio" class="custom-control-input">-->
+<!--				<label class="custom-control-label" for="task">Task</label>-->
+<!--			</div>-->
+<!--			<div class="custom-control custom-radio col-sm-6 col-md-5">-->
+<!--				<input type="radio" id="event" name="customRadio" class="custom-control-input">-->
+<!--				<label class="custom-control-label" for="event">Event</label>-->
+<!--			</div>-->
 			</div>
 
 				<!--Search Box-->
@@ -66,8 +69,6 @@
 				<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
 			</div>
 			</div>
-			</div>
-
 
 				<!--Check box, just me-->
 			<div class="container mt-3">
@@ -75,13 +76,12 @@
 				<div class="custom-control custom-checkbox">
 				<input type="checkbox" class="custom-control-input" id="justMe">
 				<label class="custom-control-label" for="justMe">Just Me</label>
+				</div>
+				</div>
 			</div>
-			</div>
-			</div>
-
 
 				<!--Event Drop Down-->
-			<div class="container">
+			<div class="container mt-3">
 			<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
 				<ngb-panel title="Christmas Party" href="detailed-event">
 					<ng-template ngbPanelContent>
@@ -100,6 +100,9 @@
 				</ngb-panel>
 			</ngb-accordion>
 			</div>
+			</div>
+		</div>
+
 
 															<!--			<div class="container mt-5">-->
 <!--				<div id="accordion" role="tablist">-->

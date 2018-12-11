@@ -26,14 +26,16 @@
 			<!--Radio buttons-->
 			<div class="content container">
 				<div class="row no-gutters">
-					<div class="custom-control custom-radio col-sm-6 col-md-8">
-						<input type="radio" id="task" name="customRadio" class="custom-control-input">
-						<label class="custom-control-label" for="task">Task</label>
-					</div>
-					<div class="custom-control custom-radio col-sm-6 col-md-5">
-						<input type="radio" id="event" name="customRadio" class="custom-control-input">
-						<label class="custom-control-label" for="event">Event</label>
-					</div>
+					<h2>Events</h2>
+					<!--<div class="custom-control custom-radio col-sm-6 col-md-8">-->
+						<!--<input type="radio" id="task" name="customRadio" class="custom-control-input">-->
+						<!--<label class="custom-control-label" for="task">Task</label>-->
+					<!--</div>-->
+					<!--<div class="custom-control custom-radio col-sm-6 col-md-5">-->
+						<!--<input type="radio" id="event" name="customRadio" class="custom-control-input">-->
+						<!--<label class="custom-control-label" for="event">Event</label>-->
+				<!--</div>-->
+				</div>
 
 					<!--Search Box-->
 					<div class="input-group input-group-sm">
@@ -44,8 +46,6 @@
 							<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
 						</div>
 					</div>
-				</div>
-
 
 				<!--Check box, just me-->
 				<div class="container mt-3">
@@ -57,22 +57,24 @@
 					</div>
 				</div>
 
-
 				<!--Event Drop Down-->
 				<div class="container mt-3">
 					<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" *ngFor="let event of events">
 						<ngb-panel title="event-title"><h4>{{event.eventName}}</h4>
 							<ng-template ngbPanelContent>
 							<p>{{event.eventContent}}</p>
+							<p>{{event.eventUserId}}</p>
 							</ng-template>
 						</ngb-panel>
-						<ngb-panel title="task-title"><h4>{{task.taskName}}</h4>
-						<ng-template ngbPanelContent>
-							<p>{{task.taskDescription}}</p>
-						</ng-template>
-						</ngb-panel>
+						<!--<ngb-panel title="task-title"><h4>{{task.taskName}}</h4>-->
+						<!--<ng-template ngbPanelContent>-->
+							<!--<p>{{task.taskDescription}}</p>-->
+						<!--</ng-template>-->
+						<!--</ngb-panel>-->
 					</ngb-accordion>
 				</div>
+			</div>
+		</div>
 
 				<!--<div class="container mt-5">-->
 					<!--<div id="accordion" role="tablist">-->
