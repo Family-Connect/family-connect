@@ -137,7 +137,7 @@ export class HomeComponent implements OnInit {
 		this.eventService.getAllEvents()
 			.subscribe(events => {
 				this.events = events;
-				this.listUsers();
+				this.getUser();
 			});
 	}
 }
