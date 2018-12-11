@@ -18,7 +18,7 @@
 					<button type="button" id="plusButton" class="btn plusButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fas fa-plus"></i>
 					</button>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+					<div class="dropdown-menu dropdown-menu-right mt-5" aria-labelledby="dropdownMenuButton">
 						<a class="dropdown-item" href="#">Edit Event Name</a>
 						<a class="dropdown-item" href="#">Edit Event Owner</a>
 						<a class="dropdown-item" href="#">Edit Event Description</a>
@@ -83,7 +83,7 @@
 							<a class="btn text-primary" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="isCollapsed" aria-controls="collapseExample"><i class="fas fa-comments"></i></a>
 							<div class="collapse multi-collapse" id="collapseTask1" [ngbCollapse]="!isCollapsed">
 								<div class="card card-body event-task-comment" *ngFor="let kitchenSink of kitchenSinks">
-									<p *ngFor="let comment of comments"> {{comment | json}}</p>
+									<p> {{kitchenSink.comments[0] | json}}</p>
 									<ul>
 										<!--<li>{{userTaskComment.comment.commentContent}}</li>-->
 									</ul>

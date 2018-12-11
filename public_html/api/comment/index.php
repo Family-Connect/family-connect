@@ -89,9 +89,13 @@ else if($method === "PUT" || $method === "POST") {
 		throw(new \InvalidArgumentException ("No comment Task ID.", 405));
 	}*/
 
-	//  make sure commentUserId is available
-	if(empty($requestObject->commentUserId) === true) {
-		throw(new \InvalidArgumentException ("No comment User ID.", 405));
+//	//  make sure commentUserId is available
+//	if(empty($requestObject->commentUserId) === true) {
+//		throw(new \InvalidArgumentException ("No comment User ID.", 405));
+//	}
+
+	if(empty($_SESSION["user"]) === true) {
+		throw (new \InvalidArgumentException("You must be logged in to post comments", 401));
 	}
 
 	//make sure comment content is available (required field)
@@ -112,9 +116,9 @@ else if($method === "PUT" || $method === "POST") {
 	}
 
 	//  make sure profileId is available
-	if(empty($requestObject->commentProfileId) !== true) {
-		throw(new \InvalidArgumentException ("No Profile ID.", 405));
-	}
+//	if(empty($requestObject->commentProfileId) !== true) {
+//		throw(new \InvalidArgumentException ("No Profile ID.", 405));
+//	}
 
 	//perform the actual put or post
 	if($method === "PUT") {

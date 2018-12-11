@@ -74,7 +74,7 @@ export class DetailedEventComponent implements OnInit {
 			commentEventId: this.eventId,
 			commentTaskId: null,
 			commentUserId: this.user.userId,
-			commentContent: this.commentOnEventForm.value.commentContent,
+			commentContent: this.commentOnEventForm.value.eventCommentContent,
 			commentDate: null
 		};
 
@@ -97,7 +97,7 @@ export class DetailedEventComponent implements OnInit {
 			commentEventId: null,
 			commentTaskId: this.task.taskId,
 			commentUserId: this.user.userId,
-			commentContent: this.commentOnEventForm.value.commentContent,
+			commentContent: this.commentOnEventForm.value.eventCommentContent,
 			commentDate: null
 		};
 
