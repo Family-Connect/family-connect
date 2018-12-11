@@ -59,23 +59,21 @@ export class MainComponent implements OnInit {
 		this.eventService.getEventByFamilyId(this.eventId).subscribe(events => this.events = events);
 	}
 
-	justMe(): any {
-		this.eventService.getEventByUserId(this.jwt.auth.userId).subscribe(events => this.events = events);
-	}
-
 	stateFlag = false;
 	stateFlag1 = false;
+
+	justMe(): any {
+		this.eventService.getEventByUserId(this.jwt.auth.userId).subscribe(events => this.events = events);
+		return {
+			'inactive': this.stateFlag
+		}
+	}
 
 	toggleState() {
 		this.stateFlag = !this.stateFlag;
 		this.stateFlag1 = !this.stateFlag1;
 	}
 
-	justMe() {
-		return {
-			'inactive': this.stateFlag
-		}
-	}
 }
 
 @Component({
