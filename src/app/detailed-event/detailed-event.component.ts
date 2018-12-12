@@ -60,6 +60,19 @@ export class DetailedEventComponent implements OnInit {
 
 		this.commentOnEventTaskForm = this.formBuilder.group({
 			eventTaskCommentContent : ["", [Validators.maxLength(855), Validators.required]]
+		});
+
+		this.editEventForm = this.formBuilder.group({
+			eventNameEdit : ["", [Validators.maxLength(30), Validators.required]],
+			eventContentEdit : ["", [Validators.maxLength(255), Validators.required]],
+			eventStartEdit : ["", [Validators.maxLength(6), Validators.required]],
+			eventEndEdit : ["", [Validators.maxLength(6), Validators.required]]
+		});
+
+		this.addTaskForm = this.formBuilder.group({
+			taskNameInsert : ["", [Validators.maxLength(30), Validators.required]],
+			taskDescriptionInsert : ["", [Validators.maxLength(512), Validators.required]],
+			taskDueDateInsert : ["", [Validators.maxLength(6), Validators.required]],
 		})
 	}
 

@@ -28,9 +28,9 @@
 											<input type="text" id="eventNameEdit" placeholder="Change Event Name" formControlName="eventNameEdit" class=" m-3"><br>
 											<input type="text" id="evenContentEdit" placeholder="Change Content" formControlName="eventContentEdit" class=" m-3"><br>
 											<label for="eventStartEdit">Edit event start date:</label>
-											<input type="date" id="eventStartEdit" formControlName="eventStartEdit" class="form-control m-3"><br>
+											<input type="date" id="eventStartEdit" formControlName="eventStartEdit" class="form-control"><br>
 											<label for="eventEndEdit">Edit end start date:</label>
-											<input type="date" id="eventEndEdit" formControlName="eventEndEdit" class="form-control m-3">
+											<input type="date" id="eventEndEdit" formControlName="eventEndEdit" class="form-control">
 											<div class="button">
 												<button type="submit">Edit Event</button>
 											</div>
@@ -42,7 +42,8 @@
 										<form [formGroup]="addTaskForm" (submit)="addTaskToEvent()" class="modal-form-content">
 											<input type="text" id="taskNameInsert" placeholder="Add Task Name" formControlName="taskNameInsert" class=" m-3"><br>
 											<input type="text" id="taskDescriptionInsert" placeholder="Add Task Description" formControlName="taskDescriptionInsert" class=" m-3"><br>
-											<!--<input type="date" id="taskDueDateInsert" placeholder="Add Task Due Date" formControlName="taskDueDateInsert">-->
+											<label for="taskDueDateInsert">Add a due date: </label>
+											<input type="date" id="taskDueDateInsert" formControlName="taskDueDateInsert">
 											<div class="button">
 												<button type="submit">Add Task</button>
 											</div>
