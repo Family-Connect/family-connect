@@ -197,4 +197,12 @@ export class DetailedEventComponent implements OnInit {
 				}
 			})
 	}
+
+	deleteTask() : any {
+	// 	let task : Task = {
+	// 		taskId: this.task.taskId
+	// 	};
+	//
+	// 	this.taskService.deleteTask(task)
+	}
 }
