@@ -14,22 +14,55 @@
 
 			<div class="configButtons">
 				<div class="dropdown">
+					<ng-template #modalContent let-modal>
+						<div class="modal-header">
+							<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<ngb-tabset>
+								<ngb-tab title="Edit Event">
+									<ng-template ngbTabContent>
+										<form [formGroup]="editEventForm" (submit)="editEvent()" class="modal-form-content" novalidate>
+											<input type="text" id="eventNameEdit" placeholder="Change Event Name" formControlName="eventNameEdit" class=" m-3"><br>
+											<input type="text" id="evenContentEdit" placeholder="Change Content" formControlName="eventContentEdit" class=" m-3"><br>
+											<label for="eventStartEdit">Edit event start date:</label>
+											<input type="date" id="eventStartEdit" formControlName="eventStartEdit" class="form-control m-3"><br>
+											<label for="eventEndEdit">Edit end start date:</label>
+											<input type="date" id="eventEndEdit" formControlName="eventEndEdit" class="form-control m-3">
+											<div class="button">
+												<button type="submit">Edit Event</button>
+											</div>
+										</form>
+									</ng-template>
+								</ngb-tab>
+								<ngb-tab title="Add Task">
+									<ng-template ngbTabContent>
+										<form [formGroup]="addTaskForm" (submit)="addTaskToEvent()" class="modal-form-content">
+											<input type="text" id="taskNameInsert" placeholder="Add Task Name" formControlName="taskNameInsert" class=" m-3"><br>
+											<input type="text" id="taskDescriptionInsert" placeholder="Add Task Description" formControlName="taskDescriptionInsert" class=" m-3"><br>
+											<!--<input type="date" id="taskDueDateInsert" placeholder="Add Task Due Date" formControlName="taskDueDateInsert">-->
+											<div class="button">
+												<button type="submit">Add Task</button>
+											</div>
+										</form>
+									</ng-template>
+								</ngb-tab>
+							</ngb-tabset>
+						</div>
+					</ng-template>
 
-					<button type="button" id="plusButton" class="btn plusButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<button type="button" id="plusButton" class="btn plusButton" (click)="open(modalContent)">
 						<i class="fas fa-plus"></i>
 					</button>
-					<div class="dropdown-menu dropdown-menu-right mt-5" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item" href="#">Edit Event Name</a>
-						<a class="dropdown-item" href="#">Edit Event Owner</a>
-						<a class="dropdown-item" href="#">Edit Event Description</a>
-					</div>
 				</div>
 
 				<div ngbDropdown placement="bottom bottom-right" class="dropdown">
 					<button type="button" id="settingsButton" class="btn settingsButton" ngbDropdownToggle>
 						<i class="fas fa-cog"></i>
 					</button>
-					<div ngbDropdownMenu>
+					<div ngbDropdownMenu class="mt-5">
 						<button class="dropdown-item">Log out</button>
 					</div>
 				</div>
@@ -62,7 +95,7 @@
 							</ul>
 						</div>
 
-						<form class="add-comment container-fluid" [formGroup]="commentOnEventForm" (ngSubmit)="commentOnEvent();" novalidate>
+						<form class="add-comment container-fluid" [formGroup]="commentOnEventForm" (submit)="commentOnEvent()" novalidate>
 							<div>
 								<textarea id="comment" name="eventComment" placeholder="What's on your mind?" formControlName="eventCommentContent"></textarea>
 							</div>
@@ -82,13 +115,18 @@
 							<p class="card-text">{{eventTask.task.taskDescription}}</p>
 							<a class="btn text-primary" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="isCollapsed" aria-controls="collapseExample"><i class="fas fa-comments"></i></a>
 							<div class="collapse multi-collapse" id="collapseTask1" [ngbCollapse]="!isCollapsed">
-								<div class="card card-body event-task-comment" *ngFor="let kitchenSink of kitchenSinks">
-									<p> {{kitchenSink.comments[0] | json}}</p>
-									<ul>
-										<!--<li>{{userTaskComment.comment.commentContent}}</li>-->
-									</ul>
+								<div *ngFor="let key of objectKeys(kitchenSinks)">
+									<div *ngIf="kitchenSinks[key].task.taskId === eventTask.task.taskId">
+										<div class="card card-body event-task-comment" *ngFor="let comment of kitchenSinks[key].comments">
+											<p> {{comment.userDisplayName}}</p>
+											<ul>
+												<li>{{comment.comment.commentContent}}</li>
+											</ul>
+										</div>
+									</div>
 								</div>
-								<form class="add-task-comment container-fluid" [formGroup]="commentOnEventTaskForm" (ngSubmit)="commentOnEventTask();" novalidate>
+
+								<form class="add-task-comment container-fluid" [formGroup]="commentOnEventTaskForm" (submit)="commentOnEventTask();" novalidate>
 									<div>
 										<textarea id="taskComment1" name="eventTaskComment" class="event-task-comment-textarea" placeholder="What's on your mind?" formControlName="eventTaskCommentContent"></textarea>
 									</div>

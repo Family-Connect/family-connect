@@ -15,12 +15,14 @@ import {Task} from "../shared/interfaces/task";
 import {UserComment} from "../shared/interfaces/UserComment";
 import {EventTask} from "../shared/interfaces/EventTask";
 import {KitchenSink} from "../shared/interfaces/kitchenSink";
+import {NgbModal, ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
 
 
 //Status and router
 import {Status} from "../shared/interfaces/status";
 import {ActivatedRoute} from "@angular/router";
 import {forEach} from "@angular/router/src/utils/collection";
+import {el} from "@angular/platform-browser/testing/src/browser_util";
 
 @Component({
 	template: require("./detailed-event.component.html")
@@ -37,9 +39,14 @@ export class DetailedEventComponent implements OnInit {
 	eventId: string = this.route.snapshot.params["eventId"];
 	commentOnEventForm: FormGroup;
 	commentOnEventTaskForm: FormGroup;
+	editEventForm: FormGroup;
+	addTaskForm: FormGroup;
+	closeResult: string;
 	status: Status = {status: null, message: null, type: null};
 
-	constructor(private commentService: CommentService, private eventService: EventService, private taskService: TaskService, private userService: UserService, private formBuilder: FormBuilder, private route: ActivatedRoute) { }
+	objectKeys = Object.keys;
+
+	constructor(private commentService: CommentService, private eventService: EventService, private taskService: TaskService, private userService: UserService, private formBuilder: FormBuilder, private route: ActivatedRoute, private modalService: NgbModal) { }
 
 	ngOnInit() : void {
 		this.eventService.getEvent(this.eventId).subscribe(event => this.event = event);
@@ -56,6 +63,24 @@ export class DetailedEventComponent implements OnInit {
 		})
 	}
 
+	open(modalContent) {
+		this.modalService.open(modalContent, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+			this.closeResult = `Closed with: ${result}`;
+		}, (reason) => {
+			this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+		});
+	}
+
+	private getDismissReason(reason: any): string {
+		if (reason === ModalDismissReasons.ESC) {
+			return 'by pressing ESC';
+		} else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+			return 'by clicking on a backdrop';
+		} else {
+			return  `with: ${reason}`;
+		}
+	}
+
 	loadComments() : any {
 		this.commentService.getCommentByEventId(this.eventId).subscribe(userComments => this.userComments = userComments);
 	}
@@ -66,6 +91,53 @@ export class DetailedEventComponent implements OnInit {
 
 	loadTaskComments() : any {
 		this.taskService.getTaskByEventId(this.eventId).subscribe(kitchenSinks => this.kitchenSinks = kitchenSinks);
+	}
+
+	editEvent() : any {
+		let event: Event = {
+			eventId: null,
+			eventFamilyId: null,
+			eventUserId: this.user.userId,
+			eventContent: this.editEventForm.value.eventContentEdit,
+			eventEndDate: this.editEventForm.value.eventEndEdit,
+			eventStartDate: this.editEventForm.value.eventStartEdit,
+			eventName: this.editEventForm.value.eventNameEdit
+		};
+
+		this.eventService.editEvent(event)
+			.subscribe(status => {
+				this.status = status;
+
+				if(status.status === 200) {
+					this.editEventForm.reset();
+				} else {
+					alert(status.message);
+				}
+			})
+
+	}
+
+	addTaskToEvent() : any {
+		let task: Task = {
+			taskId: null,
+			taskEventId: this.eventId,
+			taskUserId: this.user.userId,
+			taskDescription: this.addTaskForm.value.taskDescriptionInsert,
+			taskDueDate: this.addTaskForm.value.taskDueDateInsert,
+			taskIsComplete: null,
+			taskName: this.addTaskForm.value.taskNameInsert
+		};
+
+		this.taskService.createTask(task)
+			.subscribe(status => {
+				this.status = status;
+
+				if(status.status === 200) {
+					this.addTaskForm.reset();
+				} else {
+					alert(status.message);
+				}
+			})
 	}
 
 	commentOnEvent() : any {
