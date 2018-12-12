@@ -6,11 +6,11 @@ import {allAppComponents, appRoutingProviders, routing} from "./app.routes";
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ReactiveFormsModule} from "@angular/forms";
 import {JwtModule} from "@auth0/angular-jwt";
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 
 const moduleDeclarations = [AppComponent];
 
-//configure the parameters fot the JwtModule
+//configure the parameters for the JwtModule
 const JwtHelper = JwtModule.forRoot({
 	config: {
 		tokenGetter: () => {
@@ -24,7 +24,7 @@ const JwtHelper = JwtModule.forRoot({
 });
 
 @NgModule({
-	imports:      [BrowserModule, HttpClientModule, ReactiveFormsModule, routing, NgbModule, JwtHelper, BsDatepickerModule.forRoot()],
+	imports:      [BrowserModule, HttpClientModule, ReactiveFormsModule, routing, NgbModule, JwtHelper],
 	declarations: [...moduleDeclarations, ...allAppComponents],
 	bootstrap:    [AppComponent],
 	providers:    [...appRoutingProviders]

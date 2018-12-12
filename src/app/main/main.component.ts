@@ -9,7 +9,7 @@ import {EventService} from "../shared/services/event.service";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {Config} from "@fortawesome/fontawesome";
 import {template} from "@angular/core/src/render3";
-import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
+
 
 @Component({
 	selector: 'main',
@@ -76,68 +76,5 @@ export class MainComponent implements OnInit {
 		this.stateFlag1 = !this.stateFlag1;
 	}
 
-}
 
-@Component({
-	selector: 'datepicker',
-	templateUrl: "./main.component.html"
-})
-
-export class Datepicker {
-	bsValue = new Date();
-	bsRangeValue: Date[];
-	maxDate = new Date();
-
-	constructor() {
-		this.maxDate.setDate(this.maxDate.getDate() + 7);
-		this.bsRangeValue = [this.bsValue, this.maxDate];
-	}
-}
-
-@Component({
-	selector: 'ngbd-accordion-basic',
-	templateUrl: "./main.component.html"
-})
-
-export class NgbdAccordionBasic {
-}
-
-@Component({
-	templateUrl: "./main.component.html"
-})
-
-export class HomeComponent implements OnInit {
-
-	today: number = Date.now();
-
-	eventId: string;
-	user: User;
-	event: Event;
-	status: Status = null;
-
-	events: Event[] = [];
-	users: User[] = [];
-
-	constructor(private eventService: EventService, private userService: UserService, private jwtHelperService: JwtHelperService, private route: ActivatedRoute, private router: Router) {
-	}
-
-	ngOnInit(): void {
-		this.getUser();
-		this.listEvents()
-	}
-
-	getUser() {
-		let userToken = this.jwtHelperService.decodeToken(localStorage.getItem("jwt-token"));
-		let userId = userToken.auth.userId;
-		this.userService.getUser(userId)
-			.subscribe(user => this.user = user);
-	}
-
-	listEvents(): void {
-		this.eventService.getAllEvents()
-			.subscribe(events => {
-				this.events = events;
-				this.getUser();
-			});
-	}
 }
