@@ -1,5 +1,6 @@
 @import 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';
 @import url('https://fonts.googleapis.com/css?family=Libre+Franklin:500');
+/*below is css for sidebar*/
 .wrapper {
 	display: flex;
 	align-items: stretch;
@@ -13,6 +14,7 @@
 	height: 100%;
 	filter:drop-shadow(1px 0 3px black);
 	transition: .3s;
+	background-color: #3a4660;
 }
 
 .sidebar.active {
@@ -37,8 +39,7 @@
 }
 
 .sidebar ul li.active > a, a[aria-expanded="true"] {
-	color: #fff;
-	background: #6d7fcc;
+	color: #bd8c7d;
 }
 
 h2 {
@@ -50,6 +51,13 @@ h2 {
 	margin-top: .25rem;
 }
 
+a {
+	color: #bd8c7d
+}
+
+a:hover {
+	color: #f9f8fd;
+}
 
 .toggleButton {
 	margin-left: 1rem;
@@ -151,8 +159,8 @@ table{
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-
-
+	background-color: #3a4660;
+	color: #f9f8fd
 }
 
 .splash .buttons {
@@ -226,27 +234,57 @@ table{
 	margin: .35rem;
 }
 
-/*!* Styles for wrapping the search box *!*/
+/*below is css for detailed-task(wrapper counts for this page, main page, user-profile and detailed-event)*/
 
-/*.main {*/
-	/*width: 50%;*/
-	/*margin: 50px auto;*/
-/*}*/
+.wrapper {
+	background-color: #f9f8fd;
+	color: #3a4660;
+}
 
-/*!* Bootstrap 4 text input with search icon *!*/
+.task-body {
+	padding-top: 8px;
+}
 
-/*.has-search .form-control {*/
-	/*padding-left: 2.375rem;*/
-/*}*/
+.task-head {
+	color: #3a4660;
+}
 
-/*.has-search .form-control-feedback {*/
-	/*position: absolute;*/
-	/*z-index: 2;*/
-	/*display: block;*/
-	/*width: 2.375rem;*/
-	/*height: 2.375rem;*/
-	/*line-height: 2.375rem;*/
-	/*text-align: center;*/
-	/*pointer-events: none;*/
-	/*color: #aaa;*/
-/*}*/
+.task-description {
+	color: #3a4660;
+}
+
+.task-due-date {
+	color: #bd8c7d;
+}
+
+.user-display-name {
+	color: #3a4660;
+}
+
+.card {
+	margin: 10px;
+	background-color: transparent;
+	border-color: #3366BB;
+	border-width: thin;
+}
+
+/*below is css for profile-priv*/
+
+.privilege {
+	background-color: #f9f8fd;
+}
+
+.navbar {
+	color: #3a4660;
+}
+
+.whoseIn {
+	color: #3a4660;
+}
+
+.table {
+	color: #3a4660;
+}
+
+
+
