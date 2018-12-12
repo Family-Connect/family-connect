@@ -22,7 +22,6 @@ import {NgbModal, ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
 import {Status} from "../shared/interfaces/status";
 import {ActivatedRoute} from "@angular/router";
 import {forEach} from "@angular/router/src/utils/collection";
-import {el} from "@angular/platform-browser/testing/src/browser_util";
 
 @Component({
 	template: require("./detailed-event.component.html")

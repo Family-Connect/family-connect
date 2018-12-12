@@ -29,7 +29,7 @@ export class UserProfileComponent implements OnInit {
 	status: Status = {status:null, message:null, type:null};
 	jwt = this.jwtHelperService.decodeToken(window.localStorage.getItem("jwt-token"));
 
-	public userShow: boolean = false;
+	public userShow: boolean = true;
 	public showEditForm: boolean = false;
 	public buttonName: any = "Edit User";
 
@@ -80,8 +80,8 @@ export class UserProfileComponent implements OnInit {
 	}
 
 	checkUser() {
-		if(this.jwt.auth.userId === "userId" )
-			this.userShow = !this.userShow;
+		// if(this.jwt.auth.userId !== "userId" )
+		// 	this.userShow = !this.userShow;
 	}
 
 
