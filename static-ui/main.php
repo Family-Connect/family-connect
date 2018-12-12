@@ -2,27 +2,7 @@
 
 <div class="wrapper">
 
-	<!-- Sidebar -->
-	<nav id="sidebar" class="sidebar col-md-2 bg-light">
-		<div class="sidebar-header">
-			<h2>Sanchez</h2>
-		</div>
-
-		<ul class="users">
-			<li>
-				<a href="#">Erika</a>
-			</li>
-			<li>
-				<a href="#">Stephanie</a>
-			</li>
-			<li>
-				<a href="#">Fran</a>
-			</li>
-			<li>
-				<a href="#">Andy</a>
-			</li>
-		</ul>
-	</nav>
+	<sidebar></sidebar>
 
 	<!-- Page Content -->
 	<div id="main container-fluid">
@@ -42,105 +22,146 @@
 					<i class="fas fa-cog"></i>
 				</button>
 			</div>
-		</div>
 
 
-		<!-- Actual content (not sidebar) - edit below -->
+			<!-- Actual content (not sidebar) - edit below -->
 			<!--Radio buttons-->
-		<div class="content container">
-			<div class="row no-gutters">
-				<h2>Events</h2>
-<!--			<div class="custom-control custom-radio col-sm-6 col-md-8">-->
-<!--				<input type="radio" id="task" name="customRadio" class="custom-control-input">-->
-<!--				<label class="custom-control-label" for="task">Task</label>-->
-<!--			</div>-->
-<!--			<div class="custom-control custom-radio col-sm-6 col-md-5">-->
-<!--				<input type="radio" id="event" name="customRadio" class="custom-control-input">-->
-<!--				<label class="custom-control-label" for="event">Event</label>-->
-<!--			</div>-->
-			</div>
+			<div class="content container">
+				<div class="row no-gutters">
+					<h2>Events</h2>
+					<!--<div class="custom-control custom-radio col-sm-6 col-md-8">-->
+					<!--<input type="radio" id="task" name="customRadio" class="custom-control-input">-->
+					<!--<label class="custom-control-label" for="task">Task</label>-->
+					<!--</div>-->
+					<!--<div class="custom-control custom-radio col-sm-6 col-md-5">-->
+					<!--<input type="radio" id="event" name="customRadio" class="custom-control-input">-->
+					<!--<label class="custom-control-label" for="event">Event</label>-->
+					<!--</div>-->
+				</div>
+
 
 				<!--Search Box-->
-			<div class="input-group input-group-sm">
-				<div class="input-group-prepend col-sm-6 col-md-3">
-					<div class="custom-control custom-radio">
-					<span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
-				</div>
-				<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-			</div>
-			</div>
+				<!--<div class="input-group">-->
+				<!--<input type="text" class="form-control" placeholder="Search for an Event">-->
+				<!--<div class="input-group-append">-->
+				<!--<button class="btn btn-secondary" type="button">-->
+				<!--<i class="fa fa-search"></i>-->
+				<!--</button>-->
+				<!--</div>-->
+				<!--</div>-->
+
+
+				<!--<div class="input-group-sm">-->
+				<!--<div class="input-group-prepend col-sm-6 col-md-3">-->
+				<!--<div class="custom-control custom-radio">-->
+				<!--<span class="input-group-text" id="inputGroup-sizing-sm">Search</span>-->
+				<!--</div>-->
+				<!--<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">-->
+				<!--</div>-->
+				<!--</div>-->
 
 				<!--Check box, just me-->
-			<div class="container mt-3">
-				<div class="row no-gutters">
-				<div class="custom-control custom-checkbox">
-				<input type="checkbox" class="custom-control-input" id="justMe">
-				<label class="custom-control-label" for="justMe">Just Me</label>
+				<div class="container mt-3">
+					<div class="row no-gutters">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="justMe">
+							<label class="custom-control-label" for="justMe" (click)="justMe()" >Just Me </label>
+						</div>
+					</div>
 				</div>
-				</div>
-			</div>
 
-				<!--Event Drop Down-->
-			<div class="container mt-3">
-			<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-				<ngb-panel title="Christmas Party">
-					<ng-template ngbPanelContent>
-						Information for Event 1. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu sollicitudin
-						libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis
-						adipiscing velit. Nam eu vulputate sem. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu
-						sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis 						adipiscing velit. Nam eu vulputate sem.
-					</ng-template>
-				</ngb-panel>
-				<ngb-panel title="Birthday Party">
-					<ng-template ngbPanelContent>
-						Information for Event 2. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu sollicitudin
-						libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis
-						adipiscing velit. Nam eu vulputate sem. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu sollicitudin libero 						id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis adipiscing velit. Nam eu 						vulputate sem.
-					</ng-template>
-				</ngb-panel>
-			</ngb-accordion>
-			</div>
+				<!--Accordion-->
+				<div class="container mt-3">
+					<div class="row">
+						<div class="col-xs-12 col-12 col-md-4 form-group">
+							<form [formGroup]="postForm" (ngSubmit)="createEvent()" novalidate>
+								<input type="datetime-local"  formControlName="searchDate">
+							</form>
+							<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" *ngFor="let event of events">
+								<ngb-panel title="{{event.eventName}}"><h4>{{event.eventName}}</h4>
+									<ng-template ngbPanelContent>
+										<p>{{event.eventContent}}</p>
+										<p>{{user.userDisplayName}}</p>
+									</ng-template>
+								</ngb-panel>
+								<!--<ngb-panel title="task-title"><h4>{{task.taskName}}</h4>-->
+								<!--<ng-template ngbPanelContent>-->
+								<!--<p>{{task.taskDescription}}</p>-->
+								<!--</ng-template>-->
+								<!--</ngb-panel>-->
+							</ngb-accordion>
+						</div>
+					</div>
+				</div>
+
+				<!--Button trigger modal-->
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#plusButton">
+				</button>
+
+				<!-- Modal -->
+				<div class="modal fade" id="createEvent" tabindex="-1" role="dialog"
+					  aria-labelledby="createEvent" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Create a New Event</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">×</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								...
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary">Save changes</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
+	</div>
+</div>
 
 
-															<!--			<div class="container mt-5">-->
-<!--				<div id="accordion" role="tablist">-->
-<!--					<div class="card">-->
-<!--						<div class="card-header" role="tab" id="headingOne">-->
-<!--							<h5 class="mb-0">-->
-<!--								<a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="">-->
-<!--									Event 1-->
-<!--								</a>-->
-<!--							</h5>-->
-<!--						</div>-->
-<!---->
-<!--						<div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" style="">-->
-<!--							<div class="card-body">-->
-<!--								Information for Event 1. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu-->
-<!--								sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit.-->
-<!--								Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu-->
-<!--								sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem.-->
-<!--							</div>-->
-<!--						</div>-->
-<!--					</div>-->
-<!--					<div class="card">-->
-<!--						<div class="card-header" role="tab" id="headingTwo">-->
-<!--							<h5 class="mb-0">-->
-<!--								<a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">-->
-<!--									Event 2-->
-<!--								</a>-->
-<!--							</h5>-->
-<!--						</div>-->
-<!--						<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">-->
-<!--							<div class="card-body">-->
-<!--								Information for Event 2. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu-->
-<!--								sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit.-->
-<!--								Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem.-->
-<!--							</div>-->
-<!--						</div>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
 
+<!--<div class="container mt-5">-->
+<!--<div id="accordion" role="tablist">-->
+<!--<div class="card">-->
+<!--<div class="card-header" role="tab" id="headingOne">-->
+<!--<h5 class="mb-0">-->
+<!--<a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="">-->
+<!--Event 1-->
+<!--</a>-->
+<!--</h5>-->
+<!--</div>-->
 
+<!--<div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" style="">-->
+<!--<div class="card-body">-->
+<!--Information for Event 1. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu-->
+<!--sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit.-->
+<!--Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu-->
+<!--sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem.-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="card">-->
+<!--<div class="card-header" role="tab" id="headingTwo">-->
+<!--<h5 class="mb-0">-->
+<!--<a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">-->
+<!--Event 2-->
+<!--</a>-->
+<!--</h5>-->
+<!--</div>-->
+<!--<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">-->
+<!--<div class="card-body">-->
+<!--Information for Event 2. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu-->
+<!--sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit.-->
+<!--Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem. Lorem ipsum dolor sit amet, magna nec amet tristique, arcu sollicitudin libero id, adipiscing ea velit felis pede quisque, in pellentesque et sit. Lobortis nulla iaculis adipiscing velit. Nam eu vulputate sem.-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->

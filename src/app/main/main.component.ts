@@ -76,8 +76,13 @@ export class MainComponent implements OnInit {
 		this.stateFlag = !this.stateFlag;
 		this.stateFlag1 = !this.stateFlag1;
 	}
+}
 
-
+@Component({
+	selector: 'ngbd-accordion',
+	templateUrl: './main.component.html'
+})
+export class NgbdAccordionBasic {
 }
 
 @Component({
@@ -96,7 +101,8 @@ export class PostsComponent implements OnInit{
 
 		this.postForm = this.formBuilder.group({
 			eventName : ["", [Validators.maxLength(30), Validators.required]],
-			eventContent : ["", [Validators.maxLength(255), Validators.required]]
+			eventContent : ["", [Validators.maxLength(255), Validators.required]],
+			searchDate : ["", [Validators.maxLength(6), Validators.required]]
 		});
 		this.loadEvents();
 	}
