@@ -68,7 +68,6 @@
     "typescript": "^3.0.0",
     "url-loader": "^1.0.1",
     "webpack": "^4.7.0",
-    "webpack-command": "^0.4.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.5",
     "webpack-merge": "^4.1.2"
