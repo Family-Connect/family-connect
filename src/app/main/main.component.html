@@ -37,6 +37,7 @@
 				<!--</div>-->
 				</div>
 
+
 					<!--Search Box-->
 				<!--<div class="input-group">-->
 					<!--<input type="text" class="form-control" placeholder="Search for an Event">-->
@@ -56,7 +57,6 @@
 							<!--<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">-->
 						<!--</div>-->
 					<!--</div>-->
-			</div>
 
 				<!--Check box, just me-->
 				<div class="container mt-3">
@@ -75,9 +75,7 @@
 							<form [formGroup]="postForm" (ngSubmit)="createEvent()" novalidate>
 							<input type="datetime-local"  formControlName="searchDate">
 							</form>
-						</div>
-					</div>
-					<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" *ngFor="let event of events">
+						<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" *ngFor="let event of events">
 						<ngb-panel title="event-title"><h4>{{event.eventName}}</h4>
 							<ng-template ngbPanelContent>
 							<p>{{event.eventContent}}</p>
@@ -90,8 +88,12 @@
 						<!--</ng-template>-->
 						<!--</ngb-panel>-->
 					</ngb-accordion>
+					</div>
+					</div>
+				</div>
 
-					<!-- Button trigger modal -->
+
+				<!-- Button trigger modal -->
 					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#plusButton">
 					</button>
 

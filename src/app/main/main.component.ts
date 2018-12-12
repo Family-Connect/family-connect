@@ -50,12 +50,12 @@ export class MainComponent implements OnInit {
 		// 	this.loadTasks();
 
 
-		//this.eventService.getEventByFamilyId(this.jwt.auth.familyId).subscribe(event => this.events = event);
+		this.eventService.getEventByFamilyId(this.jwt.auth.familyId).subscribe(event => this.events = event);
 	}
 
-	// loadTasks() : any {
+	 loadTasks() : any {
 	// 	this.taskService.getTask(this.taskId).subscribe(tasks => this.task = tasks);
-	// }
+	 }
 
 	loadEvents(): any {
 		this.eventService.getEventByFamilyId(this.eventId).subscribe(events => this.events = events);
@@ -77,4 +77,41 @@ export class MainComponent implements OnInit {
 	}
 
 
+}
+
+@Component({
+	template: require("./main.component.html")
+})
+
+export class PostsComponent implements OnInit{
+	events: Event[];
+	postForm : FormGroup;
+	status : Status = {status:null, message:null, type: null};
+
+	constructor(private eventService: EventService, private formBuilder : FormBuilder) {}
+
+	ngOnInit() {
+		this.eventService.getAllEvents().subscribe(events => this.events = events);
+
+		this.postForm = this.formBuilder.group({
+			eventName : ["", [Validators.maxLength(30), Validators.required]],
+			eventContent : ["", [Validators.maxLength(255), Validators.required]]
+		});
+		this.loadEvents();
+	}
+
+	loadEvents() : void {
+		this.eventService.getAllEvents().subscribe(events => this.events = events);
+	}
+	createEvent() : void {
+		let event :Event = {eventId: null, eventFamilyId: null, eventUserId:null, eventContent: this.postForm.value.eventContent, eventEndDate: null, eventName: this.postForm.value.eventName, eventStartDate: null};
+
+		this.eventService.createEvent(event).subscribe(status => {
+			this.status = status;
+			if(status.status === 200) {
+				this.loadEvents();
+				this.postForm.reset()
+			}
+		})
+	}
 }
