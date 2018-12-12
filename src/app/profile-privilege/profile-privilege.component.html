@@ -42,10 +42,10 @@
 			</thead>
 			<tbody>
 				<tr *ngFor="let user of users">
-					<th scope="row">{{ user.userEmail}}</th>
-					<td>{{ user.userDisplayName}}</td>
-					<td>{{ user.userPhoneNumber}}</td>
-					<td>{{ user.userPrivilege }}</td>
+					<th scope="row">{{user.userEmail}}</th>
+					<td>{{user.userDisplayName}}</td>
+					<td>{{user.userPhoneNumber}}</td>
+					<td>{{user.userPrivilege}}</td>
 					<td><button type="button" id="deleteButton" class="btn plusButton" (click)="deleteUser();">
 						<span class="fa-stack fa-1x">
 							<i class="fas fa-trash-alt"></i>
@@ -93,8 +93,8 @@
 				<input class="form-check-input" type="radio" name="userPrivilege" id="inlineRadio2" value="1" formControlName="userPrivilege">
 				<label class="form-check-label" for="inlineRadio2">1</label>
 			</div>
-			<button type="submit" class="btn btn-success">Update</button>
-			<button type="reset" class="btn btn-primary">Cancel</button>
+			<button type="submit" id="btn-1">Update</button>
+			<button type="reset" id="btn-2">Cancel</button>
 		</form>
 	</div>
 </div>

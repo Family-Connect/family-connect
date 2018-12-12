@@ -7,7 +7,7 @@ import {User} from "../shared/interfaces/user";
 import {Status} from "../shared/interfaces/status"
 import {JwtHelperService} from "@auth0/angular-jwt";
 
-
+declare const $: any;
 
 @Component({
 	template: require("./profile-privilege.component.html")
@@ -16,11 +16,11 @@ import {JwtHelperService} from "@auth0/angular-jwt";
 export class ProfilePrivilegeComponent implements OnInit {
 	userForm: FormGroup;
 	deleted: boolean = false;
-	user: User;
-	users: User[] = [];
+	user: User = {userId: null, userFamilyId:null, userAvatar:null, userDisplayName:null, userEmail:null, userPhoneNumber:null, userPrivilege:null};
+	users: User[];
 	status: Status = null;
 	userAvatar: any;
-	showForm : boolean = false;
+	showForm: boolean = false;
 
 	constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router, private route: ActivatedRoute, private jwtHelperService : JwtHelperService) {
 	}
@@ -28,6 +28,8 @@ export class ProfilePrivilegeComponent implements OnInit {
 	// @ts-ignore
 	ngOnInit(): void {
 		//this.reloadUsers();
+
+		this.userService.getUserByFamilyId('6fa65d66-a7c0-4650-b716-e4d482e48dc9').subscribe(users => this.users = users);
 
 		this.userForm = this.formBuilder.group({
 			userDisplayName: ["", [Validators.maxLength(64), Validators.required]],

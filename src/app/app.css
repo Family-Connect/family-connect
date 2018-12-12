@@ -234,6 +234,13 @@ table{
 	margin: .35rem;
 }
 
+.users #btn-1 {
+	background-color: #28a745;
+}
+
+.users #btn-2 {
+	background-color: #007bff;
+}
 /*!* Styles for wrapping the search box *!*/
 
 /*.main {*/
