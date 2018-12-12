@@ -76,10 +76,6 @@
 							<input type="datetime-local"  formControlName="searchDate">
 							</form>
 						</div>
-						<div class="col-xs-12 col-12 col-md-3 form-group">
-							<button class="btn btn-success" (click)="drp.toggle()" [attr.aria-expanded]="drp.isOpen">Date
-								Range Picker</button>
-						</div>
 					</div>
 					<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" *ngFor="let event of events">
 						<ngb-panel title="event-title"><h4>{{event.eventName}}</h4>
@@ -96,8 +92,7 @@
 					</ngb-accordion>
 
 					<!-- Button trigger modal -->
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal3">
-						Launch demo modal
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#plusButton">
 					</button>
 
 					<!-- Modal -->
