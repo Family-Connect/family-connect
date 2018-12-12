@@ -23,7 +23,8 @@ export class MainComponent implements OnInit {
 		userAvatar: null,
 		userDisplayName: null,
 		userEmail: null,
-		userPhoneNumber: null
+		userPhoneNumber: null,
+		userPrivilege: null
 	};
 	event: Event = {
 		eventId: null,

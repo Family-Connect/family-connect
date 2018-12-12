@@ -79,6 +79,10 @@ try {
 			if(empty($requestObject->userPhoneNumber) === true) {
 				throw(new \InvalidArgumentException ("No phone number for user.", 405));
 			}
+			//make sure user phone number is available
+			if(empty($requestObject->userPrivilege) === true) {
+			throw(new \InvalidArgumentException ("No privilege for user.", 405));
+			}
 
 			//perform the actual put
 			if($method === "PUT") {
@@ -98,6 +102,7 @@ try {
 			// update all attributes
 			$user->setUserDisplayName($requestObject->userDisplayName);
 			$user->setUserEmail($requestObject->userEmail);
+			$user->setUserPrivilege($requestObject->userPrivilege);
 			$user->setUserPhoneNumber($requestObject->userPhoneNumber);
 			$user->update($pdo);
 

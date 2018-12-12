@@ -1,13 +1,16 @@
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, Params} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
 import {Router} from "@angular/router";
 import {UserService} from "../shared/services/user.service";
 import {User} from "../shared/interfaces/user";
-import {Status} from "../shared/interfaces/status";
+import {Status} from "../shared/interfaces/status"
+import {JwtHelperService} from "@auth0/angular-jwt";
+
+
 
 @Component({
-	template: require("./profile-privilege.html")
+	template: require("./profile-privilege.component.html")
 })
 
 export class ProfilePrivilegeComponent implements OnInit {
@@ -16,46 +19,33 @@ export class ProfilePrivilegeComponent implements OnInit {
 	user: User;
 	users: User[] = [];
 	status: Status = null;
+	userAvatar: any;
+	showForm : boolean = false;
 
-	constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router, private route: ActivatedRoute) {}
-
-	// @ts-ignore
-	ngOnInit() : void {
-		this.route.params.forEach((params : Params) => {
-			let userId = params["userId"];
-			this.userService.getUser(userId)
-				.subscribe(user => {
-					this.user = user;
-					this.userForm.patchValue(user);
-				});
-		});
+	constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router, private route: ActivatedRoute, private jwtHelperService : JwtHelperService) {
 	}
 
 	// @ts-ignore
-	ngOnInit() : void {
-		this.reloadUsers();
+	ngOnInit(): void {
+		//this.reloadUsers();
+
 		this.userForm = this.formBuilder.group({
-			attribution: ["", [Validators.maxLength(64), Validators.required]],
-			user: ["", [Validators.maxLength(255), Validators.required]],
-			submitter: ["", [Validators.maxLength(64), Validators.required]]
-			});
-		this.applyFromChanges();
-	}
-
-	applyFormChanges() : void {
-		this.userForm.valueChanges.subscribe(values => {
-			for(let field in values) {
-				this.user[field] = values[field];
-			}
+			userDisplayName: ["", [Validators.maxLength(64), Validators.required]],
+			userPrivilege: [""],
+			userPhoneNumber: ["", [Validators.maxLength(32), Validators.required]],
+			userEmail: ["", [Validators.maxLength(255),Validators.required]]
 		});
+
+		// 	this.applyFormChanges();
 	}
 
-	deleteUser() : void {
+
+	deleteUser(): void {
 		this.userService.deleteUser(this.user.userId)
 			.subscribe(status => {
 				this.status = status;
 				// @ts-ignore
-				if(this.status === 200){
+				if(this.status === 200) {
 					this.deleted = true;
 					// @ts-ignore
 					this.user = {userId: null, attribution: null, user: null, submitter: null};
@@ -63,31 +53,22 @@ export class ProfilePrivilegeComponent implements OnInit {
 			});
 	}
 
-	editUser() : void {
-		// @ts-ignore
+	editUser(user : User): void {
+
+		let editUser: User = {
+			userId: user.userId,
+			userFamilyId: this.jwtHelperService.decodeToken(localStorage.getItem("jwt-token")),
+			userPhoneNumber: this.userForm.value.userPhoneNumber,
+			userEmail: this.userForm.value.userEmail,
+			userDisplayName: this.userForm.value.userDisplayName,
+			userAvatar: "http:http.cat/404",
+			userPrivilege: this.userForm.value.userPrivilege
+
+
+		};
 		this.userService.editUser(this.user)
-			.subscribe(status => this.user =status);
+			.subscribe(status => this.status = status);
 	}
 
-	reloadUsers() : void {
-		this.userService.getAllUsers()
-			.subscribe(users => this.users = users);
-	}
 
-	switchUser(user : User) : void {
-		this.router.naviagate(["/user/", user.userId]);
-	}
-
-	createUser() :  void {
-		let user = {userId: null, atrribution: this.userForm.value.attribution, user: this.userForm.value.user, submitter: this.userForm.value.submitter};
-		// @ts-ignore
-		this.userService.createUser(user)
-			.subscribe(status => {
-				this.status = status;
-				if(status.status === 200) {
-					this.reloadUsers();
-					this.reloadUsers.reset();
-				}
-			});
-	}
 }

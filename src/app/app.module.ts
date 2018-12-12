@@ -6,11 +6,12 @@ import {allAppComponents, appRoutingProviders, routing} from "./app.routes";
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ReactiveFormsModule} from "@angular/forms";
 import {JwtModule} from "@auth0/angular-jwt";
-
+// // @ts-ignore
+// import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 const moduleDeclarations = [AppComponent];
 
-//configure the parameters for the JwtModule
+//configure the parameters fot the JwtModule
 const JwtHelper = JwtModule.forRoot({
 	config: {
 		tokenGetter: () => {

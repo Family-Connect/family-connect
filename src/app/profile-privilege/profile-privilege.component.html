@@ -35,38 +35,37 @@
 					<th scope="col">Email</th>
 					<th scope="col">Display Name</th>
 					<th scope="col">Phone Number</th>
+					<th scope="col">Privilege</th>
 					<th scope="col">Delete User</th>
 					<th scope="col">Edit User</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let user of users; let i = index">
+				<tr *ngFor="let user of users">
 					<th scope="row">{{ user.userEmail}}</th>
 					<td>{{ user.userDisplayName}}</td>
 					<td>{{ user.userPhoneNumber}}</td>
-					<td><button type="button" id="deleteButton" class="btn plusButton" (click)="onDelete(i)">
+					<td>{{ user.userPrivilege }}</td>
+					<td><button type="button" id="deleteButton" class="btn plusButton" (click)="deleteUser();">
 						<span class="fa-stack fa-1x">
 							<i class="fas fa-trash-alt"></i>
 						</span>
 					</button></td>
-					<td><button type="button" id="editButton" class="btn plusButton" (click)="onEdit(i)">
+					<td><button type="button" id="editButton" class="btn plusButton" (submit)="editUser();">
 						<i class="fas fa-pencil-alt"></i>
 					</button></td>
 				</tr>
 			</tbody>
 		</table>
-		<!--<div class="text-right">-->
-			<!--<button type="submit" class="btn btn-primary" (click)="onNew()">New</button>-->
-		<!--</div>-->
 	</div>
 	<br>
-	<div class="users" *ngIf="showNew">
-		<form (ngSubmit)="onSave()">
+	<div class="users" >
+		<form [formGroup] = "userForm">
 			<div class="form-group row">
 				<label id="email-input" class="col-12 col-form-label">Email</label>
 				<div class="col-12">
 					<label>
-						<input class="form-control" type="email" name="emailaddress">
+						<input class="form-control" type="email" name="emailaddress" formControlName="userEmail">
 					</label>
 				</div>
 			</div>
@@ -74,7 +73,7 @@
 				<label id="displayname-input" class="col-12 col-form-label">Display Name</label>
 				<div class="col-12 input-group">
 					<label>
-						<input type="text" class="form-control" name="displayName">
+						<input type="text" class="form-control" name="displayName" formControlName="userDisplayName">
 					</label>
 				</div>
 			</div>
@@ -82,12 +81,20 @@
 				<label id="phoneNumber-input" class="col-12 col-form-label">Phone Number</label>
 				<div class="col-12">
 					<label>
-						<input class="form-control" type="number" name="email">
+						<input class="form-control" type="number" name="phoneNumber" formControlName="userPhoneNumber">
 					</label>
 				</div>
 			</div>
-			<button type="submit" class="btn btn-success">{{submitType}}</button>
-			<button type="submit" class="btn btn-primary" (click)="onCancel()">Cancel</button>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="userPrivilege" id="inlineRadio1" value="0" formControlName="userPrivilege">
+				<label class="form-check-label" for="inlineRadio1">0</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="userPrivilege" id="inlineRadio2" value="1" formControlName="userPrivilege">
+				<label class="form-check-label" for="inlineRadio2">1</label>
+			</div>
+			<button type="submit" class="btn btn-success">Update</button>
+			<button type="reset" class="btn btn-primary">Cancel</button>
 		</form>
 	</div>
 </div>

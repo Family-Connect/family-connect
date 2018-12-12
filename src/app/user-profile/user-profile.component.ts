@@ -19,7 +19,7 @@ import {ActivatedRoute} from "@angular/router";
 })
 
 export class UserProfileComponent implements OnInit {
-	user: User = {userId: null, userFamilyId:null, userAvatar:null, userDisplayName:null, userEmail:null, userPhoneNumber:null};
+	user: User = {userId: null, userFamilyId:null, userAvatar:null, userDisplayName:null, userEmail:null, userPhoneNumber:null, userPrivilege:null};
 	task: Task = {taskId:null, taskEventId:null, taskUserId:null, taskDueDate:null, taskDescription:null, taskIsComplete:null, taskName:null};
 	tasks: Task[];
 	event: Event = {eventId:null, eventFamilyId:null, eventUserId:null, eventContent:null, eventEndDate:null, eventName:null, eventStartDate:null};
@@ -63,7 +63,8 @@ export class UserProfileComponent implements OnInit {
 			userEmail: this.editUserForm.value.editEmail,
 			userDisplayName: this.editUserForm.value.editDisplayName,
 			userFamilyId: null,
-			userPhoneNumber: this.editUserForm.value.editPhoneNumber
+			userPhoneNumber: this.editUserForm.value.editPhoneNumber,
+			userPrivilege: null
 		};
 
 		this.userService.editUser(user)
